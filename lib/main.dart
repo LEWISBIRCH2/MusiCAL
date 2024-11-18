@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'MusiCAL',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1f2421)),
           useMaterial3: true,
         ),
         home: const Login());
