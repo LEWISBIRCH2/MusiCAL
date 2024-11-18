@@ -2,7 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
-import 'navbar.dart';
+
+import 'defaulttab.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,8 +34,8 @@ class MyApp extends StatelessWidget {
         initialRoute: '/login',
         routes: {
           '/login': (context) => Login(),
-          '/calendar': (context) => AppBarExample(),
-          //   '/events': (context) => events(),
+          // '/calendar': (context) => Navbar2()
+          '/events': (context) => Navbar2(),
           //   '/festical': (context) => festical(),
           //   '/settings': (context) => settings(),
           //   '/recommendations': (context) => recommendations(),
