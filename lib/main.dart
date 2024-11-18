@@ -35,6 +35,5 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const Login());
-    ;
   }
 }
