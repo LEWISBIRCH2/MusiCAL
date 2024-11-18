@@ -1,66 +1,50 @@
 import 'package:flutter/material.dart';
 
-/// Flutter code sample for [AppBar].
-
-void main() => runApp(const AppBarApp());
-
-class AppBarApp extends StatelessWidget {
-  const AppBarApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: AppBarExample(),
-    );
-  }
-}
-
 class AppBarExample extends StatelessWidget {
   const AppBarExample({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('AppBar Demo'),
-        actions: <Widget>[
+        appBar: AppBar(
+            leading: Image.asset(
+              'musiCAL_LOGO.png',
+              height: 300,
+              width: 500,
+            ),
+            title: const Text('MusiCAL - NavBar'),
+            //   Image.asset('assets/musiCAL_LOGO.png', height: 20),
+
+            actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.add_alert),
-            tooltip: 'Show Snackbar',
+            icon: const Icon(Icons.calendar_month),
+            tooltip: 'Show Calendar',
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('This is a snackbar')));
+                  const SnackBar(content: Text('Displays calendar...')));
             },
           ),
           IconButton(
-            icon: const Icon(Icons.navigate_next),
-            tooltip: 'Go to the next page',
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute<void>(
-                builder: (BuildContext context) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Next page'),
-                    ),
-                    body: const Center(
-                      child: Text(
-                        'This is the next page',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  );
-                },
-              ));
-            },
-          ),
-        ],
-      ),
-      body: const Center(
-        child: Text(
-          'This is the home page',
-          style: TextStyle(fontSize: 24),
-        ),
-      ),
-    );
+              icon: const Icon(Icons.thumb_up),
+              tooltip: 'Show Recommendations',
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Displays recommendations...')));
+              }),
+          IconButton(
+              icon: const Icon(Icons.star),
+              tooltip: 'Show FestiCAL',
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Displays FestiCAL...')));
+              }),
+          IconButton(
+              icon: const Icon(Icons.settings),
+              tooltip: 'Show Settings',
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Displays settings...')));
+              }),
+        ]));
   }
 }

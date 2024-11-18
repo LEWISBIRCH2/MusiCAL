@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'navbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,12 +30,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        initialRoute: '/login',
+        routes: {
+          '/login': (context) => Login(),
+          '/calendar': (context) => AppBarExample(),
+          //   '/events': (context) => events(),
+          //   '/festical': (context) => festical(),
+          //   '/settings': (context) => settings(),
+          //   '/recommendations': (context) => recommendations(),
+        },
         title: 'MusiCAL',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1f2421)),
           useMaterial3: true,
-        ),
-        home: const Login());
-    // appBarApp: const AppBarApp());
+        ));
   }
 }
