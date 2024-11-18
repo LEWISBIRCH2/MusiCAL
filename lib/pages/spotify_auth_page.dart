@@ -10,8 +10,8 @@ class SpotifyAuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String clientId = 'c78c6e9431a84790bd4affe04258d00d';
-    const String redirectUri = 'http://127.0.0.1';
+    const String clientId = '809e9a055f604342a727aa3961f343d2';
+    const String redirectUri = 'musiCAL.app/callback';
     const String scopes = 'user-read-private user-read-email';
 
     const String authUrl =

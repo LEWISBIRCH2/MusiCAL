@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class SpotifyService {
-  final String clientId = 'c78c6e9431a84790bd4affe04258d00d';
-  final String clientSecret = 'e35f48f9f2844ff5a10a46dd1a8efa94';
-  final String redirectUri = 'http://localhost:5173/callback';
+  final String clientId = '809e9a055f604342a727aa3961f343d2';
+  final String clientSecret = '6aa9ae2264094650a6af77b3eef14903';
+  final String redirectUri = 'musiCAL.app/callback';
 
   Future<String?> exchangeToken(String code) async {
     final response = await http.post(
