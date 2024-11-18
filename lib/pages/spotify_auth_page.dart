@@ -11,7 +11,7 @@ class SpotifyAuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const String clientId = 'c78c6e9431a84790bd4affe04258d00d';
-    const String redirectUri = 'http://localhost:5173/callback';
+    const String redirectUri = 'http://127.0.0.1';
     const String scopes = 'user-read-private user-read-email';
 
     const String authUrl =
@@ -49,7 +49,7 @@ class SpotifyAuthPage extends StatelessWidget {
           return NavigationDecision.navigate;
         },
       ))
-      ..loadRequest(Uri.parse('https://flutter.dev'));
+      ..loadRequest(Uri.parse(authUrl));
 
     if (controller.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);
