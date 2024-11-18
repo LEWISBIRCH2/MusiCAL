@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'settings.dart';
 
 class Navbar2 extends StatelessWidget {
   const Navbar2({super.key});
@@ -39,10 +40,7 @@ class Navbar2 extends StatelessWidget {
                 color: Colors.orangeAccent,
                 child: const Icon(Icons.person),
               ),
-              Container(
-                color: Colors.redAccent,
-                child: const Icon(Icons.star),
-              ),
+              Settings(),
             ],
           )),
     );
