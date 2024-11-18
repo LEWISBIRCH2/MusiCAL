@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'login.dart';
+import 'settings.dart';
 import 'package:musical/pages/spotify_auth_page.dart';
 
 import 'defaulttab.dart';
@@ -34,10 +36,10 @@ class MyApp extends StatelessWidget {
         initialRoute: '/login',
         routes: {
           '/login': (context) => Login(),
-          // '/calendar': (context) => Navbar2()
-          '/events': (context) => Navbar2(),
+          '/calendar': (context) => Navbar2(),
+          //'/events': (context) => Navbar2(),
           //   '/festical': (context) => festical(),
-          //   '/settings': (context) => settings(),
+          '/settings': (context) => Settings(),
           //   '/recommendations': (context) => recommendations(),
         },
         title: 'MusiCAL',
