@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "514047598246",
+    "firebase_url": "https://musical-5846f-default-rtdb.firebaseio.com",
+    "project_id": "musical-5846f",
+    "storage_bucket": "musical-5846f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:514047598246:android:de1edfcf5bc48b23e61e67",
+        "android_client_info": {
+          "package_name": "com.example.musical"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANkPkjnXfBE096_FVIQS1-YsMCrOsqVrU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
