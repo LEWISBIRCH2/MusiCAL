@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'calendar.dart';
 import 'settings.dart';
 import 'recommendations.dart';
 
@@ -15,7 +16,7 @@ class Navbar2 extends StatelessWidget {
             bottom: const TabBar(
               tabs: [
                 Tab(
-                  icon: Icon(Icons.home),
+                  icon: Icon(Icons.calendar_month),
                 ),
                 Tab(
                   icon: Icon(Icons.settings),
@@ -28,14 +29,16 @@ class Navbar2 extends StatelessWidget {
                 ),
               ],
             ),
-            title: const Text('flutter map'),
+            title: const Text('MusiCAL'),
+            leading: Image.asset(
+              'musiCAL_LOGO.png',
+              height: 400,
+              width: 600,
+            ),
           ),
           body: TabBarView(
             children: [
-              Container(
-                color: Colors.orangeAccent,
-                child: const Icon(Icons.home),
-              ),
+              Calendar(),
               Login(),
               Container(
                 color: Colors.orangeAccent,

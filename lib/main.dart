@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'settings.dart';
 import 'package:musical/pages/spotify_auth_page.dart';
-
 import 'defaulttab.dart';
 
 void main() async {
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
         },
         title: 'MusiCAL',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1f2421)),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1F2421)),
           useMaterial3: true,
         ));
   }
