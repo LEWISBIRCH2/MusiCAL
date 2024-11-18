@@ -1,13 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'package:musical/pages/spotify_auth_page.dart';
 
 import 'defaulttab.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  if (kIsWeb) {
+/*   if (kIsWeb) {
     await Firebase.initializeApp(
         options: const FirebaseOptions(
             apiKey: "AIzaSyBtpe67Ioc4cGAF41pJqxa6sJGmNIOo2YQ",
@@ -20,8 +20,8 @@ void main() async {
             measurementId: "G-WJQHDWKMXE"));
   } else {
     await Firebase.initializeApp();
-  }
-
+  } */
+  Firebase.initializeApp();
   runApp(const MyApp());
 }
 

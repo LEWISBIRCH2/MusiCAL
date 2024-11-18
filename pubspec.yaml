@@ -11,6 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.0.0
+  http: ^0.13.6
+  webview_flutter_android: ^4.0.2
+  webview_flutter_wkwebview: ^3.16.2
 
   webview_flutter: ^4.2.1
 
