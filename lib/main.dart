@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
-
 import 'defaulttab.dart';
 
 void main() async {
@@ -42,7 +41,7 @@ class MyApp extends StatelessWidget {
         },
         title: 'MusiCAL',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1f2421)),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1F2421)),
           useMaterial3: true,
         ));
   }
