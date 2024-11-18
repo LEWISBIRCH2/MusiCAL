@@ -11,12 +11,17 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.0.0
+  http: ^0.13.6
+  webview_flutter_android: ^4.0.2
+  webview_flutter_wkwebview: ^3.16.2
 
   webview_flutter: ^4.2.1
 
   cupertino_icons: ^1.0.8
   firebase_core: ^2.25.4
   flutter_calendar_carousel: ^2.4.4
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:

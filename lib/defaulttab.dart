@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
 import 'calendar.dart';
+import 'settings.dart';
+import 'recommendations.dart';
 
 class Navbar2 extends StatelessWidget {
   const Navbar2({super.key});
@@ -42,6 +44,8 @@ class Navbar2 extends StatelessWidget {
                 color: Colors.orangeAccent,
                 child: const Icon(Icons.person),
               ),
+              Settings(),
+              Recommendations(),
               Container(
                 color: Colors.redAccent,
                 child: const Icon(Icons.star),
