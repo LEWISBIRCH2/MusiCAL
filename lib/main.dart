@@ -10,6 +10,7 @@ import 'defaulttab.dart';
 // import 'package:http/http.dart' as http;
 import 'package:musical/firebase_options.dart';
 import 'bottomnavbar.dart';
+import 'calendar.dart';
 
 import 'themes/theme_provider.dart';
 
@@ -38,6 +39,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
       home: _SpotifyLoginState(),
       routes: {
         // '/login': (context) => _SpotifyLoginState(),
@@ -50,11 +52,12 @@ class _MyAppState extends State<MyApp> {
       title: 'MusiCAL',
       theme: Provider.of<ThemeProvider>(context).themeData,
     );
+      
   }
 }
 
 class _SpotifyLoginState extends StatefulWidget {
-  const _SpotifyLoginState({super.key});
+  const _SpotifyLoginState();
 
   @override
   State<_SpotifyLoginState> createState() => __SpotifyLoginStateState();
