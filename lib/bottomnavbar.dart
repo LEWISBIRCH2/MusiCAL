@@ -29,7 +29,7 @@ class _NavigationState extends State<Navigation> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bottom Nav Bar'),
+        title: Text('MusiCAL'),
       ),
       body: IndexedStack(children: [
         Center(
@@ -37,23 +37,26 @@ class _NavigationState extends State<Navigation> {
         ),
       ]),
       bottomNavigationBar: BottomNavigationBar(
+        iconSize: 35,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_month,
                   color: const Color.fromARGB(255, 0, 0, 0)),
-              label: 'Page 1'),
+              label: 'Calendar'),
           BottomNavigationBarItem(
               icon: Icon(Icons.recommend_rounded,
                   color: const Color.fromARGB(255, 0, 0, 0)),
-              label: 'Page 2'),
+              label: 'Recommendations'),
           BottomNavigationBarItem(
               icon: Icon(Icons.festival_rounded,
                   color: const Color.fromARGB(255, 0, 0, 0)),
-              label: 'Page 3'),
+              label: 'Festical'),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings_rounded,
                   color: const Color.fromARGB(255, 0, 0, 0)),
-              label: 'Page 4'),
+              label: 'Settings'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTap,
