@@ -4,7 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:oauth2_client/spotify_oauth2_client.dart';
 import 'package:oauth2_client/access_token_response.dart';
+
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'package:provider/provider.dart';
+
 import 'settings.dart';
 // import 'package:musical/pages/spotify_auth_page.dart';
 import 'defaulttab.dart';
@@ -13,13 +17,20 @@ import 'package:musical/firebase_options.dart';
 import 'bottomnavbar.dart';
 import 'calendar.dart';
 
+import 'themes/theme_provider.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -33,6 +44,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+
         home: _SpotifyLoginState(),
         title: 'MusiCAL',
         theme: ThemeData(
@@ -40,7 +52,7 @@ class _MyAppState extends State<MyApp> {
           useMaterial3: true,
         ));
   }}
- 
+
 
 class _SpotifyLoginState extends StatefulWidget {
   const _SpotifyLoginState();
