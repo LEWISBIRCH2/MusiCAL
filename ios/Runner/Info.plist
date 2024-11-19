@@ -27,7 +27,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-			<string>musiCAL.app</string> <!-- Replace "myapp" with your desired scheme -->
+			<string>http://localhost:50511/</string> <!-- Replace "myapp" with your desired scheme -->
 			</array>
 		</dict>
 		</array>

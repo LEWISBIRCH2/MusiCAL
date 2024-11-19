@@ -2,5 +2,8 @@
   "dependencies": {
     "flutter": "^0.0.5",
     "http": "^0.0.1-security"
+  },
+  "scripts": {
+    "run": "flutter run --web-port=50511 --host-vmservice-port=50511"
   }
 }
