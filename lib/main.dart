@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:oauth2_client/spotify_oauth2_client.dart';
 import 'package:oauth2_client/access_token_response.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'settings.dart';
 // import 'package:musical/pages/spotify_auth_page.dart';
 import 'defaulttab.dart';
@@ -37,8 +39,8 @@ class _MyAppState extends State<MyApp> {
           colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1F2421)),
           useMaterial3: true,
         ));
-  }
-}
+  }}
+ 
 
 class _SpotifyLoginState extends StatefulWidget {
   const _SpotifyLoginState();
@@ -90,6 +92,7 @@ class __SpotifyLoginStateState extends State<_SpotifyLoginState> {
         ElevatedButton(
             onPressed: () {
               remoteService();
+              
             },
             child: Text('login'))
       ])),
