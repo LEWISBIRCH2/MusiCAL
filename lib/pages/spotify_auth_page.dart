@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:musical/bottomnavbar.dart';
+import 'package:musical/calendar.dart';
+import 'package:musical/defaulttab.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
@@ -11,7 +14,7 @@ class SpotifyAuthPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const String clientId = '809e9a055f604342a727aa3961f343d2';
-    const String redirectUri = 'musiCAL.app/callback';
+    const String redirectUri = 'https://dapper-swan-46f09f.netlify.app';
     const String scopes = 'user-read-private user-read-email';
 
     const String authUrl =
@@ -43,6 +46,8 @@ class SpotifyAuthPage extends StatelessWidget {
             if (code != null) {
               onCodeReceived(code);
               Navigator.pop(context);
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const Navigation()));
             }
             return NavigationDecision.prevent;
           }
