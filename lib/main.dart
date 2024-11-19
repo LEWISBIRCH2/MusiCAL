@@ -56,8 +56,8 @@ class __SpotifyLoginStateState extends State<_SpotifyLoginState> {
     final String clientSecret = '6aa9ae2264094650a6af77b3eef14903';
     AccessTokenResponse? accessT;
     SpotifyOAuth2Client client = SpotifyOAuth2Client(
-      customUriScheme: 'http://localhost:50511/',
-      redirectUri: 'http://localhost:50511/',
+      customUriScheme: 'app',
+      redirectUri: 'http://localhost:50511/#/calendar',
     );
     var authResp =
         await client.requestAuthorization(clientId: clientId, scopes: [
