@@ -23,6 +23,9 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+                   <data android:scheme="app"
+              android:host="localhost:50511"
+              />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

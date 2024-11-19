@@ -1,9 +1,14 @@
 import 'package:firebase_core/firebase_core.dart';
 // import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:oauth2_client/spotify_oauth2_client.dart';
 import 'package:oauth2_client/access_token_response.dart';
+
+import 'package:webview_flutter/webview_flutter.dart';
+
 import 'package:provider/provider.dart';
+
 import 'settings.dart';
 // import 'package:musical/pages/spotify_auth_page.dart';
 import 'defaulttab.dart';
@@ -40,21 +45,14 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
 
-      home: _SpotifyLoginState(),
-      routes: {
-        // '/login': (context) => _SpotifyLoginState(),
-        '/calendar': (context) => Navbar2(),
-        //'/events': (context) => Navbar2(),
-        //   '/festical': (context) => festical(),
-        '/settings': (context) => Settings(),
-        '/recommendations': (context) => Navigation(),
-      },
-      title: 'MusiCAL',
-      theme: Provider.of<ThemeProvider>(context).themeData,
-    );
-      
-  }
-}
+        home: _SpotifyLoginState(),
+        title: 'MusiCAL',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1F2421)),
+          useMaterial3: true,
+        ));
+  }}
+
 
 class _SpotifyLoginState extends StatefulWidget {
   const _SpotifyLoginState();
@@ -72,8 +70,8 @@ class __SpotifyLoginStateState extends State<_SpotifyLoginState> {
     final String clientSecret = '6aa9ae2264094650a6af77b3eef14903';
     AccessTokenResponse? accessT;
     SpotifyOAuth2Client client = SpotifyOAuth2Client(
-      customUriScheme: 'http://localhost:50511/',
-      redirectUri: 'http://localhost:50511/',
+      customUriScheme: 'app',
+      redirectUri: 'http://localhost:50511/#/calendar',
     );
     var authResp =
         await client.requestAuthorization(clientId: clientId, scopes: [
@@ -106,6 +104,7 @@ class __SpotifyLoginStateState extends State<_SpotifyLoginState> {
         ElevatedButton(
             onPressed: () {
               remoteService();
+              
             },
             child: Text('login'))
       ])),
