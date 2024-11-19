@@ -15,6 +15,7 @@ class Recommendations extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Container(
                 decoration: BoxDecoration(
+                    // change colour to reference light/dark themes built by layla
                     color: const Color.fromARGB(255, 12, 145, 17),
                     border: Border.all(width: 8),
                     borderRadius: BorderRadius.circular(20)),
@@ -31,6 +32,7 @@ class Recommendations extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Container(
                 decoration: BoxDecoration(
+                    // change colour to reference light/dark themes built by layla
                     color: const Color.fromARGB(255, 12, 145, 17),
                     border: Border.all(width: 8),
                     borderRadius: BorderRadius.circular(20)),
@@ -48,6 +50,7 @@ class Recommendations extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Container(
                 decoration: BoxDecoration(
+                    // change colour to reference light/dark themes built by layla
                     color: const Color.fromARGB(255, 12, 145, 17),
                     border: Border.all(width: 8),
                     borderRadius: BorderRadius.circular(20)),
@@ -65,6 +68,7 @@ class Recommendations extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Container(
                 decoration: BoxDecoration(
+                    // change colour to reference light/dark themes built by layla
                     color: const Color.fromARGB(255, 12, 145, 17),
                     border: Border.all(width: 8),
                     borderRadius: BorderRadius.circular(20)),
