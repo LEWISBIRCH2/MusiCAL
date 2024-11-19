@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Navigation(),
+        home: _SpotifyLoginState(),
         routes: {
           // '/login': (context) => _SpotifyLoginState(),
           '/calendar': (context) => Navbar2(),
@@ -41,15 +41,14 @@ class _MyAppState extends State<MyApp> {
         },
         title: 'MusiCAL',
         theme: ThemeData(
-          colorScheme:
-              ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 33, 31, 36)),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1F2421)),
           useMaterial3: true,
         ));
   }
 }
 
 class _SpotifyLoginState extends StatefulWidget {
-  const _SpotifyLoginState();
+  const _SpotifyLoginState({super.key});
 
   @override
   State<_SpotifyLoginState> createState() => __SpotifyLoginStateState();
