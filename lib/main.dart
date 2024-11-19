@@ -9,6 +9,7 @@ import 'defaulttab.dart';
 // import 'package:http/http.dart' as http;
 import 'package:musical/firebase_options.dart';
 import 'bottomnavbar.dart';
+import 'calendar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,15 +31,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: _SpotifyLoginState(),
-        routes: {
-          // '/login': (context) => _SpotifyLoginState(),
-          '/calendar': (context) => Navbar2(),
-          //'/events': (context) => Navbar2(),
-          //   '/festical': (context) => festical(),
-          '/settings': (context) => Settings(),
-          '/recommendations': (context) => Navigation(),
-        },
+        home: Calendar(),
         title: 'MusiCAL',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1F2421)),
@@ -48,7 +41,7 @@ class _MyAppState extends State<MyApp> {
 }
 
 class _SpotifyLoginState extends StatefulWidget {
-  const _SpotifyLoginState({super.key});
+  const _SpotifyLoginState();
 
   @override
   State<_SpotifyLoginState> createState() => __SpotifyLoginStateState();

@@ -5,6 +5,8 @@ import 'settings.dart';
 import 'festical.dart';
 
 class Navigation extends StatefulWidget {
+  const Navigation({super.key});
+
   @override
   _NavigationState createState() => _NavigationState();
 }
@@ -12,7 +14,7 @@ class Navigation extends StatefulWidget {
 class _NavigationState extends State<Navigation> {
   int _selectedIndex = 0;
 
-  List<Widget> _widgetOptions = [
+  final List<Widget> _widgetOptions = [
     Calendar(),
     Recommendations(),
     Festical(),

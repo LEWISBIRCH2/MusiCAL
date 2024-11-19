@@ -6,7 +6,7 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 class SpotifyAuthPage extends StatelessWidget {
   final Function(String code) onCodeReceived;
 
-  SpotifyAuthPage({required this.onCodeReceived});
+  const SpotifyAuthPage({super.key, required this.onCodeReceived});
 
   @override
   Widget build(BuildContext context) {
