@@ -8,6 +8,7 @@ import 'settings.dart';
 import 'defaulttab.dart';
 // import 'package:http/http.dart' as http;
 import 'package:musical/firebase_options.dart';
+import 'bottomnavbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +37,7 @@ class _MyAppState extends State<MyApp> {
           //'/events': (context) => Navbar2(),
           //   '/festical': (context) => festical(),
           '/settings': (context) => Settings(),
-          //   '/recommendations': (context) => recommendations(),
+          '/recommendations': (context) => Navigation(),
         },
         title: 'MusiCAL',
         theme: ThemeData(
