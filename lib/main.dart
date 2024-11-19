@@ -5,6 +5,7 @@ import 'login.dart';
 import 'settings.dart';
 import 'package:musical/pages/spotify_auth_page.dart';
 import 'defaulttab.dart';
+import 'bottomnavbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +40,7 @@ class MyApp extends StatelessWidget {
           //'/events': (context) => Navbar2(),
           //   '/festical': (context) => festical(),
           '/settings': (context) => Settings(),
-          //   '/recommendations': (context) => recommendations(),
+          '/recommendations': (context) => Navigation(),
         },
         title: 'MusiCAL',
         theme: ThemeData(
