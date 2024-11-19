@@ -1,30 +1,33 @@
 PODS:
-  - Firebase/CoreOnly (10.25.0):
-    - FirebaseCore (= 10.25.0)
-  - firebase_core (2.32.0):
-    - Firebase/CoreOnly (= 10.25.0)
+  - Firebase/CoreOnly (11.4.0):
+    - FirebaseCore (= 11.4.0)
+  - firebase_core (3.8.0):
+    - Firebase/CoreOnly (= 11.4.0)
     - Flutter
-  - FirebaseCore (10.25.0):
-    - FirebaseCoreInternal (~> 10.0)
-    - GoogleUtilities/Environment (~> 7.12)
-    - GoogleUtilities/Logger (~> 7.12)
-  - FirebaseCoreInternal (10.29.0):
-    - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseCore (11.4.0):
+    - FirebaseCoreInternal (~> 11.0)
+    - GoogleUtilities/Environment (~> 8.0)
+    - GoogleUtilities/Logger (~> 8.0)
+  - FirebaseCoreInternal (11.5.0):
+    - "GoogleUtilities/NSData+zlib (~> 8.0)"
   - Flutter (1.0.0)
   - flutter_secure_storage (6.0.0):
     - Flutter
-  - flutter_web_auth_2 (1.1.1):
+  - flutter_web_auth_2 (3.0.0):
     - Flutter
-  - GoogleUtilities/Environment (7.13.3):
+  - GoogleUtilities/Environment (8.0.2):
     - GoogleUtilities/Privacy
-    - PromisesObjC (< 3.0, >= 1.2)
-  - GoogleUtilities/Logger (7.13.3):
+  - GoogleUtilities/Logger (8.0.2):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - "GoogleUtilities/NSData+zlib (7.13.3)":
+  - "GoogleUtilities/NSData+zlib (8.0.2)":
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (7.13.3)
-  - PromisesObjC (2.4.0)
+  - GoogleUtilities/Privacy (8.0.2)
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - spotify_sdk (0.0.1):
+    - Flutter
   - url_launcher_ios (0.0.1):
     - Flutter
   - webview_flutter_wkwebview (0.0.1):
@@ -36,6 +39,8 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - flutter_web_auth_2 (from `.symlinks/plugins/flutter_web_auth_2/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - spotify_sdk (from `.symlinks/plugins/spotify_sdk/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)
 
@@ -45,7 +50,6 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreInternal
     - GoogleUtilities
-    - PromisesObjC
 
 EXTERNAL SOURCES:
   firebase_core:
@@ -56,21 +60,26 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_secure_storage/ios"
   flutter_web_auth_2:
     :path: ".symlinks/plugins/flutter_web_auth_2/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  spotify_sdk:
+    :path: ".symlinks/plugins/spotify_sdk/ios"
   url_launcher_ios:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
   webview_flutter_wkwebview:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  Firebase: 0312a2352584f782ea56f66d91606891d4607f06
-  firebase_core: a626d00494efa398e7c54f25f1454a64c8abf197
-  FirebaseCore: 7ec4d0484817f12c3373955bc87762d96842d483
-  FirebaseCoreInternal: df84dd300b561c27d5571684f389bf60b0a5c934
+  Firebase: cf1b19f21410b029b6786a54e9764a0cacad3c99
+  firebase_core: 9efc3ecf689cdbc90f13f4dc58108c83ea46b266
+  FirebaseCore: e0510f1523bc0eb21653cac00792e1e2bd6f1771
+  FirebaseCoreInternal: f47dd28ae7782e6a4738aad3106071a8fe0af604
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_secure_storage: 23fc622d89d073675f2eaa109381aefbcf5a49be
-  flutter_web_auth_2: a1bc00762c408a8f80b72a538cd7ff5b601c3e71
-  GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
-  PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
+  flutter_secure_storage: d33dac7ae2ea08509be337e775f6b59f1ff45f12
+  flutter_web_auth_2: 051cf9f5dc366f31b5dcc4e2952c2b954767be8a
+  GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
+  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
+  spotify_sdk: 93c2e7de88e7deceba91d20856f2e11c30c20a3d
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
   webview_flutter_wkwebview: 0982481e3d9c78fd5c6f62a002fcd24fc791f1e4
 

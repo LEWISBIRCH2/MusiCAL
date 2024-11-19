@@ -27,7 +27,7 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-			<string>http://localhost:50511/</string> <!-- Replace "myapp" with your desired scheme -->
+			<string>https://dapper-swan-46f09f.netlify.app</string> <!-- Replace "myapp" with your desired scheme -->
 			</array>
 		</dict>
 		</array>
