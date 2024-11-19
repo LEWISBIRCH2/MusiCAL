@@ -9,14 +9,14 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool showAccountSettings = false;
-  bool showModeSettings = false;
+  bool showDarkMode = false;
 
   void toggleSection(String section) {
     setState(() {
       if (section == 'account') {
         showAccountSettings = !showAccountSettings;
       } else if (section == 'dark mode') {
-        showModeSettings == !showModeSettings;
+        showDarkMode = !showDarkMode;
       }
     });
   }
@@ -30,21 +30,13 @@ class _SettingsState extends State<Settings> {
       body: ListView(
         children: [
           ListTile(
-            leading: Icon(Icons.account_circle, color: Colors.blue),
-            title: Text('Account'),
-            onTap: () => toggleSection('account'),
-          ),
-          if (showAccountSettings)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [ListTile(title: Text('change username'))],
-              ),
-            ),
-          ListTile(
-            leading: Icon(Icons.contrast, color: Colors.orange),
-            title: Text('dark mode'),
+            leading: showDarkMode
+                ? Icon(Icons.contrast,
+                    color: const Color.fromARGB(255, 157, 154, 154))
+                : Icon(Icons.contrast,
+                    color: const Color.fromARGB(255, 0, 0, 0)),
+            title: showDarkMode ? Text('light mode') : Text('dark mode'),
+            onTap: () => toggleSection('dark mode'),
           ),
           ListTile(
               leading: Icon(Icons.logout,
