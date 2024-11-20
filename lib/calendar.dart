@@ -56,18 +56,17 @@ import 'package:intl/intl.dart' show DateFormat;
 // }
 
 class Calendar extends StatefulWidget {
-  Calendar({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const Calendar({super.key});
 
   @override
   _CalendarState createState() => new _CalendarState();
 }
 
 class _CalendarState extends State<Calendar> {
-  DateTime _currentDate = DateTime(2019, 2, 3);
-  DateTime _currentDate2 = DateTime(2019, 2, 3);
-  String _currentMonth = DateFormat.yMMM().format(DateTime(2019, 2, 3));
-  DateTime _targetDateTime = DateTime(2019, 2, 3);
+  DateTime _currentDate = DateTime(2024, 11, 3);
+  DateTime _currentDate2 = DateTime(2024, 11, 3);
+  String _currentMonth = DateFormat.yMMM().format(DateTime(2024, 11, 3));
+  DateTime _targetDateTime = DateTime(2024, 11, 3);
 
   static Widget _eventIcon = new Container(
     decoration: new BoxDecoration(
@@ -82,9 +81,9 @@ class _CalendarState extends State<Calendar> {
 
   EventList<Event> _markedDateMap = new EventList<Event>(
     events: {
-      new DateTime(2019, 2, 10): [
+      new DateTime(2024, 2, 10): [
         new Event(
-          date: new DateTime(2019, 2, 10),
+          date: new DateTime(2024, 2, 10),
           title: 'Event 1',
           icon: _eventIcon,
           dot: Container(
@@ -95,12 +94,12 @@ class _CalendarState extends State<Calendar> {
           ),
         ),
         new Event(
-          date: new DateTime(2019, 2, 10),
+          date: new DateTime(2024, 2, 10),
           title: 'Event 2',
           icon: _eventIcon,
         ),
         new Event(
-          date: new DateTime(2019, 2, 10),
+          date: new DateTime(2024, 2, 10),
           title: 'Event 3',
           icon: _eventIcon,
         ),
@@ -112,34 +111,34 @@ class _CalendarState extends State<Calendar> {
   void initState() {
     /// Add more events to _markedDateMap EventList
     _markedDateMap.add(
-        new DateTime(2019, 2, 25),
+        new DateTime(2024, 2, 25),
         new Event(
-          date: new DateTime(2019, 2, 25),
+          date: new DateTime(2024, 2, 25),
           title: 'Event 5',
           icon: _eventIcon,
         ));
 
     _markedDateMap.add(
-        new DateTime(2019, 2, 10),
+        new DateTime(2024, 2, 10),
         new Event(
-          date: new DateTime(2019, 2, 10),
+          date: new DateTime(2024, 2, 10),
           title: 'Event 4',
           icon: _eventIcon,
         ));
 
-    _markedDateMap.addAll(new DateTime(2019, 2, 11), [
+    _markedDateMap.addAll(new DateTime(2024, 2, 11), [
       new Event(
-        date: new DateTime(2019, 2, 11),
+        date: new DateTime(2024, 11, 11),
         title: 'Event 1',
         icon: _eventIcon,
       ),
       new Event(
-        date: new DateTime(2019, 2, 11),
+        date: new DateTime(2024, 11, 11),
         title: 'Event 2',
         icon: _eventIcon,
       ),
       new Event(
-        date: new DateTime(2019, 2, 11),
+        date: new DateTime(2024, 11, 11),
         title: 'Event 3',
         icon: _eventIcon,
       ),
@@ -253,7 +252,7 @@ class _CalendarState extends State<Calendar> {
 
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text(widget.title),
+          title: new Text('Your Calendar'),
         ),
         body: SingleChildScrollView(
           child: Column(
