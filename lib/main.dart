@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: MyHomePage(),
+        home: Navigation(),
         title: 'MusiCAL',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1F2421)),
