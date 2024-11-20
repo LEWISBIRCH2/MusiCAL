@@ -36,13 +36,12 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
-        home: MyHomePage(),
-        title: 'MusiCAL',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1F2421)),
-          useMaterial3: true,
-        ));
+      home: MyHomePage(),
+      title: 'MusiCAL',
+      theme: themeProvider.themeData,
+    );
   }
 }
 
