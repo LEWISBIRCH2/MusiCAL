@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
-      home: MyHomePage(),
+      home: Navigation(),
       title: 'MusiCAL',
       theme: themeProvider.themeData,
     );
