@@ -97,7 +97,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             )),
           )
-        : SpotifyAuthPage(onCodeReceived: (code) {});
+        : SpotifyAuthPage(onCodeReceived: (code) {
+            accessToken = code;
+          });
   }
 }
 
