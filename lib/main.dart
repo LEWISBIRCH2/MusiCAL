@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:musical/models/Artists-model.dart';
 import 'package:musical/pages/spotify_auth_page.dart';
 import 'package:musical/services/spotify_service.dart';
 import 'package:provider/provider.dart';
 import 'package:musical/firebase_options.dart';
 import 'themes/theme_provider.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
+import 'package:http/http.dart' as http;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,13 +59,22 @@ class _MyHomePageState extends State<MyHomePage> {
   String redirectUrl = 'https://dapper-swan-46f09f.netlify.app';
   String? accessToken;
   SpotifyService service = SpotifyService();
+  Artists? topArtists;
 
   Future<void> getToken() async {
     accessToken = await SpotifySdk.getAccessToken(
-        clientId: clientId,
-        redirectUrl: redirectUrl,
-        scope:
-            "app-remote-control,user-modify-playback-state,playlist-read-private");
+        clientId: clientId, redirectUrl: redirectUrl, scope: "user-top-read");
+    setState(() {});
+  }
+
+  Future<void> getTopArtists() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=20&offset=0'),
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
+    print(response.body);
+    topArtists = artistsFromJson(response.body);
     setState(() {});
   }
 
@@ -81,13 +94,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           getToken();
                         },
                         child: Text('Login'))
-                    : ElevatedButton(onPressed: () {}, child: Text('API CALL')),
+                    : ElevatedButton(
+                        onPressed: () {
+                          getTopArtists();
+                        },
+                        child: Text('API CALL')),
                 Text(accessToken.toString()),
               ],
             )),
           )
         : SpotifyAuthPage(onCodeReceived: (code) async {
             accessToken = await service.exchangeToken(code);
+            await getTopArtists();
           });
   }
 }
