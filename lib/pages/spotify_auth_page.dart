@@ -13,7 +13,9 @@ class SpotifyAuthPage extends StatelessWidget {
   Widget build(BuildContext context) {
     const String clientId = '809e9a055f604342a727aa3961f343d2';
     const String redirectUri = 'https://dapper-swan-46f09f.netlify.app';
-    const String scopes = 'user-read-private user-read-email';
+    const String scopes =
+        'user-read-private user-read-email user-top-read'; //ANDROID APP SEMI-SOLVED. NEEDED USER-TOP-READ IN SCOPE.
+    // ALSO CHANGES TO MANIFEST. NEED SAME FOR IOS? COULD ALSO UPDATE DEV DASHBOARD BUNDLES.
 
     const String authUrl =
         'https://accounts.spotify.com/authorize?response_type=code'

@@ -72,9 +72,19 @@ class _MyHomePageState extends State<MyHomePage> {
           'https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=20&offset=0'),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
-    print(response.body);
-    topArtists = artistsFromJson(response.body);
-    setState(() {});
+
+    final Item = jsonDecode(response.body) as Map<String, dynamic>;
+
+    print(Item['items'][1][
+        'name']); // Declared response [.items][index][subclass?] // HOW TO NAVIGATE THIS STUPID LANGUAGE
+
+    if (mounted) {
+      //UNSURE WHAT 'MOUNTED' DOES, BUT PREVENTED (NON-FATAL)ERROR MESSAGES
+      setState(() {
+        topArtists = artistsFromJson(response.body);
+      });
+    }
+    ;
   }
 
   @override
@@ -99,6 +109,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         child: Text('API CALL')),
                 Text(accessToken.toString()),
+                topArtists != null
+                    ? Text(topArtists!.items[0].name)
+                    : Text('No Artists...')
               ],
             )),
           )
