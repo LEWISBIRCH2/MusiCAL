@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class SpotifyService {
   final String clientId = '809e9a055f604342a727aa3961f343d2';
   final String clientSecret = '6aa9ae2264094650a6af77b3eef14903';
-  final String redirectUri = 'musiCAL.app/callback';
+  final String redirectUri = 'https://dapper-swan-46f09f.netlify.app';
 
   Future<String?> exchangeToken(String code) async {
     final response = await http.post(
