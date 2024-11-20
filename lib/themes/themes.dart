@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 ThemeData lightMode = ThemeData(
   brightness: Brightness.light,
   colorScheme: ColorScheme.light(
-      surface: Color.fromARGB(255, 255, 255, 255),
-      primary: Colors.green.shade300,
-      secondary: Colors.green.shade200),
-  scaffoldBackgroundColor: Colors.white,
+      surface: Color.fromARGB(255, 255, 255,
+          255), // background color for elevated surface components
+      primary: Colors.green.shade300, // for key components
+      secondary: Colors.green.shade200), // for less prominent components
+
+  scaffoldBackgroundColor: Colors.white, //background color for scaffold widget
   appBarTheme: AppBarTheme(
-      backgroundColor: const Color.fromARGB(134, 109, 234, 86),
-      foregroundColor: Colors.black),
+      backgroundColor:
+          const Color.fromARGB(134, 109, 234, 86), // fill color of app bar
+      foregroundColor: Colors.black), // icons and text within app bar
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Colors.black),
+    bodyLarge: TextStyle(color: Colors.black), // for large body text
   ),
 );
 
