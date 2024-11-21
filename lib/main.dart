@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:musical/models/Artists-Ticketmaster-model.dart';
 import 'package:musical/models/Artists-model.dart';
 import 'package:musical/models/Events-model.dart';
 import 'package:musical/models/Profile-model.dart';
@@ -62,6 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
   SpotifyService service = SpotifyService();
   Artists? topArtists;
   Profile? profile;
+  String? userID;
   DatabaseReference dbref = FirebaseDatabase.instance.ref();
 
   Future<void> getToken() async {
@@ -100,8 +102,15 @@ class _MyHomePageState extends State<MyHomePage> {
           'images': data[i].images,
         };
 
+        userID = profile!.email
+            .replaceAll(RegExp(r'\.'), 'DOT_SIGN')
+            .replaceAll(RegExp(r'\$'), 'DOLLAR_SIGN')
+            .replaceAll(RegExp(r'\#'), 'HASH_SIGN')
+            .replaceAll(RegExp(r'\['), 'OPENARRAY_SIGN')
+            .replaceAll(RegExp(r'\]'), 'CLOSEARRAY_SIGN');
+
         await dbref
-            .child(profile!.id + profile!.displayName)
+            .child(userID!)
             .child('Top Artists')
             .push()
             .set(jsonEncode(newData));
@@ -114,14 +123,13 @@ class _MyHomePageState extends State<MyHomePage> {
       for (int i = 0; i < topArtists!.items.length; i++) {
         var artist = topArtists!.items[i].name;
 
+        // var artistResponse = await http.get(Uri.parse(
+        //     'https://app.ticketmaster.com/discovery/v2/attractions?apikey=$apiKey&keyword=$artist/&locale=*'));
+
         var response = await http.get(Uri.parse(
             'https://app.ticketmaster.com/discovery/v2/events.json?keyword=$artist&segmentName=music&apikey=$apiKey'));
 
-        await dbref
-            .child(profile!.id + profile!.displayName)
-            .child('Events')
-            .push()
-            .set(response.body);
+        await dbref.child(userID!).child('Events').push().set(response.body);
       }
     }
 
