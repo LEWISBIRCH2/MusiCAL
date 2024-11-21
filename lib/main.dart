@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:musical/models/Artists-model.dart';
+import 'package:musical/models/Events-model.dart';
 import 'package:musical/models/Profile-model.dart';
 import 'package:musical/pages/spotify_auth_page.dart';
 import 'package:musical/services/spotify_service.dart';
@@ -60,6 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String? accessToken;
   SpotifyService service = SpotifyService();
   Artists? topArtists;
+  Profile? profile;
   DatabaseReference dbref = FirebaseDatabase.instance.ref();
 
   Future<void> getToken() async {
@@ -86,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
         headers: {'Authorization': 'Bearer $accessToken'},
       );
 
-      final profile = profileFromJson(profileResponse.body);
+      profile = profileFromJson(profileResponse.body);
 
       topArtists = artistsFromJson(response.body);
       final data = topArtists!.items;
@@ -99,10 +101,27 @@ class _MyHomePageState extends State<MyHomePage> {
         };
 
         await dbref
-            .child(profile.id + profile.displayName)
+            .child(profile!.id + profile!.displayName)
             .child('Top Artists')
             .push()
             .set(jsonEncode(newData));
+      }
+    }
+
+    Future<void> getEvents() async {
+      const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
+
+      for (int i = 0; i < topArtists!.items.length; i++) {
+        var artist = topArtists!.items[i].name;
+
+        var response = await http.get(Uri.parse(
+            'https://app.ticketmaster.com/discovery/v2/events.json?keyword=$artist&segmentName=music&apikey=$apiKey'));
+
+        await dbref
+            .child(profile!.id + profile!.displayName)
+            .child('Events')
+            .push()
+            .set(response.body);
       }
     }
 
@@ -121,8 +140,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                         child: Text('Login'))
                     : ElevatedButton(
-                        onPressed: () {
-                          getTopArtists();
+                        onPressed: () async {
+                          await getTopArtists();
+                          getEvents();
                         },
                         child: Text('API CALL')),
                 Text(accessToken.toString()),
@@ -135,6 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
         : SpotifyAuthPage(onCodeReceived: (code) async {
             accessToken = await service.exchangeToken(code);
             await getTopArtists();
+            await getEvents();
           });
   }
 }
