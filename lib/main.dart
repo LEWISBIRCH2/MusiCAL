@@ -91,21 +91,18 @@ class _MyHomePageState extends State<MyHomePage> {
       topArtists = artistsFromJson(response.body);
       final data = topArtists!.items;
 
-      if (mounted) {
-        //UNSURE WHAT 'MOUNTED' DOES, BUT PREVENTED (NON-FATAL)ERROR MESSAGES
-        for (int i = 0; i < data.length; i++) {
-          var newData = {
-            'name': data[i].name,
-            'genres': data[i].genres,
-            'images': data[i].images,
-          };
+      for (int i = 0; i < data.length; i++) {
+        var newData = {
+          'name': data[i].name,
+          'genres': data[i].genres,
+          'images': data[i].images,
+        };
 
-          await dbref
-              .child(profile.id + profile.displayName)
-              .child('Top Artists')
-              .push()
-              .set(jsonEncode(newData));
-        }
+        await dbref
+            .child(profile.id + profile.displayName)
+            .child('Top Artists')
+            .push()
+            .set(jsonEncode(newData));
       }
     }
 
