@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:musical/bottomnavbar.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+import 'package:musical/bottomnavbar.dart';
 
 class SpotifyAuthPage extends StatelessWidget {
   final Function(String code) onCodeReceived;
