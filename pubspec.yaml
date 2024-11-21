@@ -20,6 +20,7 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   firebase_core: ^3.8.0
+  firebase_database: ^11.1.6
   flutter_calendar_carousel: ^2.4.4
   spotify_sdk: ^3.0.2
 
