@@ -40,6 +40,7 @@ class MyApp extends StatelessWidget {
         title: 'MusiCAL',
         theme: themeProvider.themeData,
       ),
+
     );
   }
 }
