@@ -4,6 +4,9 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'package:firebase_database/firebase_database.dart';
+import 'package:musical/models/Events-model.dart';
+import 'package:musical/main.dart' show MyApp;
 
 // class Calendar extends StatelessWidget {
 //   const Calendar({super.key});
@@ -67,6 +70,9 @@ class _CalendarState extends State<Calendar> {
   DateTime _currentDate2 = DateTime(2024, 11, 3);
   String _currentMonth = DateFormat.yMMM().format(DateTime(2024, 11, 3));
   DateTime _targetDateTime = DateTime(2024, 11, 3);
+  DatabaseReference dbref = FirebaseDatabase.instance.ref();
+
+  Events events = await dbref.child(MyApp().userID)
 
   static Widget _eventIcon = new Container(
     decoration: new BoxDecoration(
@@ -81,9 +87,9 @@ class _CalendarState extends State<Calendar> {
 
   EventList<Event> _markedDateMap = new EventList<Event>(
     events: {
-      new DateTime(2024, 2, 10): [
+      new DateTime(2024, 11, 10): [
         new Event(
-          date: new DateTime(2024, 2, 10),
+          date: new DateTime(2024, 11, 10),
           title: 'Event 1',
           icon: _eventIcon,
           dot: Container(
@@ -94,12 +100,12 @@ class _CalendarState extends State<Calendar> {
           ),
         ),
         new Event(
-          date: new DateTime(2024, 2, 10),
+          date: new DateTime(2024, 11, 10),
           title: 'Event 2',
           icon: _eventIcon,
         ),
         new Event(
-          date: new DateTime(2024, 2, 10),
+          date: new DateTime(2024, 11, 10),
           title: 'Event 3',
           icon: _eventIcon,
         ),
@@ -111,22 +117,22 @@ class _CalendarState extends State<Calendar> {
   void initState() {
     /// Add more events to _markedDateMap EventList
     _markedDateMap.add(
-        new DateTime(2024, 2, 25),
+        new DateTime(2024, 11, 25),
         new Event(
-          date: new DateTime(2024, 2, 25),
+          date: new DateTime(2024, 11, 25),
           title: 'Event 5',
           icon: _eventIcon,
         ));
 
     _markedDateMap.add(
-        new DateTime(2024, 2, 10),
+        new DateTime(2024, 11, 10),
         new Event(
-          date: new DateTime(2024, 2, 10),
+          date: new DateTime(2024, 11, 10),
           title: 'Event 4',
           icon: _eventIcon,
         ));
 
-    _markedDateMap.addAll(new DateTime(2024, 2, 11), [
+    _markedDateMap.addAll(new DateTime(2024, 11, 11), [
       new Event(
         date: new DateTime(2024, 11, 11),
         title: 'Event 1',

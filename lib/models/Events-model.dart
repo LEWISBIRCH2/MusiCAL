@@ -33,14 +33,15 @@ class Events {
 }
 
 class EventsEmbedded {
-  List<Event> events;
+  List<TMEvent> events;
 
   EventsEmbedded({
     required this.events,
   });
 
   factory EventsEmbedded.fromJson(Map<String, dynamic> json) => EventsEmbedded(
-        events: List<Event>.from(json["events"].map((x) => Event.fromJson(x))),
+        events:
+            List<TMEvent>.from(json["events"].map((x) => TMEvent.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -48,7 +49,7 @@ class EventsEmbedded {
       };
 }
 
-class Event {
+class TMEvent {
   EventName name;
   EventType type;
   String id;
@@ -76,7 +77,7 @@ class Event {
   String? description;
   Place? place;
 
-  Event({
+  TMEvent({
     required this.name,
     required this.type,
     required this.id,
@@ -105,7 +106,7 @@ class Event {
     this.place,
   });
 
-  factory Event.fromJson(Map<String, dynamic> json) => Event(
+  factory TMEvent.fromJson(Map<String, dynamic> json) => TMEvent(
         name: eventNameValues.map[json["name"]]!,
         type: eventTypeValues.map[json["type"]]!,
         id: json["id"],
