@@ -60,7 +60,7 @@ class Attraction {
   String url;
   Locale locale;
   ExternalLinks? externalLinks;
-  List<Image> images;
+  List<ArtistImage> images;
   List<Classification> classifications;
   Map<String, int> upcomingEvents;
   AttractionLinks links;
@@ -89,7 +89,8 @@ class Attraction {
         externalLinks: json["externalLinks"] == null
             ? null
             : ExternalLinks.fromJson(json["externalLinks"]),
-        images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+        images: List<ArtistImage>.from(
+            json["images"].map((x) => ArtistImage.fromJson(x))),
         classifications: List<Classification>.from(
             json["classifications"].map((x) => Classification.fromJson(x))),
         upcomingEvents: Map.from(json["upcomingEvents"])
@@ -308,14 +309,14 @@ class Musicbrainz {
       };
 }
 
-class Image {
+class ArtistImage {
   Ratio ratio;
   String url;
   int width;
   int height;
   bool fallback;
 
-  Image({
+  ArtistImage({
     required this.ratio,
     required this.url,
     required this.width,
@@ -323,7 +324,7 @@ class Image {
     required this.fallback,
   });
 
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory ArtistImage.fromJson(Map<String, dynamic> json) => ArtistImage(
         ratio: ratioValues.map[json["ratio"]]!,
         url: json["url"],
         width: json["width"],
