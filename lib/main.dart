@@ -14,6 +14,8 @@ import 'themes/theme_provider.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_database/firebase_database.dart';
+import 'bottomnavbar.dart';
+import 'calendar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => _MyAppState(),
       child: MaterialApp(
-        home: MyHomePage(),
+        home: Navigation(), //MyHomePage()
         title: 'MusiCAL',
         theme: themeProvider.themeData,
       ),
@@ -94,6 +96,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
       topArtists = artistsFromJson(response.body);
       final data = topArtists!.items;
+      setState(() {
+        topArtists;
+      });
 
       for (int i = 0; i < data.length; i++) {
         var newData = {
@@ -153,10 +158,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           getEvents();
                         },
                         child: Text('API CALL')),
-                Text(accessToken.toString()),
+                //    Text(accessToken.toString()),
+
                 topArtists != null
-                    ? Text(topArtists!.items[0].name)
-                    : Text('No Artists...')
+                    ? Text('Artists found!') // Can't just "Navigation ()" :(
+                    : Text('No Artists...') // Could route to "/page"
               ],
             )),
           )

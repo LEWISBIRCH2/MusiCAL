@@ -1,59 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_calendar_carousel/classes/marked_date.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 import 'package:flutter_calendar_carousel/classes/event.dart';
+import 'main.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
-
-// class Calendar extends StatelessWidget {
-//   const Calendar({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     ThemeData(
-//         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1f2421)),
-//         useMaterial3: true);
-
-// Theme data not taking effect. Is it positioned right?
-
-// return Container(
-//   margin: EdgeInsets.symmetric(horizontal: 16.0),
-//   child: CalendarCarousel<Event>(
-//     onDayPressed: (DateTime date, List<Event> events) {
-//       this.setState(() => _currentDate = date);
-//     },
-//     weekendTextStyle: TextStyle(color: Colors.red,),
-//     thisMonthDayBorderColor: Colors.grey,
-//     customDayBuilder: (
-//       bool isSelectable,
-//       int index,
-//       bool isSelectedDay,
-//       bool isToday,
-//       bool isPrevMonthDay,
-//       TextStyle textStyle,
-//       bool isNextMonthDay,
-//       bool isThisMonthDay,
-//       DateTime day,
-//     ) {
-//       if (day.day == 15) {
-//         return Center(child: Icon(Icons.local_airport),);
-//         else {
-//           return null;
-//         }
-//       },
-//       weekFormat: false,
-//       markedDatesMap: _markedDateMap,
-//       height: 420.0,
-//       selectedDateTime: _currentDate,
-//       daysHaveCircularBorder: false,
-
-// todayBorderColor: Color.fromARGB(255, 81, 123, 98),
-// todayButtonColor: Color.fromARGB(255, 81, 123, 98),
-// thisMonthDayBorderColor: Color.fromARGB(255, 81, 123, 98),
-//       ),
-//     );
-//   }
-// }
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -67,79 +21,69 @@ class _CalendarState extends State<Calendar> {
   DateTime _currentDate2 = DateTime(2024, 11, 3);
   String _currentMonth = DateFormat.yMMM().format(DateTime(2024, 11, 3));
   DateTime _targetDateTime = DateTime(2024, 11, 3);
+  
 
   static Widget _eventIcon = new Container(
     decoration: new BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(1000)),
-        border: Border.all(color: Colors.blue, width: 2.0)),
+        border:
+            Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 2.0)),
     child: new Icon(
-      Icons.person,
-      color: Colors.amber,
+      Icons.music_note,
+      color: const Color.fromARGB(255, 0, 156, 70),
     ),
   );
 
   EventList<Event> _markedDateMap = new EventList<Event>(
     events: {
-      new DateTime(2024, 2, 10): [
+      new DateTime(2024, 11, 10): [
+        ///////////////// ARRAY OF EVENTS TO ADD
+
         new Event(
-          date: new DateTime(2024, 2, 10),
-          title: 'Event 1',
-          icon: _eventIcon,
-          dot: Container(
-            margin: EdgeInsets.symmetric(horizontal: 1.0),
-            color: Colors.red,
-            height: 5.0,
-            width: 5.0,
-          ),
-        ),
-        new Event(
-          date: new DateTime(2024, 2, 10),
-          title: 'Event 2',
+          date: new DateTime(2024, 20, 10),
+          title: 'Arctic Monkeys',
+          description: 'Punk', // COULD BE GENRE
           icon: _eventIcon,
         ),
         new Event(
           date: new DateTime(2024, 2, 10),
-          title: 'Event 3',
+          title: 'Vince Staples',
           icon: _eventIcon,
         ),
       ],
     },
-  );
+  ); /////////////////////////// END OF ARRAY
 
   @override
   void initState() {
     /// Add more events to _markedDateMap EventList
     _markedDateMap.add(
-        new DateTime(2024, 2, 25),
+        new DateTime(2024, 11, 25),
         new Event(
-          date: new DateTime(2024, 2, 25),
-          title: 'Event 5',
+          date: new DateTime(2024, 11, 25),
+          title: 'Elvis (is dead)',
           icon: _eventIcon,
         ));
 
     _markedDateMap.add(
-        new DateTime(2024, 2, 10),
+        new DateTime(2024, 11, 21),
         new Event(
-          date: new DateTime(2024, 2, 10),
-          title: 'Event 4',
+          date: new DateTime(2024, 20, 11),
+          title: 'Maximo Park',
           icon: _eventIcon,
         ));
 
     _markedDateMap.addAll(new DateTime(2024, 2, 11), [
+      // Adds all events to "ADD ALL" date provided?
       new Event(
-        date: new DateTime(2024, 11, 11),
-        title: 'Event 1',
+        date: new DateTime(2024, 20, 11),
+        title: 'Arctic Monkeys',
         icon: _eventIcon,
       ),
       new Event(
         date: new DateTime(2024, 11, 11),
-        title: 'Event 2',
-        icon: _eventIcon,
-      ),
-      new Event(
-        date: new DateTime(2024, 11, 11),
-        title: 'Event 3',
+        title: 'Vince Staples',
         icon: _eventIcon,
       ),
     ]);
@@ -148,53 +92,16 @@ class _CalendarState extends State<Calendar> {
 
   @override
   Widget build(BuildContext context) {
-    /// Example with custom icon
-    final _calendarCarousel = CalendarCarousel<Event>(
-      onDayPressed: (date, events) {
-        this.setState(() => _currentDate = date);
-        events.forEach((event) => print(event.title));
-      },
-      weekendTextStyle: TextStyle(
-        color: Colors.red,
-      ),
-      thisMonthDayBorderColor: Colors.grey,
-//          weekDays: null, /// for pass null when you do not want to render weekDays
-      headerText: 'Custom Header',
-      weekFormat: true,
-      markedDatesMap: _markedDateMap,
-      height: 200.0,
-      selectedDateTime: _currentDate2,
-      showIconBehindDayText: true,
-//          daysHaveCircularBorder: false, /// null for not rendering any border, true for circular border, false for rectangular border
-      customGridViewPhysics: NeverScrollableScrollPhysics(),
-      markedDateShowIcon: true,
-      markedDateIconMaxShown: 2,
-      selectedDayTextStyle: TextStyle(
-        color: Colors.yellow,
-      ),
-      todayTextStyle: TextStyle(
-        color: Colors.blue,
-      ),
-      markedDateIconBuilder: (event) {
-        return event.icon ?? Icon(Icons.help_outline);
-      },
-      minSelectedDate: _currentDate.subtract(Duration(days: 360)),
-      maxSelectedDate: _currentDate.add(Duration(days: 360)),
-      todayButtonColor: Colors.transparent,
-      todayBorderColor: Colors.green,
-      markedDateMoreShowTotal:
-          true, // null for not showing hidden events indicator
-//          markedDateIconMargin: 9,
-//          markedDateIconOffset: 3,
-    );
-
-    /// Example Calendar Carousel without header and custom prev & next button
     final _calendarCarouselNoHeader = CalendarCarousel<Event>(
-      todayBorderColor: Colors.green,
-      onDayPressed: (date, events) {
-        this.setState(() => _currentDate2 = date);
-        events.forEach((event) => print(event.title));
+      markedDateShowIcon: true,
+      showIconBehindDayText: false,
+      markedDateIconMaxShown: 1,
+      markedDateIconBuilder: (event) {
+        return event.icon;
       },
+      markedDateMoreShowTotal: true,
+
+      todayBorderColor: Colors.green,
       daysHaveCircularBorder: true,
       showOnlyCurrentMonthDate: false,
       weekendTextStyle: TextStyle(
@@ -202,14 +109,15 @@ class _CalendarState extends State<Calendar> {
       ),
       thisMonthDayBorderColor: Colors.grey,
       weekFormat: false,
-//      firstDayOfWeek: 4,
+
       markedDatesMap: _markedDateMap,
       height: 420.0,
       selectedDateTime: _currentDate2,
       targetDateTime: _targetDateTime,
       customGridViewPhysics: NeverScrollableScrollPhysics(),
-      markedDateCustomShapeBorder:
-          CircleBorder(side: BorderSide(color: Colors.yellow)),
+      markedDateCustomShapeBorder: CircleBorder(
+          side: BorderSide(
+              color: const Color.fromARGB(1, 215, 76, 60))), //#d74c3c
       markedDateCustomTextStyle: TextStyle(
         fontSize: 18,
         color: Colors.blue,
@@ -218,16 +126,10 @@ class _CalendarState extends State<Calendar> {
       todayTextStyle: TextStyle(
         color: Colors.blue,
       ),
-      // markedDateShowIcon: true,
-      // markedDateIconMaxShown: 2,
-      // markedDateIconBuilder: (event) {
-      //   return event.icon;
-      // },
-      // markedDateMoreShowTotal:
-      //     true,
-      todayButtonColor: Colors.yellow,
+
+      todayButtonColor: const Color.fromARGB(255, 233, 255, 227),
       selectedDayTextStyle: TextStyle(
-        color: Colors.yellow,
+        color: const Color.fromARGB(255, 55, 255, 0),
       ),
       minSelectedDate: _currentDate.subtract(Duration(days: 360)),
       maxSelectedDate: _currentDate.add(Duration(days: 360)),
@@ -239,80 +141,97 @@ class _CalendarState extends State<Calendar> {
         color: Colors.tealAccent,
         fontSize: 16,
       ),
+
       onCalendarChanged: (DateTime date) {
         this.setState(() {
           _targetDateTime = date;
           _currentMonth = DateFormat.yMMM().format(_targetDateTime);
         });
       },
+      onDayPressed: (date, events) {
+        this.setState(() => _currentDate2 = date);
+        events.forEach((event) => print(event.title));
+//print(events[0].title);
+print(_markedDateMap.events.entries);
+   
+      },
       onDayLongPressed: (DateTime date) {
         print('long pressed date $date');
       },
     );
-
     return new Scaffold(
-        appBar: new AppBar(
-          title: new Text('Your Calendar'),
-        ),
         body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              //custom icon
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(
+              top: 30.0,
+              bottom: 16.0,
+              left: 16.0,
+              right: 16.0,
+            ),
+            child: new Row(
+              children: <Widget>[
+                Expanded(
+                    child: Text(
+                  _currentMonth,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 34.0,
+                  ),
+                )),
+                TextButton(
+                  child: Text('PREV'),
+                  onPressed: () {
+                    setState(() {
+                      _targetDateTime = DateTime(
+                          _targetDateTime.year, _targetDateTime.month - 1);
+                      _currentMonth = DateFormat.yMMM().format(_targetDateTime);
+                    });
+                  },
+                ),
+                TextButton(
+                  child: Text('NEXT'),
+                  onPressed: () {
+                    setState(() {
+                      _targetDateTime = DateTime(
+                          _targetDateTime.year, _targetDateTime.month + 1);
+                      _currentMonth = DateFormat.yMMM().format(_targetDateTime);
+                    });
+                  },
+                )
+              ],
+            ),
+          ),
+          Column(
+            children: [
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: _calendarCarousel,
-              ), // This trailing comma makes auto-formatting nicer for build methods.
-              //custom icon without header
-              Container(
-                margin: EdgeInsets.only(
-                  top: 30.0,
-                  bottom: 16.0,
-                  left: 16.0,
-                  right: 16.0,
-                ),
-                child: new Row(
-                  children: <Widget>[
-                    Expanded(
-                        child: Text(
-                      _currentMonth,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.0,
-                      ),
-                    )),
-                    TextButton(
-                      child: Text('PREV'),
-                      onPressed: () {
-                        setState(() {
-                          _targetDateTime = DateTime(
-                              _targetDateTime.year, _targetDateTime.month - 1);
-                          _currentMonth =
-                              DateFormat.yMMM().format(_targetDateTime);
-                        });
-                      },
-                    ),
-                    TextButton(
-                      child: Text('NEXT'),
-                      onPressed: () {
-                        setState(() {
-                          _targetDateTime = DateTime(
-                              _targetDateTime.year, _targetDateTime.month + 1);
-                          _currentMonth =
-                              DateFormat.yMMM().format(_targetDateTime);
-                        });
-                      },
-                    )
-                  ],
-                ),
+                child:
+                    _calendarCarouselNoHeader, // THIS IS THE DATES / NUMBERS BELOW DATE
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: _calendarCarouselNoHeader,
-              ), //
+                  height: 100,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  alignment: Alignment.topCenter,
+                  child: Text('Selected Date: $_currentDate2')),
+              Container(
+                  height: 100,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  alignment: Alignment.topCenter,
+                  child: Text(
+                    'Artist(s) Playing: $_markedDateMap',
+                  ))
             ],
-          ),
-        ));
+          ) //
+        ],
+      ),
+    ));
   }
 }
