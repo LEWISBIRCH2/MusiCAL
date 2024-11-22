@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:musical/events.dart';
 import 'package:musical/models/Artists-Ticketmaster-model.dart';
 import 'package:musical/models/Artists-model.dart';
 import 'package:musical/models/Events-model.dart';
@@ -63,6 +64,7 @@ class _MyAppState extends ChangeNotifier {
   String? userID;
   List<UserEvent> events = [];
   List<String>? eventsStrings;
+  UserEvent? selectedEvent;
 
   Future<void> getToken() async {
     accessToken = await SpotifySdk.getAccessToken(
@@ -274,7 +276,6 @@ class _CalendarState extends State<Calendar> {
   DateTime _currentDate2 = DateTime(2024, 11, 3);
   String _currentMonth = DateFormat.yMMM().format(DateTime(2024, 11, 3));
   DateTime _targetDateTime = DateTime(2024, 11, 3);
-  
 
   static Widget _eventIcon = new Container(
     decoration: new BoxDecoration(
@@ -311,6 +312,7 @@ class _CalendarState extends State<Calendar> {
   @override
   void initState() {
     /// Add more events to _markedDateMap EventList
+
     _markedDateMap.add(
         new DateTime(2024, 11, 25),
         new Event(
@@ -344,7 +346,32 @@ class _CalendarState extends State<Calendar> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    var appState = context.watch<_MyAppState>();
+
+    for (int i = 0; i < appState.events.length; i++) {
+      if (appState.events[i].eventDate != 'not found') {
+        List dateArray = appState.events[i].eventDate!.split('-');
+        int year = int.parse(dateArray[0]);
+        int month = int.parse(dateArray[1]);
+        int day = int.parse(dateArray[2]);
+
+        _markedDateMap.add(
+            new DateTime(year, month, day),
+            new Event(
+              date: new DateTime(year, month, day),
+              title: appState.events[i].eventName,
+              icon: _eventIcon,
+            ));
+      }
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var appState = context.watch<_MyAppState>();
     final _calendarCarouselNoHeader = CalendarCarousel<Event>(
       markedDateShowIcon: true,
       showIconBehindDayText: false,
@@ -353,7 +380,6 @@ class _CalendarState extends State<Calendar> {
         return event.icon;
       },
       markedDateMoreShowTotal: true,
-
       todayBorderColor: Colors.green,
       daysHaveCircularBorder: true,
       showOnlyCurrentMonthDate: false,
@@ -404,12 +430,10 @@ class _CalendarState extends State<Calendar> {
       onDayPressed: (date, events) {
         this.setState(() => _currentDate2 = date);
         events.forEach((event) => print(event.title));
-//print(events[0].title);
-print(_markedDateMap.events.entries);
-   
       },
       onDayLongPressed: (DateTime date) {
-        print('long pressed date $date');
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => EventsPage()));
       },
     );
     return new Scaffold(
@@ -486,5 +510,150 @@ print(_markedDateMap.events.entries);
         ],
       ),
     ));
+  }
+}
+
+class EventPageEvent {
+  final String name;
+  final String date;
+  final String location;
+  final String description;
+  final String ticketPrice;
+
+  EventPageEvent({
+    required this.name,
+    required this.date,
+    required this.location,
+    required this.description,
+    required this.ticketPrice,
+  });
+}
+
+class EventsPage extends StatefulWidget {
+  @override
+  State<EventsPage> createState() => _EventsPageState();
+}
+
+class _EventsPageState extends State<EventsPage> {
+  @override
+  void didChangeDependencies() {
+    var appState = context.watch<_MyAppState>();
+
+    super.didChangeDependencies();
+  }
+
+  final EventPageEvent event = EventPageEvent(
+    name: "Funky Festival",
+    date: "12-12-24",
+    location: "Manchester",
+    description: "Description here.",
+    ticketPrice: '£1',
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('EventPageEvent Information'),
+        backgroundColor: const Color.fromARGB(255, 94, 216, 125),
+      ),
+      body: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: const Color.fromARGB(255, 94, 216, 125),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'Back to calendar',
+                  style: TextStyle(color: Colors.black, fontSize: 18),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    event.name,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: const Color.fromARGB(255, 2, 3, 2),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.calendar_today,
+                          color: const Color.fromARGB(255, 94, 216, 125)),
+                      SizedBox(width: 10),
+                      Text(
+                        event.date,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.location_on,
+                        color: const Color.fromARGB(255, 94, 216, 125),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        event.location,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.attach_money,
+                        color: const Color.fromARGB(255, 94, 216, 125),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        event.ticketPrice,
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      event.description,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

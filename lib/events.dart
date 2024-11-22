@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Event {
+class EventPageEvent {
   final String name;
   final String date;
   final String location;
   final String description;
   final String ticketPrice;
 
-  Event({
+  EventPageEvent({
     required this.name,
     required this.date,
     required this.location,
@@ -17,7 +17,7 @@ class Event {
 }
 
 class EventsPage extends StatelessWidget {
-  final Event event = Event(
+  final EventPageEvent event = EventPageEvent(
     name: "Funky Festival",
     date: "12-12-24",
     location: "Manchester",
@@ -29,7 +29,7 @@ class EventsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Event Information'),
+        title: Text('EventPageEvent Information'),
         backgroundColor: const Color.fromARGB(255, 94, 216, 125),
       ),
       body: Column(
