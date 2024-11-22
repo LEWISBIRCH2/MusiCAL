@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:musical/events.dart';
 import 'package:musical/models/Artists-Ticketmaster-model.dart';
 import 'package:musical/models/Artists-model.dart';
 import 'package:musical/models/Events-model.dart';
@@ -45,7 +44,8 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => _MyAppState(),
       child: MaterialApp(
-        home: Navigation(),         //MyHomePage())
+        home: MyHomePage(),
+        //MyHomePage())
         title: 'MusiCAL',
         theme: themeProvider.themeData,
       ),
@@ -101,7 +101,7 @@ class _MyAppState extends ChangeNotifier {
         .replaceAll(RegExp(r'\]'), 'CLOSEARRAY_SIGN');
 
     try {
-      final DataSnapshot snapshot = await dbref.limitToLast(1).get();
+      final DataSnapshot snapshot = await dbref.get();
       if (snapshot.value.toString().contains(userID!)) {
       } else {
         for (int i = 0; i < data.length; i++) {
@@ -290,66 +290,13 @@ class _CalendarState extends State<Calendar> {
     ),
   );
 
-  EventList<Event> _markedDateMap = new EventList<Event>(
-    events: {
-      new DateTime(2024, 11, 10): [
-        ///////////////// ARRAY OF EVENTS TO ADD
-
-        new Event(
-          date: new DateTime(2024, 20, 10),
-          title: 'Arctic Monkeys',
-          description: 'Punk', // COULD BE GENRE
-          icon: _eventIcon,
-        ),
-        new Event(
-          date: new DateTime(2024, 2, 10),
-          title: 'Vince Staples',
-          icon: _eventIcon,
-        ),
-      ],
-    },
-  ); /////////////////////////// END OF ARRAY
-
   @override
-  void initState() {
-    /// Add more events to _markedDateMap EventList
-
-    _markedDateMap.add(
-        new DateTime(2024, 11, 25),
-        new Event(
-          date: new DateTime(2024, 11, 25),
-          title: 'Elvis (is dead)',
-          icon: _eventIcon,
-        ));
-
-    _markedDateMap.add(
-        new DateTime(2024, 11, 21),
-        new Event(
-          date: new DateTime(2024, 20, 11),
-          title: 'Maximo Park',
-          icon: _eventIcon,
-        ));
-
-    _markedDateMap.addAll(new DateTime(2024, 2, 11), [
-      // Adds all events to "ADD ALL" date provided?
-      new Event(
-        date: new DateTime(2024, 20, 11),
-        title: 'Arctic Monkeys',
-        icon: _eventIcon,
-      ),
-      new Event(
-        date: new DateTime(2024, 11, 11),
-        title: 'Vince Staples',
-        icon: _eventIcon,
-      ),
-    ]);
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
+  Widget build(BuildContext context) {
     var appState = context.watch<_MyAppState>();
+
+    EventList<Event> _markedDateMap = new EventList<Event>(
+      events: {},
+    );
 
     for (int i = 0; i < appState.events.length; i++) {
       if (appState.events[i].eventDate != 'not found') {
@@ -367,12 +314,7 @@ class _CalendarState extends State<Calendar> {
             ));
       }
     }
-    super.didChangeDependencies();
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    var appState = context.watch<_MyAppState>();
     final _calendarCarouselNoHeader = CalendarCarousel<Event>(
       markedDateShowIcon: true,
       showIconBehindDayText: false,
@@ -430,14 +372,26 @@ class _CalendarState extends State<Calendar> {
       },
       onDayPressed: (date, events) {
         this.setState(() => _currentDate2 = date);
-       //print(events[0].title);
+        //print(events[0].title);
         events.forEach((event) => print(event.title));
-      },
-
-      onDayLongPressed: (DateTime date) {
+        var eventFilter = appState.events.where((e) {
+          DateTime d;
+          if (e.eventDate != 'not found') {
+            List dateArray = e.eventDate!.split('-');
+            int year = int.parse(dateArray[0]);
+            int month = int.parse(dateArray[1]);
+            int day = int.parse(dateArray[2]);
+            d = DateTime(year, month, day);
+          } else {
+            d = DateTime(0, 0, 0);
+          }
+          return e.eventName == events[0].title && d == events[0].date;
+        });
+        appState.selectedEvent = eventFilter.elementAt(0);
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => EventsPage()));
       },
+      onDayLongPressed: (DateTime date) {},
     );
     return new Scaffold(
         body: SingleChildScrollView(
@@ -517,18 +471,18 @@ class _CalendarState extends State<Calendar> {
 }
 
 class EventPageEvent {
-  final String name;
-  final String date;
-  final String location;
-  final String description;
-  final String ticketPrice;
+  final String? name;
+  final String? date;
+  final String? location;
+  final String? description;
+  final String? ticketUrl;
 
   EventPageEvent({
-    required this.name,
-    required this.date,
-    required this.location,
-    required this.description,
-    required this.ticketPrice,
+    this.name,
+    this.date,
+    this.location,
+    this.description,
+    this.ticketUrl,
   });
 }
 
@@ -539,22 +493,19 @@ class EventsPage extends StatefulWidget {
 
 class _EventsPageState extends State<EventsPage> {
   @override
-  void didChangeDependencies() {
+  Widget build(BuildContext context) {
     var appState = context.watch<_MyAppState>();
 
-    super.didChangeDependencies();
-  }
+    UserEvent? Uevent = appState.selectedEvent;
 
-  final EventPageEvent event = EventPageEvent(
-    name: "Funky Festival",
-    date: "12-12-24",
-    location: "Manchester",
-    description: "Description here.",
-    ticketPrice: '£1',
-  );
+    final EventPageEvent event = EventPageEvent(
+      name: Uevent!.eventName,
+      date: Uevent.eventDate,
+      location: Uevent.eventPostcode,
+      description: "Description here.",
+      ticketUrl: Uevent.eventTicketUrl,
+    );
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('EventPageEvent Information'),
@@ -592,7 +543,7 @@ class _EventsPageState extends State<EventsPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    event.name,
+                    event.name!,
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -607,7 +558,7 @@ class _EventsPageState extends State<EventsPage> {
                           color: const Color.fromARGB(255, 94, 216, 125)),
                       SizedBox(width: 10),
                       Text(
-                        event.date,
+                        event.date!,
                         style: TextStyle(fontSize: 20),
                       ),
                     ],
@@ -622,7 +573,7 @@ class _EventsPageState extends State<EventsPage> {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        event.location,
+                        event.location!,
                         style: TextStyle(fontSize: 20),
                       ),
                     ],
@@ -637,8 +588,8 @@ class _EventsPageState extends State<EventsPage> {
                       ),
                       SizedBox(width: 10),
                       Text(
-                        event.ticketPrice,
-                        style: TextStyle(fontSize: 20),
+                        event.ticketUrl!,
+                        style: TextStyle(fontSize: 10),
                       ),
                     ],
                   ),
@@ -646,7 +597,7 @@ class _EventsPageState extends State<EventsPage> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      event.description,
+                      event.description!,
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 16),
                     ),
