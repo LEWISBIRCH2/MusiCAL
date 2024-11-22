@@ -26,13 +26,13 @@ class Festical extends StatelessWidget {
           ),
           body: TabBarView(children: [
             Container(
-                color: Colors.orangeAccent,
+                color: Theme.of(context).colorScheme.tertiary,
                 child: Image.asset('assets/images/EmptyLineUp.jpg')),
             Container(
-                color: Colors.redAccent,
+                color: Theme.of(context).colorScheme.tertiary,
                 child: const Icon(Icons.filter_2_rounded)),
             Container(
-                color: Colors.orangeAccent,
+                color: Theme.of(context).colorScheme.tertiary,
                 child: const Icon(Icons.filter_3_rounded))
           ]),
         ));
