@@ -39,4 +39,5 @@ ThemeData darkMode = ThemeData(
     titleLarge: TextStyle(color: Color.fromARGB(255, 240, 239, 239)),
     headlineLarge: TextStyle(color: Color.fromARGB(255, 240, 239, 239)),
   ),
+  iconTheme: IconThemeData(color: Colors.black),
 );
