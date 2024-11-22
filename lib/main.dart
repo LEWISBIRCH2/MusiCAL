@@ -472,7 +472,8 @@ class _CalendarState extends State<Calendar> {
                   ),
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Artist(s) Playing: ',style: TextStyle(fontSize: 30),
+                    'Artist(s) Playing: ',
+                    style: TextStyle(fontSize: 30),
                   ))
             ],
           ) //
