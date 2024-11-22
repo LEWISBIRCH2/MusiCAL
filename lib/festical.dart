@@ -394,6 +394,7 @@ class Festical extends StatelessWidget {
                       ))),
             ])),
             Container(
+
                 color: Colors.orangeAccent,
                 child: Image.asset(
                     'assets/images/leeds_reading_poster_template.jpeg'))
