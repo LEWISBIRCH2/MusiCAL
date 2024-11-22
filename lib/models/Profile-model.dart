@@ -17,7 +17,7 @@ class Profile {
   Followers followers;
   String href;
   String id;
-  List<Image> images;
+  List<PImage> images;
   String product;
   String type;
   String uri;
@@ -46,7 +46,8 @@ class Profile {
         followers: Followers.fromJson(json["followers"]),
         href: json["href"],
         id: json["id"],
-        images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+        images:
+            List<PImage>.from(json["images"].map((x) => PImage.fromJson(x))),
         product: json["product"],
         type: json["type"],
         uri: json["uri"],
@@ -125,18 +126,18 @@ class Followers {
       };
 }
 
-class Image {
+class PImage {
   int height;
   String url;
   int width;
 
-  Image({
+  PImage({
     required this.height,
     required this.url,
     required this.width,
   });
 
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory PImage.fromJson(Map<String, dynamic> json) => PImage(
         height: json["height"],
         url: json["url"],
         width: json["width"],
