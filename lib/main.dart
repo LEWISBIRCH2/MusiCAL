@@ -52,7 +52,98 @@ class MyApp extends StatelessWidget {
 }
 
 class _MyAppState extends ChangeNotifier {
+  final String clientId = '809e9a055f604342a727aa3961f343d2';
+  final String clientSecret = '6aa9ae2264094650a6af77b3eef14903';
+  String redirectUrl = 'https://dapper-swan-46f09f.netlify.app';
+  String? accessToken;
+  SpotifyService service = SpotifyService();
+  Artists? topArtists;
+  Profile? profile;
+  DatabaseReference dbref = FirebaseDatabase.instance.ref();
   String? userID;
+  List events = [];
+
+  Future<void> getToken() async {
+    accessToken = await SpotifySdk.getAccessToken(
+        clientId: clientId,
+        redirectUrl: redirectUrl,
+        scope: "user-top-read user-read-private user-read-email");
+
+    notifyListeners();
+  }
+
+  Future<void> getTopArtists() async {
+    var response = await http.get(
+      Uri.parse(
+          'https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=20&offset=0'),
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
+
+    var profileResponse = await http.get(
+      Uri.parse('https://api.spotify.com/v1/me'),
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
+
+    profile = profileFromJson(profileResponse.body);
+
+    topArtists = artistsFromJson(response.body);
+    final data = topArtists!.items;
+
+    for (int i = 0; i < data.length; i++) {
+      var newData = {
+        'name': data[i].name,
+        'genres': data[i].genres,
+        'images': data[i].images,
+      };
+
+      userID = profile!.email
+          .replaceAll(RegExp(r'\.'), 'DOT_SIGN')
+          .replaceAll(RegExp(r'\$'), 'DOLLAR_SIGN')
+          .replaceAll(RegExp(r'\#'), 'HASH_SIGN')
+          .replaceAll(RegExp(r'\['), 'OPENARRAY_SIGN')
+          .replaceAll(RegExp(r'\]'), 'CLOSEARRAY_SIGN');
+
+      await dbref
+          .child(userID!)
+          .child('Top Artists')
+          .push()
+          .set(jsonEncode(newData));
+    }
+
+    notifyListeners();
+  }
+
+  Future<void> getEvents() async {
+    const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
+
+    for (int i = 0; i < topArtists!.items.length; i++) {
+      var artist = topArtists!.items[i].name;
+
+      // var artistResponse = await http.get(Uri.parse(
+      //     'https://app.ticketmaster.com/discovery/v2/attractions?apikey=$apiKey&keyword=$artist/&locale=*'));
+
+      var response = await http.get(Uri.parse(
+          'https://app.ticketmaster.com/discovery/v2/events.json?keyword=$artist&segmentName=music&apikey=$apiKey'));
+
+      await dbref.child(userID!).child('Events').child('Event $i').push();
+      await dbref
+          .child(userID!)
+          .child('Events')
+          .child('Event $i')
+          .set(response.body);
+    }
+    notifyListeners();
+  }
+
+  Future<void> getUsersEvents() async {
+    dbref.child(userID!).child('Events').onChildAdded.listen((data) {
+      if (data.snapshot.value.toString().contains('{"_embedded')) {
+        print('we got one');
+        events.add(data.snapshot.value);
+      }
+    });
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -63,86 +154,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final String clientId = '809e9a055f604342a727aa3961f343d2';
-  final String clientSecret = '6aa9ae2264094650a6af77b3eef14903';
-  String redirectUrl = 'https://dapper-swan-46f09f.netlify.app';
-  String? accessToken;
-  SpotifyService service = SpotifyService();
-  Artists? topArtists;
-  Profile? profile;
-  DatabaseReference dbref = FirebaseDatabase.instance.ref();
-
-  Future<void> getToken() async {
-    accessToken = await SpotifySdk.getAccessToken(
-        clientId: clientId,
-        redirectUrl: redirectUrl,
-        scope: "user-top-read user-read-private user-read-email");
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<_MyAppState>();
-    Future<void> getTopArtists() async {
-      var response = await http.get(
-        Uri.parse(
-            'https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=20&offset=0'),
-        headers: {'Authorization': 'Bearer $accessToken'},
-      );
-
-      var profileResponse = await http.get(
-        Uri.parse('https://api.spotify.com/v1/me'),
-        headers: {'Authorization': 'Bearer $accessToken'},
-      );
-
-      profile = profileFromJson(profileResponse.body);
-
-      topArtists = artistsFromJson(response.body);
-      final data = topArtists!.items;
-
-      for (int i = 0; i < data.length; i++) {
-        var newData = {
-          'name': data[i].name,
-          'genres': data[i].genres,
-          'images': data[i].images,
-        };
-
-        appState.userID = profile!.email
-            .replaceAll(RegExp(r'\.'), 'DOT_SIGN')
-            .replaceAll(RegExp(r'\$'), 'DOLLAR_SIGN')
-            .replaceAll(RegExp(r'\#'), 'HASH_SIGN')
-            .replaceAll(RegExp(r'\['), 'OPENARRAY_SIGN')
-            .replaceAll(RegExp(r'\]'), 'CLOSEARRAY_SIGN');
-
-        setState(() {});
-
-        await dbref
-            .child(appState.userID!)
-            .child('Top Artists')
-            .push()
-            .set(jsonEncode(newData));
-      }
-    }
-
-    Future<void> getEvents() async {
-      const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
-
-      for (int i = 0; i < topArtists!.items.length; i++) {
-        var artist = topArtists!.items[i].name;
-
-        // var artistResponse = await http.get(Uri.parse(
-        //     'https://app.ticketmaster.com/discovery/v2/attractions?apikey=$apiKey&keyword=$artist/&locale=*'));
-
-        var response = await http.get(Uri.parse(
-            'https://app.ticketmaster.com/discovery/v2/events.json?keyword=$artist&segmentName=music&apikey=$apiKey'));
-
-        await dbref
-            .child(appState.userID!)
-            .child('Events')
-            .push()
-            .set(response.body);
-      }
-    }
 
     return kIsWeb
         ? Scaffold(
@@ -152,82 +166,33 @@ class _MyHomePageState extends State<MyHomePage> {
             body: Center(
                 child: Column(
               children: [
-                accessToken == null
+                appState.accessToken == null
                     ? ElevatedButton(
                         onPressed: () {
-                          getToken();
+                          appState.getToken();
                         },
                         child: Text('Login'))
                     : ElevatedButton(
                         onPressed: () async {
-                          await getTopArtists();
-                          getEvents();
+                          await appState.getTopArtists();
+                          appState.getEvents();
                         },
                         child: Text('API CALL')),
-                Text(accessToken.toString()),
-                topArtists != null
-                    ? Text(topArtists!.items[0].name)
+                Text(appState.accessToken.toString()),
+                appState.topArtists != null
+                    ? Text(appState.topArtists!.items[0].name)
                     : Text('No Artists...')
               ],
             )),
           )
         : SpotifyAuthPage(onCodeReceived: (code) async {
-            accessToken = await service.exchangeToken(code);
-            await getTopArtists();
-            await getEvents();
+            appState.accessToken = await appState.service.exchangeToken(code);
+            await appState.getTopArtists();
+            await appState.getEvents();
+            await appState.getUsersEvents();
           });
   }
 }
-
-// class Calendar extends StatelessWidget {
-//   const Calendar({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     ThemeData(
-//         colorScheme: ColorScheme.fromSeed(seedColor: Color(0xFF1f2421)),
-//         useMaterial3: true);
-
-// Theme data not taking effect. Is it positioned right?
-
-// return Container(
-//   margin: EdgeInsets.symmetric(horizontal: 16.0),
-//   child: CalendarCarousel<Event>(
-//     onDayPressed: (DateTime date, List<Event> events) {
-//       this.setState(() => _currentDate = date);
-//     },
-//     weekendTextStyle: TextStyle(color: Colors.red,),
-//     thisMonthDayBorderColor: Colors.grey,
-//     customDayBuilder: (
-//       bool isSelectable,
-//       int index,
-//       bool isSelectedDay,
-//       bool isToday,
-//       bool isPrevMonthDay,
-//       TextStyle textStyle,
-//       bool isNextMonthDay,
-//       bool isThisMonthDay,
-//       DateTime day,
-//     ) {
-//       if (day.day == 15) {
-//         return Center(child: Icon(Icons.local_airport),);
-//         else {
-//           return null;
-//         }
-//       },
-//       weekFormat: false,
-//       markedDatesMap: _markedDateMap,
-//       height: 420.0,
-//       selectedDateTime: _currentDate,
-//       daysHaveCircularBorder: false,
-
-// todayBorderColor: Color.fromARGB(255, 81, 123, 98),
-// todayButtonColor: Color.fromARGB(255, 81, 123, 98),
-// thisMonthDayBorderColor: Color.fromARGB(255, 81, 123, 98),
-//       ),
-//     );
-//   }
-// }
 
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
@@ -282,47 +247,10 @@ class _CalendarState extends State<Calendar> {
   );
 
   @override
-  void initState() {
-    /// Add more events to _markedDateMap EventList
-    _markedDateMap.add(
-        new DateTime(2024, 11, 25),
-        new Event(
-          date: new DateTime(2024, 11, 25),
-          title: 'Event 5',
-          icon: _eventIcon,
-        ));
-
-    _markedDateMap.add(
-        new DateTime(2024, 11, 10),
-        new Event(
-          date: new DateTime(2024, 11, 10),
-          title: 'Event 4',
-          icon: _eventIcon,
-        ));
-
-    _markedDateMap.addAll(new DateTime(2024, 11, 11), [
-      new Event(
-        date: new DateTime(2024, 11, 11),
-        title: 'Event 1',
-        icon: _eventIcon,
-      ),
-      new Event(
-        date: new DateTime(2024, 11, 11),
-        title: 'Event 2',
-        icon: _eventIcon,
-      ),
-      new Event(
-        date: new DateTime(2024, 11, 11),
-        title: 'Event 3',
-        icon: _eventIcon,
-      ),
-    ]);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    /// Example with custom icon
+    var appState = context.watch<_MyAppState>();
+    DatabaseReference dbref = FirebaseDatabase.instance.ref();
+
     final _calendarCarousel = CalendarCarousel<Event>(
       onDayPressed: (date, events) {
         this.setState(() => _currentDate = date);
@@ -332,14 +260,12 @@ class _CalendarState extends State<Calendar> {
         color: Colors.red,
       ),
       thisMonthDayBorderColor: Colors.grey,
-//          weekDays: null, /// for pass null when you do not want to render weekDays
       headerText: 'Custom Header',
       weekFormat: true,
       markedDatesMap: _markedDateMap,
       height: 200.0,
       selectedDateTime: _currentDate2,
       showIconBehindDayText: true,
-//          daysHaveCircularBorder: false, /// null for not rendering any border, true for circular border, false for rectangular border
       customGridViewPhysics: NeverScrollableScrollPhysics(),
       markedDateShowIcon: true,
       markedDateIconMaxShown: 2,
@@ -356,13 +282,9 @@ class _CalendarState extends State<Calendar> {
       maxSelectedDate: _currentDate.add(Duration(days: 360)),
       todayButtonColor: Colors.transparent,
       todayBorderColor: Colors.green,
-      markedDateMoreShowTotal:
-          true, // null for not showing hidden events indicator
-//          markedDateIconMargin: 9,
-//          markedDateIconOffset: 3,
+      markedDateMoreShowTotal: true,
     );
 
-    /// Example Calendar Carousel without header and custom prev & next button
     final _calendarCarouselNoHeader = CalendarCarousel<Event>(
       todayBorderColor: Colors.green,
       onDayPressed: (date, events) {
@@ -392,13 +314,6 @@ class _CalendarState extends State<Calendar> {
       todayTextStyle: TextStyle(
         color: Colors.blue,
       ),
-      // markedDateShowIcon: true,
-      // markedDateIconMaxShown: 2,
-      // markedDateIconBuilder: (event) {
-      //   return event.icon;
-      // },
-      // markedDateMoreShowTotal:
-      //     true,
       todayButtonColor: Colors.yellow,
       selectedDayTextStyle: TextStyle(
         color: Colors.yellow,
@@ -433,12 +348,10 @@ class _CalendarState extends State<Calendar> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              //custom icon
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 16.0),
                 child: _calendarCarousel,
-              ), // This trailing comma makes auto-formatting nicer for build methods.
-              //custom icon without header
+              ),
               Container(
                 margin: EdgeInsets.only(
                   top: 30.0,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
-import 'calendar.dart';
 import 'settings.dart';
 import 'recommendations.dart';
+import 'package:musical/main.dart';
 
 class Navbar2 extends StatelessWidget {
   const Navbar2({super.key});
