@@ -89,28 +89,35 @@ class _MyAppState extends ChangeNotifier {
     topArtists = artistsFromJson(response.body);
     final data = topArtists!.items;
 
-    for (int i = 0; i < data.length; i++) {
-      var newData = {
-        'name': data[i].name,
-        'genres': data[i].genres,
-        'images': data[i].images,
-      };
+    userID = profile!.email
+        .replaceAll(RegExp(r'\.'), 'DOT_SIGN')
+        .replaceAll(RegExp(r'\$'), 'DOLLAR_SIGN')
+        .replaceAll(RegExp(r'\#'), 'HASH_SIGN')
+        .replaceAll(RegExp(r'\['), 'OPENARRAY_SIGN')
+        .replaceAll(RegExp(r'\]'), 'CLOSEARRAY_SIGN');
 
-      userID = profile!.email
-          .replaceAll(RegExp(r'\.'), 'DOT_SIGN')
-          .replaceAll(RegExp(r'\$'), 'DOLLAR_SIGN')
-          .replaceAll(RegExp(r'\#'), 'HASH_SIGN')
-          .replaceAll(RegExp(r'\['), 'OPENARRAY_SIGN')
-          .replaceAll(RegExp(r'\]'), 'CLOSEARRAY_SIGN');
+    try {
+      final DataSnapshot snapshot = await dbref.limitToLast(1).get();
+      if (snapshot.value.toString().contains(userID!)) {
+      } else {
+        for (int i = 0; i < data.length; i++) {
+          var newData = {
+            'name': data[i].name,
+            'genres': data[i].genres,
+            'images': data[i].images,
+          };
+          await dbref
+              .child(userID!)
+              .child('Top Artists')
+              .push()
+              .set(jsonEncode(newData));
+        }
 
-      await dbref
-          .child(userID!)
-          .child('Top Artists')
-          .push()
-          .set(jsonEncode(newData));
+        notifyListeners();
+      }
+    } catch (error) {
+      print('Error');
     }
-
-    notifyListeners();
   }
 
   Future<void> getEvents() async {
@@ -138,7 +145,6 @@ class _MyAppState extends ChangeNotifier {
   Future<void> getUsersEvents() async {
     dbref.child(userID!).child('Events').onChildAdded.listen((data) {
       if (data.snapshot.value.toString().contains('{"_embedded')) {
-        print('we got one');
         events.add(data.snapshot.value);
       }
     });
