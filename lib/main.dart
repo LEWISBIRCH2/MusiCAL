@@ -472,7 +472,8 @@ class _CalendarState extends State<Calendar> {
                   ),
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Artist(s) Playing: ',style: TextStyle(fontSize: 30),
+                    'Artist(s) Playing: ',
+                    style: TextStyle(fontSize: 30),
                   ))
             ],
           ) //
@@ -632,18 +633,26 @@ class Festical extends StatelessWidget {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.surface,
           appBar: AppBar(
-            bottom: const TabBar(
+            bottom: TabBar(
               tabs: [
                 Tab(
-                  icon: Icon(Icons.filter_1_rounded),
+                  icon: Icon(
+                    Icons.filter_1_rounded,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
                 ),
                 Tab(
-                  icon: Icon(Icons.filter_2_rounded),
+                  icon: Icon(
+                    Icons.filter_2_rounded,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
                 ),
                 Tab(
-                  icon: Icon(Icons.filter_3_rounded),
-                )
+                  icon: Icon(Icons.filter_3_rounded,
+                      color: Theme.of(context).iconTheme.color),
+                ),
               ],
             ),
             title: const Text('Your Festical'),
