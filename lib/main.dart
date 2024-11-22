@@ -520,7 +520,7 @@ class _EventsPageState extends State<EventsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('EventPageEvent Information'),
+        title: Text('Event Information'),
         backgroundColor: const Color.fromARGB(255, 94, 216, 125),
       ),
       body: Column(
@@ -543,7 +543,7 @@ class _EventsPageState extends State<EventsPage> {
                 SizedBox(width: 8),
                 Text(
                   'Back to calendar',
-                  style: TextStyle(color: Colors.black, fontSize: 18),
+                  style: Theme.of(context).textTheme.bodyLarge!,
                 ),
               ],
             ),
@@ -556,11 +556,7 @@ class _EventsPageState extends State<EventsPage> {
                 children: [
                   Text(
                     event.name!,
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: const Color.fromARGB(255, 2, 3, 2),
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge!,
                   ),
                   SizedBox(height: 20),
                   Row(
