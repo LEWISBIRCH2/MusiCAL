@@ -442,25 +442,38 @@ class _CalendarState extends State<Calendar> {
           Column(
             children: [
               Container(
+                height: MediaQuery.of(context).size.height * 0.35,
                 margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child:
-                    _calendarCarouselNoHeader, // THIS IS THE DATES / NUMBERS BELOW DATE
+                child: _calendarCarouselNoHeader,
+              ),
+              Container(
+                color: Colors.black,
+                height: 2,
+              ),
+              Container(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                height: 10,
+              ),
+              Container(
+                  height: 40,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                  ),
+                  alignment: Alignment.topLeft,
+                  child: Text('Selected Date: $_currentDate2',
+                      style: const TextStyle(fontWeight: FontWeight.bold))),
+              Container(
+                color: const Color.fromARGB(255, 255, 255, 255),
+                height: 1,
               ),
               Container(
                   height: 100,
                   margin: EdgeInsets.symmetric(
                     horizontal: 16.0,
                   ),
-                  alignment: Alignment.topCenter,
-                  child: Text('Selected Date: $_currentDate2')),
-              Container(
-                  height: 100,
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                  ),
-                  alignment: Alignment.topCenter,
+                  alignment: Alignment.topLeft,
                   child: Text(
-                    'Artist(s) Playing: ',
+                    'Artist(s) Playing: ',style: TextStyle(fontSize: 30),
                   ))
             ],
           ) //
