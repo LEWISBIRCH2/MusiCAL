@@ -61,7 +61,8 @@ class _MyAppState extends ChangeNotifier {
   Profile? profile;
   DatabaseReference dbref = FirebaseDatabase.instance.ref();
   String? userID;
-  List events = [];
+  List<UserEvent> events = [];
+  List<String>? eventsStrings;
 
   Future<void> getToken() async {
     accessToken = await SpotifySdk.getAccessToken(
@@ -75,7 +76,7 @@ class _MyAppState extends ChangeNotifier {
   Future<void> getTopArtists() async {
     var response = await http.get(
       Uri.parse(
-          'https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=20&offset=0'),
+          'https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=20&offset=0'),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
 
@@ -130,7 +131,7 @@ class _MyAppState extends ChangeNotifier {
       //     'https://app.ticketmaster.com/discovery/v2/attractions?apikey=$apiKey&keyword=$artist/&locale=*'));
 
       var response = await http.get(Uri.parse(
-          'https://app.ticketmaster.com/discovery/v2/events.json?keyword=$artist&segmentName=music&apikey=$apiKey'));
+          'https://app.ticketmaster.com/discovery/v2/events.json?keyword=$artist&segmentName=music&countryCode=GB&apikey=$apiKey'));
 
       await dbref.child(userID!).child('Events').child('Event $i').push();
       await dbref
@@ -143,11 +144,72 @@ class _MyAppState extends ChangeNotifier {
   }
 
   Future<void> getUsersEvents() async {
-    dbref.child(userID!).child('Events').onChildAdded.listen((data) {
-      if (data.snapshot.value.toString().contains('{"_embedded')) {
-        events.add(data.snapshot.value);
+    for (int i = 0; i < topArtists!.items.length; i++) {
+      await dbref
+          .child(userID!)
+          .child('Events')
+          .child('Event $i')
+          .get()
+          .then((data) {
+        sortUserEvents(data.value.toString());
+      });
+    }
+    notifyListeners();
+  }
+
+  void sortUserEvents(String userEvent) {
+    if (userEvent.startsWith('{"_embedded')) {
+      String eventString = userEvent.split('{"events')[1];
+      List<String>? eventsStrings = eventString.split('}},{"name"');
+      for (int i = 0; i < eventsStrings.length; i++) {
+        String? eventName;
+        String? eventID;
+        String? eventDate;
+        String? eventStartTime;
+        String? eventTicketUrl;
+        String? eventPostcode;
+
+        if (i == 0) {
+          eventName =
+              eventsStrings[i].split('","')[0].replaceFirst('":[{"name":"', '');
+        } else {
+          eventName = eventsStrings[i].split('","')[0].replaceFirst(':"', '');
+        }
+
+        eventID = eventsStrings[i].split(',"id":"')[1].split('","')[0];
+
+        if (eventsStrings[i].contains('{"localDate":"')) {
+          eventDate =
+              eventsStrings[i].split('{"localDate":"')[1].split('","')[0];
+        } else {
+          eventDate = 'not found';
+        }
+
+        if (eventsStrings[i].contains('"localTime":"')) {
+          eventStartTime =
+              eventsStrings[i].split('"localTime":"')[1].split('","')[0];
+        } else {
+          eventStartTime = 'not found';
+        }
+
+        if (eventsStrings[i].contains('postalCode":"')) {
+          eventPostcode =
+              eventsStrings[i].split('postalCode":"')[1].split('","')[0];
+        } else {
+          eventPostcode = 'not found';
+        }
+
+        eventTicketUrl = eventsStrings[i].split('"url":"')[1].split('","')[0];
+
+        events.add(UserEvent(
+            eventName: eventName,
+            eventID: eventID,
+            eventDate: eventDate,
+            eventStartTime: eventStartTime,
+            eventPostcode: eventPostcode,
+            eventTicketUrl: eventTicketUrl));
       }
-    });
+    }
     notifyListeners();
   }
 }
@@ -255,7 +317,6 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<_MyAppState>();
-    DatabaseReference dbref = FirebaseDatabase.instance.ref();
 
     final _calendarCarousel = CalendarCarousel<Event>(
       onDayPressed: (date, events) {
