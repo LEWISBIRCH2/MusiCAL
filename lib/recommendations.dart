@@ -16,7 +16,7 @@ class Recommendations extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                     // change colour to reference light/dark themes built by layla
-                    color: const Color.fromARGB(255, 12, 145, 17),
+                    color: Theme.of(context).colorScheme.tertiary,
                     border: Border.all(width: 8),
                     borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.topCenter,
@@ -33,7 +33,7 @@ class Recommendations extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                     // change colour to reference light/dark themes built by layla
-                    color: const Color.fromARGB(255, 12, 145, 17),
+                    color: Theme.of(context).colorScheme.tertiary,
                     border: Border.all(width: 8),
                     borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.topCenter,
@@ -51,7 +51,7 @@ class Recommendations extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                     // change colour to reference light/dark themes built by layla
-                    color: const Color.fromARGB(255, 12, 145, 17),
+                    color: Theme.of(context).colorScheme.tertiary,
                     border: Border.all(width: 8),
                     borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.topCenter,
@@ -69,7 +69,7 @@ class Recommendations extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                     // change colour to reference light/dark themes built by layla
-                    color: const Color.fromARGB(255, 12, 145, 17),
+                    color: Theme.of(context).colorScheme.tertiary,
                     border: Border.all(width: 8),
                     borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.topCenter,
