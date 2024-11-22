@@ -244,7 +244,7 @@ class Festical extends StatelessWidget {
             ),
             Center(
                 child: Stack(children: [
-              Image.asset('assets/images/glastonbury_poster_template.jpg'),
+              Image.asset('/images/glastonbury_poster_template.jpg'),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.7, -0.2),

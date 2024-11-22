@@ -20,6 +20,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
+import 'bottomnavbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +45,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => _MyAppState(),
       child: MaterialApp(
-        home: MyHomePage(),
+        home: Navigation(),         //MyHomePage())
         title: 'MusiCAL',
         theme: themeProvider.themeData,
       ),
@@ -429,8 +430,10 @@ class _CalendarState extends State<Calendar> {
       },
       onDayPressed: (date, events) {
         this.setState(() => _currentDate2 = date);
+       //print(events[0].title);
         events.forEach((event) => print(event.title));
       },
+
       onDayLongPressed: (DateTime date) {
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => EventsPage()));
@@ -503,7 +506,7 @@ class _CalendarState extends State<Calendar> {
                   ),
                   alignment: Alignment.topCenter,
                   child: Text(
-                    'Artist(s) Playing: $_markedDateMap',
+                    'Artist(s) Playing: ',
                   ))
             ],
           ) //
