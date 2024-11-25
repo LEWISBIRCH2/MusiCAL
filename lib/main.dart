@@ -71,6 +71,8 @@ class _MyAppState extends ChangeNotifier {
   List<UserEvent> events = [];
   List<String>? eventsStrings;
   UserEvent? selectedEvent;
+  List<String> festNames = [];
+  List<Festival> userFestivals = [];
 
   Future<void> getToken() async {
     accessToken = await SpotifySdk.getAccessToken(
@@ -234,7 +236,7 @@ class _MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getUserFestivals() async {
+  Future<void> getFestivals() async {
     const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
 
     var response = await http.get(Uri.parse(
@@ -249,7 +251,6 @@ class _MyAppState extends ChangeNotifier {
       List<String>? artists = [];
       String? date;
       String? url;
-      bool TBA = false;
 
       if (i == 0) {
         name = festivals[i]
@@ -274,22 +275,37 @@ class _MyAppState extends ChangeNotifier {
           artists.add(artistStrings[j].split('","')[0]);
         }
 
-        if (artists.length == 1) {
-          TBA = true;
+        if (artists.length > 1) {
+          festNames.add(name);
+          dbref.child('Festivals').child('$name').push();
+          await dbref
+              .child('Festivals')
+              .child('$name')
+              .set(festivalToJson(Festival(
+                name: name,
+                location: location,
+                artists: artists,
+                date: date,
+                url: url,
+              )));
         }
       }
-
-      dbref.child('Festivals').child('$name').push();
-      await dbref.child('Festivals').child('$name').set(Festival(
-              name: name,
-              location: location,
-              artists: artists,
-              date: date,
-              url: url,
-              TBA: TBA)
-          .toJson());
     }
     notifyListeners();
+  }
+
+  Future<void> getUserFestivals() async {
+    for (int i = 0; i < festNames.length; i++) {
+      await dbref.child('Festivals').child(festNames[i]).get().then((data) {
+        Festival f = festivalFromJson(data.value.toString());
+        for (int j = 0; j < topArtists!.items.length; j++) {
+          if (f.artists!.contains(topArtists!.items[j].name)) {
+            f.festRec++;
+          }
+        }
+        userFestivals.add(f);
+      });
+    }
   }
 }
 
@@ -342,6 +358,7 @@ class _MyHomePageState extends State<MyHomePage> {
             await appState.getTopArtists();
             await appState.getEvents();
             await appState.getUsersEvents();
+            await appState.getFestivals();
             await appState.getUserFestivals();
           });
   }
