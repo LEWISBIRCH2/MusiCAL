@@ -44,8 +44,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => _MyAppState(),
       child: MaterialApp(
-        home: Navigation(),
-        //MyHomePage())
+        home: MyHomePage(),
         title: 'MusiCAL',
         theme: themeProvider.themeData,
       ),
@@ -211,8 +210,14 @@ class _MyAppState extends ChangeNotifier {
             .split('url":"')[1]
             .split('","width')[0];
 
-        eventVenue =
-            eventsStrings[i].split('{"venues":[{"name":"')[1].split('","')[0];
+        if (eventsStrings[i].contains('{"venues":[{"name":"')) {
+          eventVenue =
+              eventsStrings[i].split('{"venues":[{"name":"')[1].split('","')[0];
+        } else {
+          eventVenue = 'not found';
+        }
+
+        print(eventVenue);
 
         events.add(UserEvent(
             eventName: eventName,
@@ -456,11 +461,9 @@ class _CalendarState extends State<Calendar> {
           Column(
             children: [
               Container(
-
                 height: MediaQuery.of(context).size.height * 0.39,
                 margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-                child: _calendarCarouselNoHeader,
-
+                child: calendarCarouselNoHeader,
               ),
               Container(
                 color: Colors.black,
