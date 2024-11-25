@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:musical/models/Artists-model.dart';
 import 'package:musical/models/Events-model.dart';
+import 'package:musical/models/Festival-model.dart';
 import 'package:musical/models/Profile-model.dart';
 import 'package:musical/pages/spotify_auth_page.dart';
 import 'package:musical/services/spotify_service.dart';
@@ -134,9 +135,6 @@ class _MyAppState extends ChangeNotifier {
     for (int i = 0; i < topArtists!.items.length; i++) {
       var artist = topArtists!.items[i].name;
 
-      // var artistResponse = await http.get(Uri.parse(
-      //     'https://app.ticketmaster.com/discovery/v2/attractions?apikey=$apiKey&keyword=$artist/&locale=*'));
-
       var response = await http.get(Uri.parse(
           'https://app.ticketmaster.com/discovery/v2/events.json?keyword=$artist&segmentName=music&countryCode=GB&apikey=$apiKey'));
 
@@ -235,6 +233,64 @@ class _MyAppState extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> getUserFestivals() async {
+    const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
+
+    var response = await http.get(Uri.parse(
+        'https://app.ticketmaster.com/discovery/v2/events.json?keyword=festival&segmentName=music&countryCode=GB&size=200&apikey=$apiKey'));
+
+    List<String> festivals = response.body.split(']}},{"name":"');
+    festivals.removeLast();
+
+    for (int i = 0; i < festivals.length; i++) {
+      String? name;
+      String? location;
+      List<String>? artists = [];
+      String? date;
+      String? url;
+      bool TBA = false;
+
+      if (i == 0) {
+        name = festivals[i]
+            .split('{"_embedded":{"events":[{"name":"')[1]
+            .split('","')[0];
+      } else {
+        name = festivals[i].split('","')[0];
+      }
+
+      location = festivals[i].split('venues":[{"name":"')[1].split('","')[0];
+
+      date = festivals[i].split('"localDate":"')[1].split('","')[0];
+
+      url = festivals[i].split('"url":"')[1].split('","')[0];
+
+      if (festivals[i].contains('],"attractions":')) {
+        List<String> artistStrings =
+            festivals[i].split('],"attractions":')[1].split('{"name":"');
+        artistStrings.removeAt(0);
+
+        for (int j = 0; j < artistStrings.length; j++) {
+          artists.add(artistStrings[j].split('","')[0]);
+        }
+
+        if (artists.length == 1) {
+          TBA = true;
+        }
+      }
+
+      dbref.child('Festivals').child('$name').push();
+      await dbref.child('Festivals').child('$name').set(Festival(
+              name: name,
+              location: location,
+              artists: artists,
+              date: date,
+              url: url,
+              TBA: TBA)
+          .toJson());
+    }
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -286,6 +342,7 @@ class _MyHomePageState extends State<MyHomePage> {
             await appState.getTopArtists();
             await appState.getEvents();
             await appState.getUsersEvents();
+            await appState.getUserFestivals();
           });
   }
 }
