@@ -18,7 +18,11 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
+
 import 'bottomnavbar.dart';
+
+import 'package:url_launcher/url_launcher.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -625,20 +629,20 @@ class _EventsPageState extends State<EventsPage> {
                         color: const Color.fromARGB(255, 94, 216, 125),
                       ),
                       SizedBox(width: 10),
-                      Text(
-                        event.ticketUrl!,
-                        style: TextStyle(fontSize: 10),
+                      InkWell(
+                        onTap: () async {
+                          final Uri url = Uri.parse(event.ticketUrl!);
+                          if (await canLaunchUrl(url)) {
+                            await launchUrl(url,
+                                mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Text(
+                          'Buy tickets',
+                          style: TextStyle(fontSize: 10),
+                        ),
                       ),
                     ],
-                  ),
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      event.description!,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
-                    ),
                   ),
                 ],
               ),
