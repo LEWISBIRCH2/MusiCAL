@@ -306,9 +306,6 @@ class _MyAppState extends ChangeNotifier {
           if (f.artists!.contains(topArtists!.items[j].name)) {
             f.festRec++;
           }
-          // if (f.artists!.contains('Blossoms')) {
-          //   f.festRec++;
-          // }
         }
         userFestivals.add(f);
       });
