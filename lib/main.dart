@@ -86,7 +86,7 @@ class _MyAppState extends ChangeNotifier {
   Future<void> getTopArtists() async {
     var response = await http.get(
       Uri.parse(
-          'https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=30&offset=0'),
+          'https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=40&offset=0'),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
 
@@ -132,7 +132,7 @@ class _MyAppState extends ChangeNotifier {
   }
 
   Future<void> getEvents() async {
-    const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
+    const apiKey = 'oQwxcMmwTA9qT7sBrpax4NH0nzTiuWSw';
 
     for (int i = 0; i < topArtists!.items.length; i++) {
       var artist = topArtists!.items[i].name;
@@ -237,7 +237,7 @@ class _MyAppState extends ChangeNotifier {
   }
 
   Future<void> getFestivals() async {
-    const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
+    const apiKey = 'oQwxcMmwTA9qT7sBrpax4NH0nzTiuWSw';
 
     var response = await http.get(Uri.parse(
         'https://app.ticketmaster.com/discovery/v2/events.json?keyword=festival&segmentName=music&countryCode=GB&size=200&apikey=$apiKey'));
@@ -287,6 +287,7 @@ class _MyAppState extends ChangeNotifier {
                 artists: artists,
                 date: date,
                 url: url,
+                festRec: 0,
               )));
         }
       }
@@ -302,10 +303,20 @@ class _MyAppState extends ChangeNotifier {
           if (f.artists!.contains(topArtists!.items[j].name)) {
             f.festRec++;
           }
+          // if (f.artists!.contains('Blossoms')) {
+          //   f.festRec++;
+          // }
         }
         userFestivals.add(f);
       });
     }
+    userFestivals.sort((f1, f2) => f1.festRec.compareTo(f2.festRec));
+    for (int i = 0; i < userFestivals.length; i++) {
+      if (userFestivals[i].festRec > 0) {
+        print(festivalToJson(userFestivals[i]));
+      }
+    }
+    notifyListeners();
   }
 }
 
@@ -430,7 +441,6 @@ class _CalendarState extends State<Calendar> {
       ),
       thisMonthDayBorderColor: Colors.grey,
       weekFormat: false,
-
       markedDatesMap: markedDateMap,
       height: 420.0,
       selectedDateTime: _currentDate2,
@@ -454,10 +464,7 @@ class _CalendarState extends State<Calendar> {
       ),
       minSelectedDate: _currentDate.subtract(Duration(days: 360)),
       maxSelectedDate: _currentDate.add(Duration(days: 360)),
-      prevDaysTextStyle: TextStyle(
-        fontSize: 16,
-        color: Colors.pinkAccent,
-      ),
+      prevDaysTextStyle: TextStyle(fontSize: 16, color: Colors.black),
       inactiveDaysTextStyle: TextStyle(
         color: Colors.tealAccent,
         fontSize: 16,
@@ -471,9 +478,6 @@ class _CalendarState extends State<Calendar> {
       },
       onDayPressed: (date, events) {
         setState(() => _currentDate2 = date);
-        for (var event in events) {
-          print(event.title);
-        }
         var eventFilter = appState.events.where((e) {
           DateTime d;
           if (e.eventDate != 'not found') {
@@ -631,25 +635,6 @@ class _EventsPageState extends State<EventsPage> {
       appBar: AppBar(),
       body: Column(
         children: [
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(2.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: const Color.fromARGB(255, 94, 216, 125),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 40),
           Expanded(
             child: Center(
               child: Column(
