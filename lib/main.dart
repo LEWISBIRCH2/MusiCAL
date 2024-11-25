@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'bottomnavbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:musical/models/Artists-Ticketmaster-model.dart';
 import 'package:musical/models/Artists-model.dart';
 import 'package:musical/models/Events-model.dart';
 import 'package:musical/models/Profile-model.dart';
@@ -216,8 +214,6 @@ class _MyAppState extends ChangeNotifier {
         } else {
           eventVenue = 'not found';
         }
-
-        print(eventVenue);
 
         events.add(UserEvent(
             eventName: eventName,
