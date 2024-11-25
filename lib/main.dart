@@ -171,6 +171,8 @@ class _MyAppState extends ChangeNotifier {
         String? eventStartTime;
         String? eventTicketUrl;
         String? eventPostcode;
+        String? eventImage;
+        String? eventVenue;
 
         if (i == 0) {
           eventName =
@@ -204,13 +206,23 @@ class _MyAppState extends ChangeNotifier {
 
         eventTicketUrl = eventsStrings[i].split('"url":"')[1].split('","')[0];
 
+        eventImage = eventsStrings[i]
+            .split("images")[1]
+            .split('url":"')[1]
+            .split('","width')[0];
+
+        eventVenue =
+            eventsStrings[i].split('{"venues":[{"name":"')[1].split('","')[0];
+
         events.add(UserEvent(
             eventName: eventName,
             eventID: eventID,
             eventDate: eventDate,
             eventStartTime: eventStartTime,
             eventPostcode: eventPostcode,
-            eventTicketUrl: eventTicketUrl));
+            eventTicketUrl: eventTicketUrl,
+            eventImage: eventImage,
+            eventVenue: eventVenue));
       }
     }
     notifyListeners();
@@ -492,6 +504,8 @@ class EventPageEvent {
   final String? location;
   final String? description;
   final String? ticketUrl;
+  final String? image;
+  final String? venue;
 
   EventPageEvent({
     this.name,
@@ -499,6 +513,8 @@ class EventPageEvent {
     this.location,
     this.description,
     this.ticketUrl,
+    this.image,
+    this.venue,
   });
 }
 
@@ -522,13 +538,11 @@ class _EventsPageState extends State<EventsPage> {
       location: Uevent.eventPostcode,
       description: "Description here.",
       ticketUrl: Uevent.eventTicketUrl,
+      image: Uevent.eventImage,
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('EventPageEvent Information'),
-        backgroundColor: const Color.fromARGB(255, 94, 216, 125),
-      ),
+      appBar: AppBar(),
       body: Column(
         children: [
           Container(
