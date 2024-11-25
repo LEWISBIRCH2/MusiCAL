@@ -456,9 +456,11 @@ class _CalendarState extends State<Calendar> {
           Column(
             children: [
               Container(
-                height: MediaQuery.of(context).size.height * 0.35,
-                margin: EdgeInsets.symmetric(horizontal: 16.0),
-                child: calendarCarouselNoHeader,
+
+                height: MediaQuery.of(context).size.height * 0.39,
+                margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                child: _calendarCarouselNoHeader,
+
               ),
               Container(
                 color: Colors.black,
