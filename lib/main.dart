@@ -22,6 +22,7 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'bottomnavbar.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 // THE FORBIDDEN RUN COMMAND:
 // flutter run --web-port=50511 --host-vmservice-port=50511 -d chrome --web-browser-flag "--disable-web-security"
@@ -89,7 +90,7 @@ class _MyAppState extends ChangeNotifier {
   Future<void> getTopArtists() async {
     var response = await http.get(
       Uri.parse(
-          'https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=40&offset=0'),
+          'https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=30&offset=0'),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
 
@@ -278,7 +279,7 @@ class _MyAppState extends ChangeNotifier {
           artists.add(artistStrings[j].split('","')[0]);
         }
 
-        if (artists.length > 1) {
+        if (artists.length >= 1) {
           festNames.add(name);
           dbref.child('Festivals').child('$name').push();
           await dbref
@@ -355,20 +356,27 @@ class _MyHomePageState extends State<MyHomePage> {
                     : Column(
                         children: [
                           Image.asset('assets/images/musiCAL_LOGO.png'),
-                          ElevatedButton(
-                              onPressed: () async {
-                                await appState.getTopArtists();
-                                print('0');
-                                await appState.getEvents();
-                                print('1');
-                                await appState.getUsersEvents();
-                                print('2');
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => Navigation()),
-                                );
-                              },
-                              child: Text('OPEN CALENDAR')),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ElevatedButton(
+                                onPressed: () async {
+                                  await appState.getTopArtists();
+                                  print('1');
+                                  await appState.getEvents();
+                                  print('2');
+                                  await appState.getUsersEvents();
+                                  print('3');
+                                  await appState.getFestivals();
+                                  print('4');
+                                  await appState.getUserFestivals();
+                                  print('5');
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => Navigation()));
+                                },
+                                child: Text('OPEN CALENDAR')),
+                          ),
+                          LoadingAnimationWidget.staggeredDotsWave(
+                              color: Colors.green, size: 50)
                         ],
                       ),
               ],
