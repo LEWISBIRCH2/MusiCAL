@@ -11,7 +11,13 @@ class Festival {
   String? url;
   int festRec = 0;
 
-  Festival({this.name, this.location, this.artists, this.date, this.url});
+  Festival(
+      {this.name,
+      this.location,
+      this.artists,
+      this.date,
+      this.url,
+      required this.festRec});
 
   factory Festival.fromJson(Map<String, dynamic> json) => Festival(
         name: json["name"],
@@ -19,6 +25,7 @@ class Festival {
         date: json["date"],
         url: json["url"],
         artists: List<String>.from(json["artists"].map((x) => x)),
+        festRec: json["festRec"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -26,6 +33,7 @@ class Festival {
         "location": location,
         "date": date,
         "url": url,
-        "artists": List<dynamic>.from(artists!.map((x) => x))
+        "artists": List<dynamic>.from(artists!.map((x) => x)),
+        "festRec": festRec,
       };
 }
