@@ -522,7 +522,6 @@ class EventPageEvent {
 
 class EventsPage extends StatefulWidget {
   const EventsPage({super.key});
-
   @override
   State<EventsPage> createState() => _EventsPageState();
 }
@@ -541,6 +540,7 @@ class _EventsPageState extends State<EventsPage> {
       description: "Description here.",
       ticketUrl: Uevent.eventTicketUrl,
       image: Uevent.eventImage,
+      venue: Uevent.eventVenue,
     );
 
     return Scaffold(
@@ -563,10 +563,6 @@ class _EventsPageState extends State<EventsPage> {
                   },
                 ),
                 SizedBox(width: 8),
-                Text(
-                  'Back to calendar',
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                ),
               ],
             ),
           ),
@@ -576,14 +572,11 @@ class _EventsPageState extends State<EventsPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    event.name!,
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: const Color.fromARGB(255, 2, 3, 2),
-                    ),
-                  ),
+                  Image.network(event.image!,
+                      width: double.infinity, height: 200, fit: BoxFit.cover),
+                  SizedBox(height: 100),
+                  Text(event.name!,
+                      style: Theme.of(context).textTheme.headlineLarge),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -593,7 +586,7 @@ class _EventsPageState extends State<EventsPage> {
                       SizedBox(width: 10),
                       Text(
                         event.date!,
-                        style: TextStyle(fontSize: 20),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
@@ -605,14 +598,16 @@ class _EventsPageState extends State<EventsPage> {
                         Icons.location_on,
                         color: const Color.fromARGB(255, 94, 216, 125),
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(width: 10, height: 10),
                       Text(
-                        event.location!,
-                        style: TextStyle(fontSize: 20),
+                        event.venue!,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
+                      SizedBox(width: 10, height: 10),
+                      Text(event.location!)
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 20, width: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -631,7 +626,7 @@ class _EventsPageState extends State<EventsPage> {
                         },
                         child: Text(
                           'Buy tickets',
-                          style: TextStyle(fontSize: 10),
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
                     ],
