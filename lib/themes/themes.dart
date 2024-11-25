@@ -17,8 +17,13 @@ ThemeData lightMode = ThemeData(
           const Color.fromARGB(134, 109, 234, 86), // fill color of app bar
       foregroundColor: Colors.black), // icons and text within app bar
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Colors.black), // for large body text
-  ),
+      headlineLarge: TextStyle(
+          color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold),
+      bodyLarge: TextStyle(color: Colors.black, fontSize: 40),
+      bodyMedium: TextStyle(color: Colors.black, fontSize: 20),
+      bodySmall: TextStyle(color: Colors.black, fontSize: 20)
+      // for large body text
+      ),
 );
 
 ThemeData darkMode = ThemeData(
@@ -32,6 +37,8 @@ ThemeData darkMode = ThemeData(
       backgroundColor: const Color.fromARGB(249, 142, 139, 142),
       foregroundColor: const Color.fromARGB(255, 247, 247, 247)),
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Color.fromARGB(255, 240, 239, 239)),
+    bodyLarge: TextStyle(color: Colors.black, fontSize: 40),
+    bodyMedium: TextStyle(color: Colors.black, fontSize: 30),
+    bodySmall: TextStyle(color: Colors.black, fontSize: 20),
   ),
 );

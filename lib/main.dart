@@ -616,7 +616,7 @@ class _EventsPageState extends State<EventsPage> {
         children: [
           Container(
             width: double.infinity,
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(2.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -629,19 +629,19 @@ class _EventsPageState extends State<EventsPage> {
                     Navigator.pop(context);
                   },
                 ),
-                SizedBox(width: 8),
               ],
             ),
           ),
+          SizedBox(height: 40),
           Expanded(
             child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.network(event.image!,
                       width: double.infinity, height: 200, fit: BoxFit.cover),
-                  SizedBox(height: 100),
+                  SizedBox(height: 50),
                   Text(event.name!,
                       style: Theme.of(context).textTheme.headlineLarge),
                   SizedBox(height: 20),
