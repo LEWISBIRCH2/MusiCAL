@@ -5,6 +5,8 @@ class UserEvent {
   String? eventStartTime;
   String? eventTicketUrl;
   String? eventPostcode;
+  String? eventImage;
+  String? eventVenue;
 
   UserEvent(
       {this.eventName,
@@ -12,5 +14,7 @@ class UserEvent {
       this.eventDate,
       this.eventStartTime,
       this.eventTicketUrl,
-      this.eventPostcode});
+      this.eventPostcode,
+      this.eventImage,
+      this.eventVenue});
 }
