@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'bottomnavbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => _MyAppState(),
       child: MaterialApp(
-        home: MyHomePage(),
+        home: Navigation(),
         //MyHomePage())
         title: 'MusiCAL',
         theme: themeProvider.themeData,
@@ -135,7 +136,7 @@ class _MyAppState extends ChangeNotifier {
       var response = await http.get(Uri.parse(
           'https://app.ticketmaster.com/discovery/v2/events.json?keyword=$artist&segmentName=music&countryCode=GB&apikey=$apiKey'));
 
-      await dbref.child(userID!).child('Events').child('Event $i').push();
+      dbref.child(userID!).child('Events').child('Event $i').push();
       await dbref
           .child(userID!)
           .child('Events')
@@ -170,6 +171,8 @@ class _MyAppState extends ChangeNotifier {
         String? eventStartTime;
         String? eventTicketUrl;
         String? eventPostcode;
+        String? eventImage;
+        String? eventVenue;
 
         if (i == 0) {
           eventName =
@@ -203,13 +206,23 @@ class _MyAppState extends ChangeNotifier {
 
         eventTicketUrl = eventsStrings[i].split('"url":"')[1].split('","')[0];
 
+        eventImage = eventsStrings[i]
+            .split("images")[1]
+            .split('url":"')[1]
+            .split('","width')[0];
+
+        eventVenue =
+            eventsStrings[i].split('{"venues":[{"name":"')[1].split('","')[0];
+
         events.add(UserEvent(
             eventName: eventName,
             eventID: eventID,
             eventDate: eventDate,
             eventStartTime: eventStartTime,
             eventPostcode: eventPostcode,
-            eventTicketUrl: eventTicketUrl));
+            eventTicketUrl: eventTicketUrl,
+            eventImage: eventImage,
+            eventVenue: eventVenue));
       }
     }
     notifyListeners();
@@ -268,22 +281,22 @@ class Calendar extends StatefulWidget {
   const Calendar({super.key});
 
   @override
-  _CalendarState createState() => new _CalendarState();
+  _CalendarState createState() => _CalendarState();
 }
 
 class _CalendarState extends State<Calendar> {
-  DateTime _currentDate = DateTime(2024, 11, 3);
+  final DateTime _currentDate = DateTime(2024, 11, 3);
   DateTime _currentDate2 = DateTime(2024, 11, 3);
   String _currentMonth = DateFormat.yMMM().format(DateTime(2024, 11, 3));
   DateTime _targetDateTime = DateTime(2024, 11, 3);
 
-  static Widget _eventIcon = new Container(
-    decoration: new BoxDecoration(
+  static final Widget _eventIcon = Container(
+    decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(1000)),
         border:
             Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 2.0)),
-    child: new Icon(
+    child: Icon(
       Icons.music_note,
       color: const Color.fromARGB(255, 0, 156, 70),
     ),
@@ -293,7 +306,7 @@ class _CalendarState extends State<Calendar> {
   Widget build(BuildContext context) {
     var appState = context.watch<_MyAppState>();
 
-    EventList<Event> _markedDateMap = new EventList<Event>(
+    EventList<Event> markedDateMap = EventList<Event>(
       events: {},
     );
 
@@ -304,17 +317,17 @@ class _CalendarState extends State<Calendar> {
         int month = int.parse(dateArray[1]);
         int day = int.parse(dateArray[2]);
 
-        _markedDateMap.add(
-            new DateTime(year, month, day),
-            new Event(
-              date: new DateTime(year, month, day),
+        markedDateMap.add(
+            DateTime(year, month, day),
+            Event(
+              date: DateTime(year, month, day),
               title: appState.events[i].eventName,
               icon: _eventIcon,
             ));
       }
     }
 
-    final _calendarCarouselNoHeader = CalendarCarousel<Event>(
+    final calendarCarouselNoHeader = CalendarCarousel<Event>(
       markedDateShowIcon: true,
       showIconBehindDayText: false,
       markedDateIconMaxShown: 1,
@@ -331,7 +344,7 @@ class _CalendarState extends State<Calendar> {
       thisMonthDayBorderColor: Colors.grey,
       weekFormat: false,
 
-      markedDatesMap: _markedDateMap,
+      markedDatesMap: markedDateMap,
       height: 420.0,
       selectedDateTime: _currentDate2,
       targetDateTime: _targetDateTime,
@@ -364,15 +377,17 @@ class _CalendarState extends State<Calendar> {
       ),
 
       onCalendarChanged: (DateTime date) {
-        this.setState(() {
+        setState(() {
           _targetDateTime = date;
           _currentMonth = DateFormat.yMMM().format(_targetDateTime);
         });
       },
       onDayPressed: (date, events) {
-        this.setState(() => _currentDate2 = date);
+        setState(() => _currentDate2 = date);
         //print(events[0].title);
-        events.forEach((event) => print(event.title));
+        for (var event in events) {
+          print(event.title);
+        }
         var eventFilter = appState.events.where((e) {
           DateTime d;
           if (e.eventDate != 'not found') {
@@ -392,7 +407,7 @@ class _CalendarState extends State<Calendar> {
       },
       onDayLongPressed: (DateTime date) {},
     );
-    return new Scaffold(
+    return Scaffold(
         body: SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,7 +420,7 @@ class _CalendarState extends State<Calendar> {
               left: 16.0,
               right: 16.0,
             ),
-            child: new Row(
+            child: Row(
               children: <Widget>[
                 Expanded(
                     child: Text(
@@ -441,9 +456,11 @@ class _CalendarState extends State<Calendar> {
           Column(
             children: [
               Container(
+
                 height: MediaQuery.of(context).size.height * 0.39,
                 margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
                 child: _calendarCarouselNoHeader,
+
               ),
               Container(
                 color: Colors.black,
@@ -489,6 +506,8 @@ class EventPageEvent {
   final String? location;
   final String? description;
   final String? ticketUrl;
+  final String? image;
+  final String? venue;
 
   EventPageEvent({
     this.name,
@@ -496,10 +515,14 @@ class EventPageEvent {
     this.location,
     this.description,
     this.ticketUrl,
+    this.image,
+    this.venue,
   });
 }
 
 class EventsPage extends StatefulWidget {
+  const EventsPage({super.key});
+
   @override
   State<EventsPage> createState() => _EventsPageState();
 }
@@ -517,13 +540,11 @@ class _EventsPageState extends State<EventsPage> {
       location: Uevent.eventPostcode,
       description: "Description here.",
       ticketUrl: Uevent.eventTicketUrl,
+      image: Uevent.eventImage,
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Event Information'),
-        backgroundColor: const Color.fromARGB(255, 94, 216, 125),
-      ),
+      appBar: AppBar(),
       body: Column(
         children: [
           Container(
@@ -544,7 +565,7 @@ class _EventsPageState extends State<EventsPage> {
                 SizedBox(width: 8),
                 Text(
                   'Back to calendar',
-                  style: Theme.of(context).textTheme.bodyLarge!,
+                  style: TextStyle(color: Colors.black, fontSize: 18),
                 ),
               ],
             ),
@@ -557,7 +578,11 @@ class _EventsPageState extends State<EventsPage> {
                 children: [
                   Text(
                     event.name!,
-                    style: Theme.of(context).textTheme.bodyLarge!,
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: const Color.fromARGB(255, 2, 3, 2),
+                    ),
                   ),
                   SizedBox(height: 20),
                   Row(
@@ -874,210 +899,210 @@ class Festical extends StatelessWidget {
                   child: Align(
                       alignment: Alignment(-0.7, -0.15),
                       child: Text(
-                        "Some Big Band",
+                        festArtists.items.elementAt(0).name,
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0, -0.27),
                       child: Text(
-                        "Big Big Band",
+                        festArtists.items.elementAt(1).name,
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.7, -0.15),
                       child: Text(
-                        "Bigsnkajs Band",
+                        festArtists.items.elementAt(2).name,
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.85, 0),
                       child: Text(
-                        "Medium Band 1",
+                        festArtists.items.elementAt(3).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.3, 0),
                       child: Text(
-                        "Medium Band 2",
+                        festArtists.items.elementAt(4).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.3, 0),
                       child: Text(
-                        "Medium Band 3",
+                        festArtists.items.elementAt(5).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.85, 0),
                       child: Text(
-                        "Medium Band 4",
+                        festArtists.items.elementAt(6).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.85, 0.12),
                       child: Text(
-                        "Medium Band 5",
+                        festArtists.items.elementAt(7).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.3, 0.12),
                       child: Text(
-                        "Medium Band 6",
+                        festArtists.items.elementAt(8).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.3, 0.12),
                       child: Text(
-                        "Medium Band 7",
+                        festArtists.items.elementAt(9).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.85, 0.12),
                       child: Text(
-                        "Medium Band 8",
+                        festArtists.items.elementAt(10).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.85, 0.25),
                       child: Text(
-                        "Medium Band 9",
+                        festArtists.items.elementAt(11).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.3, 0.25),
                       child: Text(
-                        "Medium Band 10",
+                        festArtists.items.elementAt(12).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.3, 0.25),
                       child: Text(
-                        "Medium Band 11",
+                        festArtists.items.elementAt(13).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.85, 0.25),
                       child: Text(
-                        "Medium Band 12",
+                        festArtists.items.elementAt(14).name,
                         style: TextStyle(color: Colors.white, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.86, 0.4),
                       child: Text(
-                        "Small Band 1",
+                        festArtists.items.elementAt(15).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.45, 0.4),
                       child: Text(
-                        "Small Band 2",
+                        festArtists.items.elementAt(16).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.05, 0.4),
                       child: Text(
-                        "Small Band 3",
+                        festArtists.items.elementAt(17).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.4, 0.4),
                       child: Text(
-                        "Small Band 4",
+                        festArtists.items.elementAt(18).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.85, 0.4),
                       child: Text(
-                        "Small Band 5",
+                        festArtists.items.elementAt(19).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.86, 0.55),
                       child: Text(
-                        "Small Band 6",
+                        festArtists.items.elementAt(20).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.45, 0.55),
                       child: Text(
-                        "Small Band 7",
+                        festArtists.items.elementAt(21).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.05, 0.55),
                       child: Text(
-                        "Small Band 8",
+                        festArtists.items.elementAt(22).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.4, 0.55),
                       child: Text(
-                        "Small Band 9",
+                        festArtists.items.elementAt(23).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.85, 0.55),
                       child: Text(
-                        "Small Band 10",
+                        festArtists.items.elementAt(24).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.86, 0.7),
                       child: Text(
-                        "Small Band 11",
+                        festArtists.items.elementAt(25).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.45, 0.7),
                       child: Text(
-                        "Small Band 12",
+                        festArtists.items.elementAt(26).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.05, 0.7),
                       child: Text(
-                        "Small Band 13",
+                        festArtists.items.elementAt(27).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.4, 0.7),
                       child: Text(
-                        "Small Band 14",
+                        festArtists.items.elementAt(28).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.85, 0.7),
                       child: Text(
-                        "Small Band 15",
+                        festArtists.items.elementAt(29).name,
                         style: TextStyle(color: Colors.white, fontSize: 7),
                       ))),
             ])),
@@ -1088,210 +1113,210 @@ class Festical extends StatelessWidget {
                   child: Align(
                       alignment: Alignment(-0.5, -0.8),
                       child: Text(
-                        "Headliner 2",
+                        festArtists.items.elementAt(0).name,
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.2, -0.95),
                       child: Text(
-                        "Headliner 1",
+                        festArtists.items.elementAt(1).name,
                         style: TextStyle(color: Colors.black, fontSize: 17),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.85, -0.8),
                       child: Text(
-                        "Headliner 3",
+                        festArtists.items.elementAt(2).name,
                         style: TextStyle(color: Colors.black, fontSize: 15),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.57, -0.5),
                       child: Text(
-                        "Medium 1",
+                        festArtists.items.elementAt(3).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.1, -0.5),
                       child: Text(
-                        "Medium 2",
+                        festArtists.items.elementAt(4).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.4, -0.5),
                       child: Text(
-                        "Medium 3",
+                        festArtists.items.elementAt(5).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.88, -0.5),
                       child: Text(
-                        "Medium 4",
+                        festArtists.items.elementAt(6).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.57, -0.3),
                       child: Text(
-                        "Medium 5",
+                        festArtists.items.elementAt(7).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.1, -0.3),
                       child: Text(
-                        "Medium 6",
+                        festArtists.items.elementAt(8).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.4, -0.3),
                       child: Text(
-                        "Medium 7",
+                        festArtists.items.elementAt(9).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.88, -0.3),
                       child: Text(
-                        "Medium 8",
+                        festArtists.items.elementAt(10).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.57, -0.1),
                       child: Text(
-                        "Medium 9",
+                        festArtists.items.elementAt(11).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.1, -0.1),
                       child: Text(
-                        "Medium 10",
+                        festArtists.items.elementAt(12).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.4, -0.1),
                       child: Text(
-                        "Medium 11",
+                        festArtists.items.elementAt(13).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.88, -0.1),
                       child: Text(
-                        "Medium 12",
+                        festArtists.items.elementAt(14).name,
                         style: TextStyle(color: Colors.black, fontSize: 10),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.6, 0.1),
                       child: Text(
-                        "Small 1",
+                        festArtists.items.elementAt(15).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.25, 0.1),
                       child: Text(
-                        "Small 2",
+                        festArtists.items.elementAt(16).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.15, 0.1),
                       child: Text(
-                        "Small 3",
+                        festArtists.items.elementAt(17).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.55, 0.1),
                       child: Text(
-                        "Small 4",
+                        festArtists.items.elementAt(18).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.88, 0.1),
                       child: Text(
-                        "Small 5",
+                        festArtists.items.elementAt(19).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.6, 0.3),
                       child: Text(
-                        "Small 6",
+                        festArtists.items.elementAt(20).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.25, 0.3),
                       child: Text(
-                        "Small 7",
+                        festArtists.items.elementAt(21).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.15, 0.3),
                       child: Text(
-                        "Small 8",
+                        festArtists.items.elementAt(22).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.55, 0.3),
                       child: Text(
-                        "Small 9",
+                        festArtists.items.elementAt(23).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.88, 0.3),
                       child: Text(
-                        "Small 10",
+                        festArtists.items.elementAt(24).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.6, 0.5),
                       child: Text(
-                        "Small 11",
+                        festArtists.items.elementAt(25).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.25, 0.5),
                       child: Text(
-                        "Small 12",
+                        festArtists.items.elementAt(26).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.15, 0.5),
                       child: Text(
-                        "Small 13",
+                        festArtists.items.elementAt(27).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.55, 0.5),
                       child: Text(
-                        "Small 14",
+                        festArtists.items.elementAt(28).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.88, 0.5),
                       child: Text(
-                        "Small 15",
+                        festArtists.items.elementAt(29).name,
                         style: TextStyle(color: Colors.black, fontSize: 8),
                       ))),
             ]))
