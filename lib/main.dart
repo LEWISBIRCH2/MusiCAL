@@ -18,7 +18,11 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
+
+import 'bottomnavbar.dart';
+
 import 'package:url_launcher/url_launcher.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -260,13 +264,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     : ElevatedButton(
                         onPressed: () async {
                           await appState.getTopArtists();
-                          appState.getEvents();
+                          print('0');
+                          await appState.getEvents();
+                          print('1');
+                          await appState.getUsersEvents();
+                          print('2');
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) => Navigation()),
+                          );
                         },
                         child: Text('API CALL')),
                 Text(appState.accessToken.toString()),
-                appState.topArtists != null
-                    ? Text(appState.topArtists!.items[0].name)
-                    : Text('No Artists...')
               ],
             )),
           )
@@ -386,7 +395,6 @@ class _CalendarState extends State<Calendar> {
       },
       onDayPressed: (date, events) {
         setState(() => _currentDate2 = date);
-        //print(events[0].title);
         for (var event in events) {
           print(event.title);
         }
