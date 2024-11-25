@@ -23,6 +23,9 @@ import 'bottomnavbar.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// THE FORBIDDEN RUN COMMAND:
+// flutter run --web-port=50511 --host-vmservice-port=50511 -d chrome --web-browser-flag "--disable-web-security"
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -323,33 +326,40 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return kIsWeb
         ? Scaffold(
-            appBar: AppBar(
-              title: Text('Title'),
-            ),
             body: Center(
                 child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 appState.accessToken == null
-                    ? ElevatedButton(
-                        onPressed: () {
-                          appState.getToken();
-                        },
-                        child: Text('Login'))
-                    : ElevatedButton(
-                        onPressed: () async {
-                          await appState.getTopArtists();
-                          print('0');
-                          await appState.getEvents();
-                          print('1');
-                          await appState.getUsersEvents();
-                          print('2');
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => Navigation()),
-                          );
-                        },
-                        child: Text('API CALL')),
-                Text(appState.accessToken.toString()),
+                    ? Column(
+                        children: [
+                          Image.asset('assets/images/musiCAL_LOGO.png'),
+                          ElevatedButton(
+                              onPressed: () {
+                                appState.getToken();
+                              },
+                              child: Text('LOGIN')),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/images/musiCAL_LOGO.png'),
+                          ElevatedButton(
+                              onPressed: () async {
+                                await appState.getTopArtists();
+                                print('0');
+                                await appState.getEvents();
+                                print('1');
+                                await appState.getUsersEvents();
+                                print('2');
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => Navigation()),
+                                );
+                              },
+                              child: Text('OPEN CALENDAR')),
+                        ],
+                      ),
               ],
             )),
           )
