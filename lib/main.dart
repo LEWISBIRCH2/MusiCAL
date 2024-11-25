@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:musical/models/Artists-model.dart';
 import 'package:musical/models/Events-model.dart';
@@ -758,42 +760,44 @@ class Festical extends StatelessWidget {
                           alignment: Alignment(-0.5, -0.5),
                           child: Text(
                             festArtists!.items.elementAt(0).name,
-                            style: TextStyle(color: Colors.black, fontSize: 10),
+                            style: GoogleFonts.getFont('Jura'),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.6, -0.21),
+                          alignment: Alignment(0.7, -0.21),
                           child: Text(
                             festArtists.items.elementAt(1).name,
-                            style: TextStyle(color: Colors.black, fontSize: 10),
+                            style: GoogleFonts.getFont('Jura'),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.5, 0.08),
                           child: Text(
                             festArtists.items.elementAt(2).name,
-                            style: TextStyle(color: Colors.black, fontSize: 10),
+                            style: GoogleFonts.getFont('Jura'),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.85, -0.4),
                           child: Text(
                             festArtists.items.elementAt(3).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.getFont('Jura'),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.27, -0.4),
                           child: Text(
                             festArtists.items.elementAt(4).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.getFont('Jura'),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.33, -0.4),
-                          child: Text(
+                          child: AutoSizeText(
                             festArtists.items.elementAt(5).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: TextStyle(
+                                fontSize: AutoSizeText.lerp(12, 24, 0.5)),
+                            overflow: TextOverflow.ellipsis,
                           ))),
                   Positioned.fill(
                       child: Align(

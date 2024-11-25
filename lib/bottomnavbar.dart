@@ -38,9 +38,14 @@ class _NavigationState extends State<Navigation> {
         ),
       ]),
       bottomNavigationBar: BottomNavigationBar(
+        selectedLabelStyle: const TextStyle(color: Colors.black, fontSize: 10),
+        selectedItemColor: Colors.black,
+        unselectedLabelStyle:
+            const TextStyle(color: Colors.black, fontSize: 10),
+        unselectedItemColor: Colors.black,
         iconSize: 35,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
+        showUnselectedLabels: true,
+        showSelectedLabels: true,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_month,
