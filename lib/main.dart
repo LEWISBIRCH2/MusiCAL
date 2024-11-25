@@ -795,8 +795,7 @@ class Festical extends StatelessWidget {
                           alignment: Alignment(0.33, -0.4),
                           child: AutoSizeText(
                             festArtists.items.elementAt(5).name,
-                            style: TextStyle(
-                                fontSize: AutoSizeText.lerp(12, 24, 0.5)),
+                            style: TextStyle(fontSize: 10),
                             overflow: TextOverflow.ellipsis,
                           ))),
                   Positioned.fill(
