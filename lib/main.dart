@@ -6,6 +6,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:musical/models/Artists-model.dart';
 import 'package:musical/models/Events-model.dart';
+import 'package:musical/models/Festival-model.dart';
 import 'package:musical/models/Profile-model.dart';
 import 'package:musical/pages/spotify_auth_page.dart';
 import 'package:musical/services/spotify_service.dart';
@@ -20,16 +21,22 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
-
 import 'bottomnavbar.dart';
-
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+// THE FORBIDDEN RUN COMMAND:
+// flutter run --web-port=50511 --host-vmservice-port=50511 -d chrome --web-browser-flag "--disable-web-security"
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(
     ChangeNotifierProvider(
@@ -69,6 +76,8 @@ class _MyAppState extends ChangeNotifier {
   List<UserEvent> events = [];
   List<String>? eventsStrings;
   UserEvent? selectedEvent;
+  List<String> festNames = [];
+  List<Festival> userFestivals = [];
 
   Future<void> getToken() async {
     accessToken = await SpotifySdk.getAccessToken(
@@ -82,7 +91,7 @@ class _MyAppState extends ChangeNotifier {
   Future<void> getTopArtists() async {
     var response = await http.get(
       Uri.parse(
-          'https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=30&offset=0'),
+          'https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=40&offset=0'),
       headers: {'Authorization': 'Bearer $accessToken'},
     );
 
@@ -128,13 +137,10 @@ class _MyAppState extends ChangeNotifier {
   }
 
   Future<void> getEvents() async {
-    const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
+    const apiKey = 'oQwxcMmwTA9qT7sBrpax4NH0nzTiuWSw';
 
     for (int i = 0; i < topArtists!.items.length; i++) {
       var artist = topArtists!.items[i].name;
-
-      // var artistResponse = await http.get(Uri.parse(
-      //     'https://app.ticketmaster.com/discovery/v2/attractions?apikey=$apiKey&keyword=$artist/&locale=*'));
 
       var response = await http.get(Uri.parse(
           'https://app.ticketmaster.com/discovery/v2/events.json?keyword=$artist&segmentName=music&countryCode=GB&apikey=$apiKey'));
@@ -234,6 +240,89 @@ class _MyAppState extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  Future<void> getFestivals() async {
+    const apiKey = 'oQwxcMmwTA9qT7sBrpax4NH0nzTiuWSw';
+
+    var response = await http.get(Uri.parse(
+        'https://app.ticketmaster.com/discovery/v2/events.json?keyword=festival&segmentName=music&countryCode=GB&size=200&apikey=$apiKey'));
+
+    List<String> festivals = response.body.split(']}},{"name":"');
+    festivals.removeLast();
+
+    for (int i = 0; i < festivals.length; i++) {
+      String? name;
+      String? location;
+      List<String>? artists = [];
+      String? date;
+      String? url;
+
+      if (i == 0) {
+        name = festivals[i]
+            .split('{"_embedded":{"events":[{"name":"')[1]
+            .split('","')[0];
+      } else {
+        name = festivals[i].split('","')[0];
+      }
+
+      location = festivals[i].split('venues":[{"name":"')[1].split('","')[0];
+
+      date = festivals[i].split('"localDate":"')[1].split('","')[0];
+
+      url = festivals[i].split('"url":"')[1].split('","')[0];
+
+      if (festivals[i].contains('],"attractions":')) {
+        List<String> artistStrings =
+            festivals[i].split('],"attractions":')[1].split('{"name":"');
+        artistStrings.removeAt(0);
+
+        for (int j = 0; j < artistStrings.length; j++) {
+          artists.add(artistStrings[j].split('","')[0]);
+        }
+
+        if (artists.length > 1) {
+          festNames.add(name);
+          dbref.child('Festivals').child('$name').push();
+          await dbref
+              .child('Festivals')
+              .child('$name')
+              .set(festivalToJson(Festival(
+                name: name,
+                location: location,
+                artists: artists,
+                date: date,
+                url: url,
+                festRec: 0,
+              )));
+        }
+      }
+    }
+    notifyListeners();
+  }
+
+  Future<void> getUserFestivals() async {
+    for (int i = 0; i < festNames.length; i++) {
+      await dbref.child('Festivals').child(festNames[i]).get().then((data) {
+        Festival f = festivalFromJson(data.value.toString());
+        for (int j = 0; j < topArtists!.items.length; j++) {
+          if (f.artists!.contains(topArtists!.items[j].name)) {
+            f.festRec++;
+          }
+          // if (f.artists!.contains('Blossoms')) {
+          //   f.festRec++;
+          // }
+        }
+        userFestivals.add(f);
+      });
+    }
+    userFestivals.sort((f1, f2) => f1.festRec.compareTo(f2.festRec));
+    for (int i = 0; i < userFestivals.length; i++) {
+      if (userFestivals[i].festRec > 0) {
+        print(festivalToJson(userFestivals[i]));
+      }
+    }
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -250,33 +339,40 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return kIsWeb
         ? Scaffold(
-            appBar: AppBar(
-              title: Text('Title'),
-            ),
             body: Center(
                 child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 appState.accessToken == null
-                    ? ElevatedButton(
-                        onPressed: () {
-                          appState.getToken();
-                        },
-                        child: Text('Login'))
-                    : ElevatedButton(
-                        onPressed: () async {
-                          await appState.getTopArtists();
-                          print('0');
-                          await appState.getEvents();
-                          print('1');
-                          await appState.getUsersEvents();
-                          print('2');
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) => Navigation()),
-                          );
-                        },
-                        child: Text('API CALL')),
-                Text(appState.accessToken.toString()),
+                    ? Column(
+                        children: [
+                          Image.asset('assets/images/musiCAL_LOGO.png'),
+                          ElevatedButton(
+                              onPressed: () {
+                                appState.getToken();
+                              },
+                              child: Text('LOGIN')),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          Image.asset('assets/images/musiCAL_LOGO.png'),
+                          ElevatedButton(
+                              onPressed: () async {
+                                await appState.getTopArtists();
+                                print('0');
+                                await appState.getEvents();
+                                print('1');
+                                await appState.getUsersEvents();
+                                print('2');
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => Navigation()),
+                                );
+                              },
+                              child: Text('OPEN CALENDAR')),
+                        ],
+                      ),
               ],
             )),
           )
@@ -285,6 +381,8 @@ class _MyHomePageState extends State<MyHomePage> {
             await appState.getTopArtists();
             await appState.getEvents();
             await appState.getUsersEvents();
+            await appState.getFestivals();
+            await appState.getUserFestivals();
           });
   }
 }
@@ -355,7 +453,6 @@ class _CalendarState extends State<Calendar> {
       ),
       thisMonthDayBorderColor: Colors.grey,
       weekFormat: false,
-
       markedDatesMap: markedDateMap,
       height: 420.0,
       selectedDateTime: _currentDate2,
@@ -379,10 +476,7 @@ class _CalendarState extends State<Calendar> {
       ),
       minSelectedDate: _currentDate.subtract(Duration(days: 360)),
       maxSelectedDate: _currentDate.add(Duration(days: 360)),
-      prevDaysTextStyle: TextStyle(
-        fontSize: 16,
-        color: Colors.pinkAccent,
-      ),
+      prevDaysTextStyle: TextStyle(fontSize: 16, color: Colors.black),
       inactiveDaysTextStyle: TextStyle(
         color: Colors.tealAccent,
         fontSize: 16,
@@ -396,9 +490,6 @@ class _CalendarState extends State<Calendar> {
       },
       onDayPressed: (date, events) {
         setState(() => _currentDate2 = date);
-        for (var event in events) {
-          print(event.title);
-        }
         var eventFilter = appState.events.where((e) {
           DateTime d;
           if (e.eventDate != 'not found') {
@@ -531,7 +622,6 @@ class EventPageEvent {
 
 class EventsPage extends StatefulWidget {
   const EventsPage({super.key});
-
   @override
   State<EventsPage> createState() => _EventsPageState();
 }
@@ -550,49 +640,24 @@ class _EventsPageState extends State<EventsPage> {
       description: "Description here.",
       ticketUrl: Uevent.eventTicketUrl,
       image: Uevent.eventImage,
+      venue: Uevent.eventVenue,
     );
 
     return Scaffold(
       appBar: AppBar(),
       body: Column(
         children: [
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: const Color.fromARGB(255, 94, 216, 125),
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'Back to calendar',
-                  style: TextStyle(color: Colors.black, fontSize: 18),
-                ),
-              ],
-            ),
-          ),
           Expanded(
             child: Center(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(
-                    event.name!,
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: const Color.fromARGB(255, 2, 3, 2),
-                    ),
-                  ),
+                  Image.network(event.image!,
+                      width: double.infinity, height: 200, fit: BoxFit.cover),
+                  SizedBox(height: 50),
+                  Text(event.name!,
+                      style: Theme.of(context).textTheme.headlineLarge),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -602,7 +667,7 @@ class _EventsPageState extends State<EventsPage> {
                       SizedBox(width: 10),
                       Text(
                         event.date!,
-                        style: TextStyle(fontSize: 20),
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ],
                   ),
@@ -614,14 +679,16 @@ class _EventsPageState extends State<EventsPage> {
                         Icons.location_on,
                         color: const Color.fromARGB(255, 94, 216, 125),
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(width: 10, height: 10),
                       Text(
-                        event.location!,
-                        style: TextStyle(fontSize: 20),
+                        event.venue!,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
+                      SizedBox(width: 10, height: 10),
+                      Text(event.location!)
                     ],
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 20, width: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -640,7 +707,7 @@ class _EventsPageState extends State<EventsPage> {
                         },
                         child: Text(
                           'Buy tickets',
-                          style: TextStyle(fontSize: 10),
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
                     ],
