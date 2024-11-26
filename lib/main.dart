@@ -26,7 +26,7 @@ import './themes/themes.dart';
 import './themes/theme_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'loading.dart';
 
 // THE FORBIDDEN RUN COMMAND:
 // flutter run --web-port=50511 --host-vmservice-port=50511 -d chrome --web-browser-flag "--disable-web-security"
@@ -82,6 +82,7 @@ class _MyAppState extends ChangeNotifier {
   List<String> festNames = [];
   List<Festival> userFestivals = [];
   Iterable<UserEvent> calEvents = [];
+  bool isLoading = false;
 
   Future<void> getToken() async {
     accessToken = await SpotifySdk.getAccessToken(
@@ -90,6 +91,31 @@ class _MyAppState extends ChangeNotifier {
         scope: "user-top-read user-read-private user-read-email");
 
     notifyListeners();
+  }
+
+  Future<String?> exchangeToken(String code) async {
+    isLoading = true;
+    final response = await http.post(
+      Uri.parse('https://accounts.spotify.com/api/token'),
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization':
+            'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}',
+      },
+      body: {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': redirectUrl,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['access_token'];
+    } else {
+      print('Error exchanging token: ${response.body}');
+      return null;
+    }
   }
 
   Future<void> getTopArtists() async {
@@ -141,7 +167,7 @@ class _MyAppState extends ChangeNotifier {
   }
 
   Future<void> getEvents() async {
-    const apiKey = 'oQwxcMmwTA9qT7sBrpax4NH0nzTiuWSw';
+    const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
 
     for (int i = 0; i < topArtists!.items.length; i++) {
       var artist = topArtists!.items[i].name;
@@ -170,6 +196,7 @@ class _MyAppState extends ChangeNotifier {
         sortUserEvents(data.value.toString());
       });
     }
+    isLoading = false;
     notifyListeners();
   }
 
@@ -246,7 +273,7 @@ class _MyAppState extends ChangeNotifier {
   }
 
   Future<void> getFestivals() async {
-    const apiKey = 'oQwxcMmwTA9qT7sBrpax4NH0nzTiuWSw';
+    const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
 
     var response = await http.get(Uri.parse(
         'https://app.ticketmaster.com/discovery/v2/events.json?keyword=festival&segmentName=music&countryCode=GB&size=200&apikey=$apiKey'));
@@ -377,15 +404,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                                 child: Text('OPEN CALENDAR')),
                           ),
-                          LoadingAnimationWidget.staggeredDotsWave(
-                              color: Colors.green, size: 50)
                         ],
                       ),
               ],
             )),
           )
         : SpotifyAuthPage(onCodeReceived: (code) async {
-            appState.accessToken = await appState.service.exchangeToken(code);
+            appState.accessToken = await appState.exchangeToken(code);
             await appState.getTopArtists();
             await appState.getEvents();
             await appState.getUsersEvents();
@@ -535,93 +560,98 @@ class _CalendarState extends State<Calendar> {
       },
       onDayLongPressed: (DateTime date) {},
     );
-    return Scaffold(
-        body: SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(
-              top: 30.0,
-              bottom: 16.0,
-              left: 16.0,
-              right: 16.0,
-            ),
-            child: Row(
+    return appState.isLoading
+        ? PianoLoading()
+        : Scaffold(
+            body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Expanded(
-                  child: Text(
-                    _currentMonth,
-                    style: isDarkMode
-                        ? TextStyle(fontSize: 34, color: Colors.white)
-                        : TextStyle(fontSize: 34, color: Colors.black),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 30.0,
+                    bottom: 16.0,
+                    left: 16.0,
+                    right: 16.0,
+                  ),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          _currentMonth,
+                          style: isDarkMode
+                              ? TextStyle(fontSize: 34, color: Colors.white)
+                              : TextStyle(fontSize: 34, color: Colors.black),
+                        ),
+                      ),
+                      TextButton(
+                        child: Text('PREV'),
+                        onPressed: () {
+                          setState(() {
+                            _targetDateTime = DateTime(_targetDateTime.year,
+                                _targetDateTime.month - 1);
+                            _currentMonth =
+                                DateFormat.yMMM().format(_targetDateTime);
+                          });
+                        },
+                      ),
+                      TextButton(
+                        child: Text('NEXT'),
+                        onPressed: () {
+                          setState(() {
+                            _targetDateTime = DateTime(_targetDateTime.year,
+                                _targetDateTime.month + 1);
+                            _currentMonth =
+                                DateFormat.yMMM().format(_targetDateTime);
+                          });
+                        },
+                      )
+                    ],
                   ),
                 ),
-                TextButton(
-                  child: Text('PREV'),
-                  onPressed: () {
-                    setState(() {
-                      _targetDateTime = DateTime(
-                          _targetDateTime.year, _targetDateTime.month - 1);
-                      _currentMonth = DateFormat.yMMM().format(_targetDateTime);
-                    });
-                  },
-                ),
-                TextButton(
-                  child: Text('NEXT'),
-                  onPressed: () {
-                    setState(() {
-                      _targetDateTime = DateTime(
-                          _targetDateTime.year, _targetDateTime.month + 1);
-                      _currentMonth = DateFormat.yMMM().format(_targetDateTime);
-                    });
-                  },
-                )
-              ],
-            ),
-          ),
-          Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).size.height * 0.39,
-                margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-                child: calendarCarouselNoHeader,
-              ),
-              Container(
-                color: Colors.black,
-                height: 2,
-              ),
-              Container(
-
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      for (int i = 0; i < appState.calEvents.length; i++)
-                        Row(
+                Column(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.39,
+                      margin: EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 10.0),
+                      child: calendarCarouselNoHeader,
+                    ),
+                    Container(
+                      color: Colors.black,
+                      height: 2,
+                    ),
+                    Container(
+                      child: SingleChildScrollView(
+                        child: Column(
                           children: [
-                            ElevatedButton(
-                                onPressed: () {
-                                  appState.selectedEvent =
-                                      appState.calEvents.elementAt(i);
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => EventsPage()));
-                                },
-                                child: Text(appState.calEvents
-                                    .elementAt(i)
-                                    .eventName!)),
+                            for (int i = 0; i < appState.calEvents.length; i++)
+                              Row(
+                                children: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        appState.selectedEvent =
+                                            appState.calEvents.elementAt(i);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EventsPage()));
+                                      },
+                                      child: Text(appState.calEvents
+                                          .elementAt(i)
+                                          .eventName!)),
+                                ],
+                              ),
                           ],
                         ),
-                    ],
-
-                  ),
-                ),
-              )
-            ],
-          ) //
-        ],
-      ),
-    ));
+                      ),
+                    )
+                  ],
+                ) //
+              ],
+            ),
+          ));
   }
 }
 
