@@ -559,7 +559,6 @@ class _CalendarState extends State<Calendar> {
       onDayLongPressed: (DateTime date) {},
     );
 
-
     final calendarCarouselNoHeaderWeb = CalendarCarousel<Event>(
       markedDateShowIcon: true,
       height: MediaQuery.of(context).size.height * 0.6,
@@ -636,186 +635,182 @@ class _CalendarState extends State<Calendar> {
     //     MediaQuery.of(context).size.width <= 850) {
     //   return Text('Please adjust window size');
     // }
-  
-if (appState.isLoading){return PianoLoading()}     
-    else
-    
-    return 530 >= MediaQuery.of(context).size.width
-        ? Scaffold(
 
-            body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 30.0,
-                    bottom: 16.0,
-                    left: 16.0,
-                    right: 16.0,
-
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                          child: Text(
-                        _currentMonth,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 34.0,
-                        ),
-                      )),
-                      TextButton(
-                        child: Text('PREV'),
-                        onPressed: () {
-                          setState(() {
-                            _targetDateTime = DateTime(_targetDateTime.year,
-                                _targetDateTime.month - 1);
-                            _currentMonth =
-                                DateFormat.yMMM().format(_targetDateTime);
-                          });
-                        },
-                      ),
-                      TextButton(
-                        child: Text('NEXT'),
-                        onPressed: () {
-                          setState(() {
-                            _targetDateTime = DateTime(_targetDateTime.year,
-                                _targetDateTime.month + 1);
-                            _currentMonth =
-                                DateFormat.yMMM().format(_targetDateTime);
-                          });
-                        },
-                      )
-                    ],
-                  ),
-                ),
-                Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 10.0),
-                      child: calendarCarouselNoHeader,
+    if (appState.isLoading) {
+      return PianoLoading();
+    } else {
+      
+      return 530 >= MediaQuery.of(context).size.width
+          ? Scaffold(
+              body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 30.0,
+                      bottom: 16.0,
+                      left: 16.0,
+                      right: 16.0,
                     ),
-                    Column(
-                      children: [
-                        for (int i = 0; i < appState.calEvents.length; i++)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      appState.selectedEvent =
-                                          appState.calEvents.elementAt(i);
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EventsPage()));
-                                    },
-                                    child: Text(appState.calEvents
-                                        .elementAt(i)
-                                        .eventName!)),
-                              ),
-                            ],
-                          ),
-                      ],
-                    )
-                  ],
-                ) 
-              ],
-            ),
-          ))
-        : Scaffold(
-            body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(
-                    top: 30.0,
-                    bottom: 16.0,
-                    left: 16.0,
-                    right: 16.0,
-          
-
-                  ),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                            child: Text(
                           _currentMonth,
-                          style: isDarkMode
-                              ? TextStyle(fontSize: 34, color: Colors.white)
-                              : TextStyle(fontSize: 34, color: Colors.black),
-                        ),),
-
-                      TextButton(
-                        child: Text('PREV'),
-                        onPressed: () {
-                          setState(() {
-                            _targetDateTime = DateTime(_targetDateTime.year,
-                                _targetDateTime.month - 1);
-                            _currentMonth =
-                                DateFormat.yMMM().format(_targetDateTime);
-                          });
-                        },
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 34.0,
+                          ),
+                        )),
+                        TextButton(
+                          child: Text('PREV'),
+                          onPressed: () {
+                            setState(() {
+                              _targetDateTime = DateTime(_targetDateTime.year,
+                                  _targetDateTime.month - 1);
+                              _currentMonth =
+                                  DateFormat.yMMM().format(_targetDateTime);
+                            });
+                          },
+                        ),
+                        TextButton(
+                          child: Text('NEXT'),
+                          onPressed: () {
+                            setState(() {
+                              _targetDateTime = DateTime(_targetDateTime.year,
+                                  _targetDateTime.month + 1);
+                              _currentMonth =
+                                  DateFormat.yMMM().format(_targetDateTime);
+                            });
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.5,
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 10.0),
+                        child: calendarCarouselNoHeader,
                       ),
-                      TextButton(
-                        child: Text('NEXT'),
-                        onPressed: () {
-                          setState(() {
-                            _targetDateTime = DateTime(_targetDateTime.year,
-                                _targetDateTime.month + 1);
-                            _currentMonth =
-                                DateFormat.yMMM().format(_targetDateTime);
-                          });
-                        },
+                      Column(
+                        children: [
+                          for (int i = 0; i < appState.calEvents.length; i++)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        appState.selectedEvent =
+                                            appState.calEvents.elementAt(i);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EventsPage()));
+                                      },
+                                      child: Text(appState.calEvents
+                                          .elementAt(i)
+                                          .eventName!)),
+                                ),
+                              ],
+                            ),
+                        ],
                       )
                     ],
-                  ),
-                ),
-                Column(
-                  children: [
-
-                    Center(
-                      child: Container(
-                        child: calendarCarouselNoHeaderWeb,
-                      ),
+                  )
+                ],
+              ),
+            ))
+          : Scaffold(
+              body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: 30.0,
+                      bottom: 16.0,
+                      left: 16.0,
+                      right: 16.0,
                     ),
-                    Column(
-                      children: [
-                        for (int i = 0; i < appState.calEvents.length; i++)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      appState.selectedEvent =
-                                          appState.calEvents.elementAt(i);
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  EventsPage()));
-                                    },
-                                    child: Text(appState.calEvents
-                                        .elementAt(i)
-                                        .eventName!)),
-                              ),
-                            ],
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: Text(
+                            _currentMonth,
+                            style: isDarkMode
+                                ? TextStyle(fontSize: 34, color: Colors.white)
+                                : TextStyle(fontSize: 34, color: Colors.black),
                           ),
+                        ),
+                        TextButton(
+                          child: Text('PREV'),
+                          onPressed: () {
+                            setState(() {
+                              _targetDateTime = DateTime(_targetDateTime.year,
+                                  _targetDateTime.month - 1);
+                              _currentMonth =
+                                  DateFormat.yMMM().format(_targetDateTime);
+                            });
+                          },
+                        ),
+                        TextButton(
+                          child: Text('NEXT'),
+                          onPressed: () {
+                            setState(() {
+                              _targetDateTime = DateTime(_targetDateTime.year,
+                                  _targetDateTime.month + 1);
+                              _currentMonth =
+                                  DateFormat.yMMM().format(_targetDateTime);
+                            });
+                          },
+                        )
                       ],
-
-                    )
-                  ],
-                ) 
-              ],
-            ),
-          ));
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Center(
+                        child: Container(
+                          child: calendarCarouselNoHeaderWeb,
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          for (int i = 0; i < appState.calEvents.length; i++)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Center(
+                                  child: ElevatedButton(
+                                      onPressed: () {
+                                        appState.selectedEvent =
+                                            appState.calEvents.elementAt(i);
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EventsPage()));
+                                      },
+                                      child: Text(appState.calEvents
+                                          .elementAt(i)
+                                          .eventName!)),
+                                ),
+                              ],
+                            ),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ));
+    }
   }
 }
 
