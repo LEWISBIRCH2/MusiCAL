@@ -527,8 +527,9 @@ class CalendarState extends State<Calendar> {
           : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
       nextMonthDayBorderColor: isDarkMode ? Colors.black : Colors.white,
       headerTextStyle: TextStyle(color: Colors.pink),
-      todayButtonColor:
-          isDarkMode ? Colors.black : Colors.white, // background of today date
+      todayButtonColor: isDarkMode
+          ? const Color.fromARGB(248, 73, 72, 72)
+          : Colors.white, // background of today date
       selectedDayTextStyle: isDarkMode
           ? TextStyle(color: Colors.white)
           : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
@@ -993,6 +994,8 @@ class Festical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeData == darkMode;
     var appState = context.watch<_MyAppState>();
 
     Artists? festArtists = appState.topArtists;
@@ -1002,16 +1005,32 @@ class Festical extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            bottom: const TabBar(
+            bottom: TabBar(
+              indicatorColor: const Color.fromARGB(255, 255, 253, 251),
               tabs: [
                 Tab(
-                  icon: Icon(Icons.filter_1_rounded),
+                  icon: Icon(
+                    Icons.filter_1_rounded,
+                    color: isDarkMode
+                        ? const Color.fromARGB(255, 255, 255, 255)
+                        : const Color.fromARGB(255, 0, 0, 0),
+                  ),
                 ),
                 Tab(
-                  icon: Icon(Icons.filter_2_rounded),
+                  icon: Icon(
+                    Icons.filter_2_rounded,
+                    color: isDarkMode
+                        ? const Color.fromARGB(255, 255, 255, 255)
+                        : const Color.fromARGB(255, 0, 0, 0),
+                  ),
                 ),
                 Tab(
-                  icon: Icon(Icons.filter_3_rounded),
+                  icon: Icon(
+                    Icons.filter_3_rounded,
+                    color: isDarkMode
+                        ? const Color.fromARGB(255, 255, 255, 255)
+                        : const Color.fromARGB(255, 0, 0, 0),
+                  ),
                 )
               ],
             ),
