@@ -9,7 +9,6 @@ import 'package:musical/models/Events-model.dart';
 import 'package:musical/models/Festival-model.dart';
 import 'package:musical/models/Profile-model.dart';
 import 'package:musical/pages/spotify_auth_page.dart';
-import 'package:musical/services/spotify_service.dart';
 import 'package:provider/provider.dart';
 import 'package:musical/firebase_options.dart';
 import 'themes/theme_provider.dart';
@@ -71,7 +70,6 @@ class _MyAppState extends ChangeNotifier {
   final String clientSecret = '6aa9ae2264094650a6af77b3eef14903';
   String redirectUrl = 'https://dapper-swan-46f09f.netlify.app';
   String? accessToken;
-  SpotifyService service = SpotifyService();
   Artists? topArtists;
   Profile? profile;
   DatabaseReference dbref = FirebaseDatabase.instance.ref();
