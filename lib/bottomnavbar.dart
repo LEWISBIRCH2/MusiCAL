@@ -35,9 +35,9 @@ class _NavigationState extends State<Navigation> {
         Provider.of<ThemeProvider>(context).themeData == darkMode;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('MusiCAL'),
-      ),
+      // appBar: AppBar(
+      //   title: Text('MusiCAL'),
+      // ),
       body: IndexedStack(children: [
         Center(
           child: _widgetOptions.elementAt(_selectedIndex),
