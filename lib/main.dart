@@ -22,6 +22,8 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'bottomnavbar.dart';
+import './themes/themes.dart';
+import './themes/theme_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -410,16 +412,18 @@ class _CalendarState extends State<Calendar> {
     decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(1000)),
-        border:
-            Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 2.0)),
+        border: Border.all(color: Colors.black, width: 2.0)),
     child: Icon(
       Icons.music_note,
-      color: const Color.fromARGB(255, 0, 156, 70),
+      color: const Color.fromARGB(255, 114, 181, 85),
     ),
   );
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeData == darkMode;
+
     var appState = context.watch<_MyAppState>();
 
     EventList<Event> markedDateMap = EventList<Event>(
@@ -451,13 +455,22 @@ class _CalendarState extends State<Calendar> {
         return event.icon;
       },
       markedDateMoreShowTotal: true,
-      todayBorderColor: Colors.green,
+      todayBorderColor: isDarkMode
+          ? const Color.fromARGB(255, 114, 181, 85)
+          : const Color.fromARGB(255, 114, 181, 85),
       daysHaveCircularBorder: true,
       showOnlyCurrentMonthDate: false,
-      weekendTextStyle: TextStyle(
-        color: Colors.red,
-      ),
-      thisMonthDayBorderColor: Colors.grey,
+      weekdayTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black),
+
+      weekendTextStyle: isDarkMode
+          ? TextStyle(color: const Color.fromARGB(255, 250, 241, 154))
+          : TextStyle(color: const Color.fromARGB(255, 185, 72, 64)),
+
+      thisMonthDayBorderColor:
+          isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 0, 0),
+
       weekFormat: false,
       markedDatesMap: markedDateMap,
       height: 420.0,
@@ -466,27 +479,35 @@ class _CalendarState extends State<Calendar> {
       customGridViewPhysics: NeverScrollableScrollPhysics(),
       markedDateCustomShapeBorder: CircleBorder(
           side: BorderSide(
-              color: const Color.fromARGB(1, 215, 76, 60))), //#d74c3c
-      markedDateCustomTextStyle: TextStyle(
-        fontSize: 18,
-        color: Colors.blue,
-      ),
+              color: const Color.fromARGB(1, 215, 17, 246))), //#d74c3c
+      markedDateCustomTextStyle: TextStyle(fontSize: 18, color: Colors.black),
       showHeader: false,
-      todayTextStyle: TextStyle(
-        color: Colors.blue,
-      ),
-
-      todayButtonColor: const Color.fromARGB(255, 233, 255, 227),
-      selectedDayTextStyle: TextStyle(
-        color: const Color.fromARGB(255, 55, 255, 0),
-      ),
+      todayTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black), // color of today date
+      nextDaysTextStyle: isDarkMode
+          ? TextStyle(color: const Color.fromARGB(255, 255, 255, 255))
+          : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+      nextMonthDayBorderColor: isDarkMode ? Colors.black : Colors.white,
+      headerTextStyle: TextStyle(color: Colors.pink),
+      todayButtonColor:
+          isDarkMode ? Colors.black : Colors.white, // background of today date
+      selectedDayTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+      selectedDayButtonColor: const Color.fromARGB(255, 114, 181, 85),
+      daysTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
       minSelectedDate: _currentDate.subtract(Duration(days: 360)),
       maxSelectedDate: _currentDate.add(Duration(days: 360)),
-      prevDaysTextStyle: TextStyle(fontSize: 16, color: Colors.black),
-      inactiveDaysTextStyle: TextStyle(
-        color: Colors.tealAccent,
-        fontSize: 16,
-      ),
+      prevMonthDayBorderColor: isDarkMode ? Colors.black : Colors.white,
+      prevDaysTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black),
+      inactiveDaysTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black),
 
       onCalendarChanged: (DateTime date) {
         setState(() {
@@ -530,13 +551,13 @@ class _CalendarState extends State<Calendar> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                    child: Text(
-                  _currentMonth,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 34.0,
+                  child: Text(
+                    _currentMonth,
+                    style: isDarkMode
+                        ? TextStyle(fontSize: 34, color: Colors.white)
+                        : TextStyle(fontSize: 34, color: Colors.black),
                   ),
-                )),
+                ),
                 TextButton(
                   child: Text('PREV'),
                   onPressed: () {
@@ -572,6 +593,7 @@ class _CalendarState extends State<Calendar> {
                 height: 2,
               ),
               Container(
+
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -591,6 +613,7 @@ class _CalendarState extends State<Calendar> {
                           ],
                         ),
                     ],
+
                   ),
                 ),
               )
