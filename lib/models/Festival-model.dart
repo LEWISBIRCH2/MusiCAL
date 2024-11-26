@@ -7,6 +7,8 @@ class Festival {
   String? name;
   String? location;
   List<String>? artists;
+  String? genre;
+  String? subgenre;
   String? date;
   String? url;
   int festRec = 0;
@@ -15,6 +17,8 @@ class Festival {
       {this.name,
       this.location,
       this.artists,
+      this.genre,
+      this.subgenre,
       this.date,
       this.url,
       required this.festRec});
@@ -25,6 +29,8 @@ class Festival {
         date: json["date"],
         url: json["url"],
         artists: List<String>.from(json["artists"].map((x) => x)),
+        genre: json["genre"],
+        subgenre: json["subgenre"],
         festRec: json["festRec"],
       );
 
@@ -34,6 +40,8 @@ class Festival {
         "date": date,
         "url": url,
         "artists": List<dynamic>.from(artists!.map((x) => x)),
+        "genre": genre,
+        "subgenre": subgenre,
         "festRec": festRec,
       };
 }
