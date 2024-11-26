@@ -79,6 +79,7 @@ class _MyAppState extends ChangeNotifier {
   List<Festival> userFestivals = [];
   Iterable<UserEvent> calEvents = [];
   bool isLoading = false;
+  bool festLoading = true;
 
   Future<void> getToken() async {
     isLoading = true;
@@ -286,6 +287,8 @@ class _MyAppState extends ChangeNotifier {
       String? name;
       String? location;
       List<String>? artists = [];
+      String? genre;
+      String? subgenre;
       String? date;
       String? url;
 
@@ -311,22 +314,34 @@ class _MyAppState extends ChangeNotifier {
         for (int j = 0; j < artistStrings.length; j++) {
           artists.add(artistStrings[j].split('","')[0]);
         }
+      }
 
-        if (artists.length >= 1) {
-          festNames.add(name);
-          dbref.child('Festivals').child(name).push();
-          await dbref
-              .child('Festivals')
-              .child(name)
-              .set(festivalToJson(Festival(
-                name: name,
-                location: location,
-                artists: artists,
-                date: date,
-                url: url,
-                festRec: 0,
-              )));
-        }
+      if (festivals[i].contains('},"classifications":[')) {
+        genre = festivals[i]
+            .split('},"classifications":[')[1]
+            .split('"genre"')[1]
+            .split('name":"')[1]
+            .split('"}')[0];
+        subgenre = festivals[i]
+            .split('},"classifications":[')[1]
+            .split('"subGenre"')[1]
+            .split('name":"')[1]
+            .split('"}')[0];
+      }
+
+      if (artists.length >= 1) {
+        festNames.add(name);
+        dbref.child('Festivals').child(name).push();
+        await dbref.child('Festivals').child(name).set(festivalToJson(Festival(
+              name: name,
+              location: location,
+              artists: artists,
+              genre: genre,
+              subgenre: subgenre,
+              date: date,
+              url: url,
+              festRec: 0,
+            )));
       }
     }
     notifyListeners();
@@ -338,18 +353,26 @@ class _MyAppState extends ChangeNotifier {
         Festival f = festivalFromJson(data.value.toString());
         for (int j = 0; j < topArtists!.items.length; j++) {
           if (f.artists!.contains(topArtists!.items[j].name)) {
-            f.festRec++;
+            f.festRec += 10;
+          }
+
+          for (int k = 0; k < topArtists!.items[j].genres.length; k++) {
+            if (topArtists!.items[j].genres[k].toLowerCase() ==
+                f.genre!.toLowerCase()) {
+              f.festRec += 2;
+            }
+            if (topArtists!.items[j].genres[k].toLowerCase() ==
+                f.subgenre!.toLowerCase()) {
+              f.festRec += 1;
+            }
           }
         }
+
         userFestivals.add(f);
       });
     }
-    userFestivals.sort((f1, f2) => f1.festRec.compareTo(f2.festRec));
-    for (int i = 0; i < userFestivals.length; i++) {
-      if (userFestivals[i].festRec > 0) {
-        print(festivalToJson(userFestivals[i]));
-      }
-    }
+    userFestivals.sort((f1, f2) => f2.festRec.compareTo(f1.festRec));
+    festLoading = false;
     notifyListeners();
   }
 }
@@ -2002,6 +2025,123 @@ class Festical extends StatelessWidget {
                       ))),
             ]))
           ]),
+        ));
+  }
+}
+
+class Recommendations extends StatelessWidget {
+  const Recommendations({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<_MyAppState>();
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeData == darkMode;
+
+    return Scaffold(
+        appBar: AppBar(),
+        body: GridView.count(
+          crossAxisCount: 1,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    // change colour to reference light/dark themes built by layla
+                    color: Theme.of(context).colorScheme.tertiary,
+                    border: Border.all(width: 8),
+                    borderRadius: BorderRadius.circular(20)),
+                alignment: Alignment.topCenter,
+                padding: EdgeInsets.all(20.0),
+                margin: EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    Text(
+                      'Top 5 Festivals for You...',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: isDarkMode
+                              ? const Color.fromARGB(255, 255, 254, 254)
+                              : Colors.black),
+                    ),
+                    appState.festLoading
+                        ? Text('loading')
+                        : Column(
+                            children: [
+                              for (int i = 0; i < 5; i++)
+                                Row(
+                                  children: [
+                                    Text(appState.userFestivals[i].name!),
+                                    // Text(appState.userFestivals[i].date!),
+                                    // Text(appState.userFestivals[i].location!),
+                                  ],
+                                )
+                            ],
+                          )
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    // change colour to reference light/dark themes built by layla
+                    color: Theme.of(context).colorScheme.tertiary,
+                    border: Border.all(width: 8),
+                    borderRadius: BorderRadius.circular(20)),
+                alignment: Alignment.topCenter,
+                padding: EdgeInsets.all(20.0),
+                margin: EdgeInsets.all(10.0),
+                child: Text(
+                  'Top 3 Festivals Your Favourite Artists Are At...',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isDarkMode
+                          ? const Color.fromARGB(255, 255, 255, 255)
+                          : Colors.black),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    // change colour to reference light/dark themes built by layla
+                    color: Theme.of(context).colorScheme.tertiary,
+                    border: Border.all(width: 8),
+                    borderRadius: BorderRadius.circular(20)),
+                alignment: Alignment.topCenter,
+                padding: EdgeInsets.all(20.0),
+                margin: EdgeInsets.all(10.0),
+                child: Text(
+                  'Top 3 Festivals Including Your Favourite Genre...',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isDarkMode
+                          ? const Color.fromARGB(255, 255, 255, 255)
+                          : Colors.black),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                    // change colour to reference light/dark themes built by layla
+                    color: Theme.of(context).colorScheme.tertiary,
+                    border: Border.all(width: 8),
+                    borderRadius: BorderRadius.circular(20)),
+                alignment: Alignment.topCenter,
+                padding: EdgeInsets.all(20.0),
+                margin: EdgeInsets.all(10.0),
+                child: Text(
+                  'Top 3 Festivals that are a bit different...',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isDarkMode
+                          ? const Color.fromARGB(255, 255, 255, 255)
+                          : Colors.black),
+                ),
+              ),
+            ),
+          ],
         ));
   }
 }
