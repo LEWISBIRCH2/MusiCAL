@@ -61,29 +61,29 @@ class _NavigationState extends State<Navigation> {
         showSelectedLabels: true,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month,
+              icon: Icon(Icons.calendar_month_rounded,
                   color: isDarkMode
                       ? const Color.fromARGB(255, 96, 94, 94)
-                      : Colors.black),
+                      : const Color.fromARGB(255, 124, 124, 124)),
               label: 'Calendar'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.recommend_rounded,
+            icon: Icon(Icons.thumb_up_alt_rounded,
                 color: isDarkMode
                     ? const Color.fromARGB(255, 96, 94, 94)
-                    : Colors.black),
+                    : const Color.fromARGB(255, 124, 124, 124)),
             label: 'For you',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.festival_rounded,
+              icon: Icon(Icons.festival,
                   color: isDarkMode
                       ? const Color.fromARGB(255, 96, 94, 94)
-                      : Colors.black),
+                      : const Color.fromARGB(255, 124, 124, 124)),
               label: 'Festical'),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings_rounded,
                   color: isDarkMode
                       ? const Color.fromARGB(255, 96, 94, 94)
-                      : Colors.black),
+                      : const Color.fromARGB(255, 124, 124, 124)),
               label: 'Settings'),
         ],
         currentIndex: _selectedIndex,
