@@ -21,6 +21,8 @@ import 'package:flutter_calendar_carousel/classes/event.dart';
 import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'bottomnavbar.dart';
+import './themes/themes.dart';
+import './themes/theme_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'loading.dart';
@@ -309,10 +311,10 @@ class _MyAppState extends ChangeNotifier {
 
         if (artists.length >= 1) {
           festNames.add(name);
-          dbref.child('Festivals').child('$name').push();
+          dbref.child('Festivals').child(name).push();
           await dbref
               .child('Festivals')
-              .child('$name')
+              .child(name)
               .set(festivalToJson(Festival(
                 name: name,
                 location: location,
@@ -433,16 +435,18 @@ class _CalendarState extends State<Calendar> {
     decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(1000)),
-        border:
-            Border.all(color: const Color.fromARGB(255, 0, 0, 0), width: 2.0)),
+        border: Border.all(color: Colors.black, width: 2.0)),
     child: Icon(
       Icons.music_note,
-      color: const Color.fromARGB(255, 0, 156, 70),
+      color: const Color.fromARGB(255, 114, 181, 85),
     ),
   );
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeData == darkMode;
+
     var appState = context.watch<_MyAppState>();
 
     EventList<Event> markedDateMap = EventList<Event>(
@@ -474,13 +478,22 @@ class _CalendarState extends State<Calendar> {
         return event.icon;
       },
       markedDateMoreShowTotal: true,
-      todayBorderColor: Colors.green,
+      todayBorderColor: isDarkMode
+          ? const Color.fromARGB(255, 114, 181, 85)
+          : const Color.fromARGB(255, 114, 181, 85),
       daysHaveCircularBorder: true,
       showOnlyCurrentMonthDate: false,
-      weekendTextStyle: TextStyle(
-        color: Colors.red,
-      ),
-      thisMonthDayBorderColor: Colors.grey,
+      weekdayTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black),
+
+      weekendTextStyle: isDarkMode
+          ? TextStyle(color: const Color.fromARGB(255, 250, 241, 154))
+          : TextStyle(color: const Color.fromARGB(255, 185, 72, 64)),
+
+      thisMonthDayBorderColor:
+          isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 0, 0),
+
       weekFormat: false,
       markedDatesMap: markedDateMap,
       height: 420.0,
@@ -489,27 +502,35 @@ class _CalendarState extends State<Calendar> {
       customGridViewPhysics: NeverScrollableScrollPhysics(),
       markedDateCustomShapeBorder: CircleBorder(
           side: BorderSide(
-              color: const Color.fromARGB(1, 215, 76, 60))), //#d74c3c
-      markedDateCustomTextStyle: TextStyle(
-        fontSize: 18,
-        color: Colors.blue,
-      ),
+              color: const Color.fromARGB(1, 215, 17, 246))), //#d74c3c
+      markedDateCustomTextStyle: TextStyle(fontSize: 18, color: Colors.black),
       showHeader: false,
-      todayTextStyle: TextStyle(
-        color: Colors.blue,
-      ),
-
-      todayButtonColor: const Color.fromARGB(255, 233, 255, 227),
-      selectedDayTextStyle: TextStyle(
-        color: const Color.fromARGB(255, 55, 255, 0),
-      ),
+      todayTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black), // color of today date
+      nextDaysTextStyle: isDarkMode
+          ? TextStyle(color: const Color.fromARGB(255, 255, 255, 255))
+          : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+      nextMonthDayBorderColor: isDarkMode ? Colors.black : Colors.white,
+      headerTextStyle: TextStyle(color: Colors.pink),
+      todayButtonColor:
+          isDarkMode ? Colors.black : Colors.white, // background of today date
+      selectedDayTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+      selectedDayButtonColor: const Color.fromARGB(255, 114, 181, 85),
+      daysTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
       minSelectedDate: _currentDate.subtract(Duration(days: 360)),
       maxSelectedDate: _currentDate.add(Duration(days: 360)),
-      prevDaysTextStyle: TextStyle(fontSize: 16, color: Colors.black),
-      inactiveDaysTextStyle: TextStyle(
-        color: Colors.tealAccent,
-        fontSize: 16,
-      ),
+      prevMonthDayBorderColor: isDarkMode ? Colors.black : Colors.white,
+      prevDaysTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black),
+      inactiveDaysTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black),
 
       onCalendarChanged: (DateTime date) {
         setState(() {
@@ -560,6 +581,67 @@ class _CalendarState extends State<Calendar> {
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 34.0,
+                Expanded(
+                  child: Text(
+                    _currentMonth,
+                    style: isDarkMode
+                        ? TextStyle(fontSize: 34, color: Colors.white)
+                        : TextStyle(fontSize: 34, color: Colors.black),
+                  ),
+                ),
+                TextButton(
+                  child: Text('PREV'),
+                  onPressed: () {
+                    setState(() {
+                      _targetDateTime = DateTime(
+                          _targetDateTime.year, _targetDateTime.month - 1);
+                      _currentMonth = DateFormat.yMMM().format(_targetDateTime);
+                    });
+                  },
+                ),
+                TextButton(
+                  child: Text('NEXT'),
+                  onPressed: () {
+                    setState(() {
+                      _targetDateTime = DateTime(
+                          _targetDateTime.year, _targetDateTime.month + 1);
+                      _currentMonth = DateFormat.yMMM().format(_targetDateTime);
+                    });
+                  },
+                )
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).size.height * 0.39,
+                margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                child: calendarCarouselNoHeader,
+              ),
+              Container(
+                color: Colors.black,
+                height: 2,
+              ),
+              Container(
+
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < appState.calEvents.length; i++)
+                        Row(
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  appState.selectedEvent =
+                                      appState.calEvents.elementAt(i);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => EventsPage()));
+                                },
+                                child: Text(appState.calEvents
+                                    .elementAt(i)
+                                    .eventName!)),
+                          ],
                         ),
                       )),
                       TextButton(
@@ -585,6 +667,7 @@ class _CalendarState extends State<Calendar> {
                         },
                       )
                     ],
+
                   ),
                 ),
                 Column(
@@ -789,214 +872,334 @@ class Festical extends StatelessWidget {
                   Image.asset('assets/images/EmptyLineUp.jpg'),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.5, -0.5),
+                          alignment: Alignment(-0.6, -0.5),
                           child: Text(
                             festArtists!.items.elementAt(0).name,
-                            style: GoogleFonts.getFont('Jura'),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.7, -0.21),
-                          child: Text(
-                            festArtists.items.elementAt(1).name,
-                            style: GoogleFonts.getFont('Jura'),
-                          ))),
+                    alignment: Alignment(0.7, -0.21),
+                    child: Text(
+                      festArtists.items.elementAt(1).name,
+                      style: GoogleFonts.lacquer(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700)),
+                    ),
+                  )),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.5, 0.08),
                           child: Text(
                             festArtists.items.elementAt(2).name,
-                            style: GoogleFonts.getFont('Jura'),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.85, -0.4),
                           child: Text(
                             festArtists.items.elementAt(3).name,
-                            style: GoogleFonts.getFont('Jura'),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.27, -0.4),
                           child: Text(
                             festArtists.items.elementAt(4).name,
-                            style: GoogleFonts.getFont('Jura'),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.33, -0.4),
-                          child: AutoSizeText(
+                          child: Text(
                             festArtists.items.elementAt(5).name,
-                            style: TextStyle(fontSize: 10),
-                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.92, -0.4),
                           child: Text(
                             festArtists.items.elementAt(6).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.87, -0.31),
                           child: Text(
                             festArtists.items.elementAt(7).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.41, -0.31),
                           child: Text(
                             festArtists.items.elementAt(8).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.02, -0.31),
                           child: Text(
                             festArtists.items.elementAt(9).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.45, -0.31),
                           child: Text(
                             festArtists.items.elementAt(10).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.89, -0.31),
                           child: Text(
                             festArtists.items.elementAt(11).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.85, -0.11),
                           child: Text(
                             festArtists.items.elementAt(12).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.27, -0.11),
                           child: Text(
                             festArtists.items.elementAt(13).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.33, -0.11),
                           child: Text(
                             festArtists.items.elementAt(14).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.92, -0.11),
                           child: Text(
                             festArtists.items.elementAt(15).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.87, -0.02),
                           child: Text(
                             festArtists.items.elementAt(16).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.41, -0.02),
                           child: Text(
                             festArtists.items.elementAt(17).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.02, -0.02),
                           child: Text(
                             festArtists.items.elementAt(18).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.45, -0.02),
                           child: Text(
                             festArtists.items.elementAt(19).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.89, -0.02),
                           child: Text(
                             festArtists.items.elementAt(20).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.85, 0.18),
                           child: Text(
                             festArtists.items.elementAt(21).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.27, 0.18),
                           child: Text(
                             festArtists.items.elementAt(22).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.33, 0.18),
                           child: Text(
                             festArtists.items.elementAt(23).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.92, 0.18),
                           child: Text(
                             festArtists.items.elementAt(24).name,
-                            style: TextStyle(color: Colors.black, fontSize: 6),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.87, 0.27),
                           child: Text(
                             festArtists.items.elementAt(25).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(-0.41, 0.27),
                           child: Text(
                             festArtists.items.elementAt(26).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.02, 0.27),
                           child: Text(
                             festArtists.items.elementAt(27).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.45, 0.27),
                           child: Text(
                             festArtists.items.elementAt(28).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
                           alignment: Alignment(0.89, 0.27),
                           child: Text(
                             festArtists.items.elementAt(29).name,
-                            style: TextStyle(color: Colors.black, fontSize: 5),
+                            style: GoogleFonts.lacquer(
+                                textStyle: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 7,
+                                    fontWeight: FontWeight.w700)),
                           )))
                 ],
               ),
@@ -1009,210 +1212,330 @@ class Festical extends StatelessWidget {
                       alignment: Alignment(-0.7, -0.15),
                       child: Text(
                         festArtists.items.elementAt(0).name,
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.red,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0, -0.27),
+                      alignment: Alignment(0, -0.28),
                       child: Text(
                         festArtists.items.elementAt(1).name,
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.green,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(0.7, -0.15),
                       child: Text(
                         festArtists.items.elementAt(2).name,
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.85, 0),
+                      alignment: Alignment(-0.85, -0.04),
                       child: Text(
                         festArtists.items.elementAt(3).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.pinkAccent,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.3, 0),
+                      alignment: Alignment(-0.3, 0.03),
                       child: Text(
                         festArtists.items.elementAt(4).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.lightBlue,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.3, 0),
+                      alignment: Alignment(0.3, -0.04),
                       child: Text(
                         festArtists.items.elementAt(5).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.pinkAccent,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0),
+                      alignment: Alignment(0.85, 0.03),
                       child: Text(
                         festArtists.items.elementAt(6).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.85, 0.12),
+                      alignment: Alignment(-0.85, 0.07),
                       child: Text(
                         festArtists.items.elementAt(7).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.green,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.3, 0.12),
+                      alignment: Alignment(-0.3, 0.15),
                       child: Text(
                         festArtists.items.elementAt(8).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.red,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.3, 0.12),
+                      alignment: Alignment(0.3, 0.07),
                       child: Text(
                         festArtists.items.elementAt(9).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.green,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.12),
+                      alignment: Alignment(0.85, 0.15),
                       child: Text(
                         festArtists.items.elementAt(10).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.85, 0.25),
+                      alignment: Alignment(-0.85, 0.19),
                       child: Text(
                         festArtists.items.elementAt(11).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.pinkAccent,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.3, 0.25),
+                      alignment: Alignment(-0.3, 0.27),
                       child: Text(
                         festArtists.items.elementAt(12).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.lightBlue,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.3, 0.25),
+                      alignment: Alignment(0.3, 0.19),
                       child: Text(
                         festArtists.items.elementAt(13).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.pinkAccent,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.25),
+                      alignment: Alignment(0.85, 0.27),
                       child: Text(
                         festArtists.items.elementAt(14).name,
-                        style: TextStyle(color: Colors.white, fontSize: 8),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.86, 0.4),
+                      alignment: Alignment(-0.86, 0.32),
                       child: Text(
                         festArtists.items.elementAt(15).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.green,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.45, 0.4),
+                      alignment: Alignment(-0.45, 0.37),
                       child: Text(
                         festArtists.items.elementAt(16).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.red,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.05, 0.4),
+                      alignment: Alignment(-0.05, 0.42),
                       child: Text(
                         festArtists.items.elementAt(17).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.green,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.4, 0.4),
+                      alignment: Alignment(0.4, 0.37),
                       child: Text(
                         festArtists.items.elementAt(18).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.4),
+                      alignment: Alignment(0.85, 0.35),
                       child: Text(
                         festArtists.items.elementAt(19).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.pinkAccent,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.86, 0.55),
+                      alignment: Alignment(-0.86, 0.45),
                       child: Text(
                         festArtists.items.elementAt(20).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.lightBlue,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.45, 0.55),
+                      alignment: Alignment(-0.45, 0.5),
                       child: Text(
                         festArtists.items.elementAt(21).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.pinkAccent,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.05, 0.55),
                       child: Text(
                         festArtists.items.elementAt(22).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.4, 0.55),
+                      alignment: Alignment(0.4, 0.5),
                       child: Text(
                         festArtists.items.elementAt(23).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.green,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.55),
+                      alignment: Alignment(0.85, 0.48),
                       child: Text(
                         festArtists.items.elementAt(24).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.red,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.86, 0.7),
+                      alignment: Alignment(-0.86, 0.6),
                       child: Text(
                         festArtists.items.elementAt(25).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.green,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.45, 0.7),
+                      alignment: Alignment(-0.45, 0.65),
                       child: Text(
                         festArtists.items.elementAt(26).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.orange,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
                       alignment: Alignment(-0.05, 0.7),
                       child: Text(
                         festArtists.items.elementAt(27).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.pinkAccent,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.4, 0.7),
+                      alignment: Alignment(0.4, 0.65),
                       child: Text(
                         festArtists.items.elementAt(28).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.lightBlue,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.7),
+                      alignment: Alignment(0.85, 0.63),
                       child: Text(
                         festArtists.items.elementAt(29).name,
-                        style: TextStyle(color: Colors.white, fontSize: 7),
+                        style: GoogleFonts.leagueGothic(
+                            textStyle: TextStyle(
+                                color: Colors.pinkAccent,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w700)),
                       ))),
             ])),
             Center(
@@ -1220,213 +1543,333 @@ class Festical extends StatelessWidget {
               Image.asset('assets/images/leeds_final.jpg'),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.5, -0.8),
+                      alignment: Alignment(-0.4, -0.82),
                       child: Text(
                         festArtists.items.elementAt(0).name,
-                        style: TextStyle(color: Colors.black, fontSize: 15),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.2, -0.95),
+                      alignment: Alignment(0.5, -0.95),
                       child: Text(
                         festArtists.items.elementAt(1).name,
-                        style: TextStyle(color: Colors.black, fontSize: 17),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, -0.8),
+                      alignment: Alignment(0.85, -0.78),
                       child: Text(
                         festArtists.items.elementAt(2).name,
-                        style: TextStyle(color: Colors.black, fontSize: 15),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.57, -0.5),
+                      alignment: Alignment(-0.45, -0.65),
                       child: Text(
                         festArtists.items.elementAt(3).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.1, -0.5),
+                      alignment: Alignment(-0.45, -0.55),
                       child: Text(
                         festArtists.items.elementAt(4).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.4, -0.5),
+                      alignment: Alignment(0.7, -0.65),
                       child: Text(
                         festArtists.items.elementAt(5).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.88, -0.5),
+                      alignment: Alignment(0.7, -0.55),
                       child: Text(
                         festArtists.items.elementAt(6).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.57, -0.3),
+                      alignment: Alignment(-0.45, -0.45),
                       child: Text(
                         festArtists.items.elementAt(7).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.1, -0.3),
+                      alignment: Alignment(-0.45, -0.35),
                       child: Text(
                         festArtists.items.elementAt(8).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.4, -0.3),
+                      alignment: Alignment(0.7, -0.45),
                       child: Text(
                         festArtists.items.elementAt(9).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.88, -0.3),
+                      alignment: Alignment(0.7, -0.35),
                       child: Text(
                         festArtists.items.elementAt(10).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.57, -0.1),
+                      alignment: Alignment(-0.45, -0.25),
                       child: Text(
                         festArtists.items.elementAt(11).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.1, -0.1),
+                      alignment: Alignment(-0.45, -0.15),
                       child: Text(
                         festArtists.items.elementAt(12).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.4, -0.1),
+                      alignment: Alignment(0.7, -0.25),
                       child: Text(
                         festArtists.items.elementAt(13).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.88, -0.1),
+                      alignment: Alignment(0.7, -0.15),
                       child: Text(
                         festArtists.items.elementAt(14).name,
-                        style: TextStyle(color: Colors.black, fontSize: 10),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.6, 0.1),
+                      alignment: Alignment(-0.6, -0.05),
                       child: Text(
                         festArtists.items.elementAt(15).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.25, 0.1),
+                      alignment: Alignment(-0.25, 0.05),
                       child: Text(
                         festArtists.items.elementAt(16).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.15, 0.1),
+                      alignment: Alignment(0.15, 0.15),
                       child: Text(
                         festArtists.items.elementAt(17).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.55, 0.1),
+                      alignment: Alignment(0.55, 0.05),
                       child: Text(
                         festArtists.items.elementAt(18).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.88, 0.1),
+                      alignment: Alignment(0.88, -0.05),
                       child: Text(
                         festArtists.items.elementAt(19).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.6, 0.3),
+                      alignment: Alignment(-0.6, 0.25),
                       child: Text(
                         festArtists.items.elementAt(20).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.25, 0.3),
+                      alignment: Alignment(-0.25, 0.35),
                       child: Text(
                         festArtists.items.elementAt(21).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.15, 0.3),
+                      alignment: Alignment(0.15, 0.45),
                       child: Text(
                         festArtists.items.elementAt(22).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.55, 0.3),
+                      alignment: Alignment(0.55, 0.35),
                       child: Text(
                         festArtists.items.elementAt(23).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.88, 0.3),
+                      alignment: Alignment(0.88, 0.25),
                       child: Text(
                         festArtists.items.elementAt(24).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.6, 0.5),
+                      alignment: Alignment(-0.6, 0.55),
                       child: Text(
                         festArtists.items.elementAt(25).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.25, 0.5),
+                      alignment: Alignment(-0.25, 0.65),
                       child: Text(
                         festArtists.items.elementAt(26).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.15, 0.5),
+                      alignment: Alignment(0.15, 0.75),
                       child: Text(
                         festArtists.items.elementAt(27).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.55, 0.5),
+                      alignment: Alignment(0.55, 0.65),
                       child: Text(
                         festArtists.items.elementAt(28).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.88, 0.5),
+                      alignment: Alignment(0.88, 0.55),
                       child: Text(
                         festArtists.items.elementAt(29).name,
-                        style: TextStyle(color: Colors.black, fontSize: 8),
+                        style: GoogleFonts.rubikDistressed(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w700)),
                       ))),
             ]))
           ]),
