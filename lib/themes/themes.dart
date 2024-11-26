@@ -7,7 +7,7 @@ ThemeData lightMode = ThemeData(
         255, 255, 255, 255), // background color for elevated surface components
     primary: Colors.green.shade300, // for key components
     secondary: Colors.green.shade200,
-    tertiary: Color.fromARGB(25, 244, 239, 163),
+    tertiary: Color.fromARGB(46, 244, 239, 163),
   ),
   // for less prominent compoents
 
@@ -34,7 +34,7 @@ ThemeData darkMode = ThemeData(
     secondary: Colors.green.shade900,
     tertiary: const Color.fromARGB(248, 55, 55, 55),
   ),
-  scaffoldBackgroundColor: Colors.black,
+  scaffoldBackgroundColor: const Color.fromARGB(248, 28, 28, 28),
   appBarTheme: AppBarTheme(
       backgroundColor: const Color.fromARGB(248, 55, 55, 55),
       foregroundColor: const Color.fromARGB(255, 247, 247, 247)),

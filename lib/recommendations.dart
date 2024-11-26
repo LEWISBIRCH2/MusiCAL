@@ -24,7 +24,9 @@ class Recommendations extends StatelessWidget {
                 decoration: BoxDecoration(
                     // change colour to reference light/dark themes built by layla
                     color: Theme.of(context).colorScheme.tertiary,
-                    border: Border.all(width: 8),
+                    border: Border.all(
+                        width: 8,
+                        color: Theme.of(context).colorScheme.tertiary),
                     borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.topCenter,
                 padding: EdgeInsets.all(20.0),
@@ -44,7 +46,9 @@ class Recommendations extends StatelessWidget {
                 decoration: BoxDecoration(
                     // change colour to reference light/dark themes built by layla
                     color: Theme.of(context).colorScheme.tertiary,
-                    border: Border.all(width: 8),
+                    border: Border.all(
+                        width: 8,
+                        color: Theme.of(context).colorScheme.tertiary),
                     borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.topCenter,
                 padding: EdgeInsets.all(20.0),
@@ -64,7 +68,9 @@ class Recommendations extends StatelessWidget {
                 decoration: BoxDecoration(
                     // change colour to reference light/dark themes built by layla
                     color: Theme.of(context).colorScheme.tertiary,
-                    border: Border.all(width: 8),
+                    border: Border.all(
+                        width: 8,
+                        color: Theme.of(context).colorScheme.tertiary),
                     borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.topCenter,
                 padding: EdgeInsets.all(20.0),
@@ -84,7 +90,9 @@ class Recommendations extends StatelessWidget {
                 decoration: BoxDecoration(
                     // change colour to reference light/dark themes built by layla
                     color: Theme.of(context).colorScheme.tertiary,
-                    border: Border.all(width: 8),
+                    border: Border.all(
+                        width: 8,
+                        color: Theme.of(context).colorScheme.tertiary),
                     borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.topCenter,
                 padding: EdgeInsets.all(20.0),
