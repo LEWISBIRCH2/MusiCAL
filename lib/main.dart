@@ -83,6 +83,7 @@ class _MyAppState extends ChangeNotifier {
   bool isLoading = false;
 
   Future<void> getToken() async {
+    isLoading = true;
     accessToken = await SpotifySdk.getAccessToken(
         clientId: clientId,
         redirectUrl: redirectUrl,
@@ -366,46 +367,34 @@ class _MyHomePageState extends State<MyHomePage> {
     return kIsWeb
         ? Scaffold(
             body: Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                appState.accessToken == null
-                    ? Column(
-                        children: [
-                          Image.asset('assets/images/musiCAL_LOGO.png'),
-                          ElevatedButton(
-                              onPressed: () {
-                                appState.getToken();
-                              },
-                              child: Text('LOGIN')),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Image.asset('assets/images/musiCAL_LOGO.png'),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ElevatedButton(
-                                onPressed: () async {
-                                  await appState.getTopArtists();
-                                  print('1');
-                                  await appState.getEvents();
-                                  print('2');
-                                  await appState.getUsersEvents();
-                                  print('3');
-                                  await appState.getFestivals();
-                                  print('4');
-                                  await appState.getUserFestivals();
-                                  print('5');
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => Navigation()));
-                                },
-                                child: Text('OPEN CALENDAR')),
-                          ),
-                        ],
-                      ),
-              ],
-            )),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Image.asset('assets/images/musiCAL_LOGO.png'),
+                      ElevatedButton(
+                          onPressed: () async {
+                            await appState.getToken();
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => Navigation()));
+                            await appState.getTopArtists();
+                            print('1');
+                            await appState.getEvents();
+                            print('2');
+                            await appState.getUsersEvents();
+                            print('3');
+                            await appState.getFestivals();
+                            print('4');
+                            await appState.getUserFestivals();
+                            print('5');
+                          },
+                          child: Text('LOGIN')),
+                    ],
+                  )
+                ],
+              ),
+            ),
           )
         : SpotifyAuthPage(onCodeReceived: (code) async {
             appState.accessToken = await appState.exchangeToken(code);
@@ -639,7 +628,6 @@ class _CalendarState extends State<Calendar> {
     if (appState.isLoading) {
       return PianoLoading();
     } else {
-      
       return 530 >= MediaQuery.of(context).size.width
           ? Scaffold(
               body: SingleChildScrollView(
