@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:musical/models/Artists-model.dart';
 import 'package:musical/models/Events-model.dart';
@@ -22,7 +21,6 @@ import 'package:flutter_calendar_carousel/classes/event_list.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'bottomnavbar.dart';
 import './themes/themes.dart';
-import './themes/theme_provider.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'loading.dart';
@@ -132,6 +130,9 @@ class _MyAppState extends ChangeNotifier {
     profile = profileFromJson(profileResponse.body);
 
     topArtists = artistsFromJson(response.body);
+    topArtists!.items.sort((a, b) {
+      return b.popularity.compareTo(a.popularity);
+    });
     final data = topArtists!.items;
 
     userID = profile!.email
@@ -150,6 +151,7 @@ class _MyAppState extends ChangeNotifier {
             'name': data[i].name,
             'genres': data[i].genres,
             'images': data[i].images,
+            'popularity': data[i].popularity,
           };
           await dbref
               .child(userID!)
@@ -411,10 +413,10 @@ class Calendar extends StatefulWidget {
   const Calendar({super.key});
 
   @override
-  _CalendarState createState() => _CalendarState();
+  CalendarState createState() => CalendarState();
 }
 
-class _CalendarState extends State<Calendar> {
+class CalendarState extends State<Calendar> {
   final DateTime _currentDate = DateTime(2024, 11, 3);
   DateTime _currentDate2 = DateTime(2024, 11, 3);
   String _currentMonth = DateFormat.yMMM().format(DateTime(2024, 11, 3));
