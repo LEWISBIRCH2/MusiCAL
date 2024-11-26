@@ -661,16 +661,17 @@ class EventPageEvent {
   final String? ticketUrl;
   final String? image;
   final String? venue;
+  final String? startTime;
 
-  EventPageEvent({
-    this.name,
-    this.date,
-    this.location,
-    this.description,
-    this.ticketUrl,
-    this.image,
-    this.venue,
-  });
+  EventPageEvent(
+      {this.name,
+      this.date,
+      this.location,
+      this.description,
+      this.ticketUrl,
+      this.image,
+      this.venue,
+      this.startTime});
 }
 
 class EventsPage extends StatefulWidget {
@@ -682,19 +683,21 @@ class EventsPage extends StatefulWidget {
 class _EventsPageState extends State<EventsPage> {
   @override
   Widget build(BuildContext context) {
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeData == darkMode;
     var appState = context.watch<_MyAppState>();
 
     UserEvent? Uevent = appState.selectedEvent;
 
     final EventPageEvent event = EventPageEvent(
-      name: Uevent!.eventName,
-      date: Uevent.eventDate,
-      location: Uevent.eventPostcode,
-      description: "Description here.",
-      ticketUrl: Uevent.eventTicketUrl,
-      image: Uevent.eventImage,
-      venue: Uevent.eventVenue,
-    );
+        name: Uevent!.eventName,
+        date: Uevent.eventDate,
+        location: Uevent.eventPostcode,
+        description: "Description here.",
+        ticketUrl: Uevent.eventTicketUrl,
+        image: Uevent.eventImage,
+        venue: Uevent.eventVenue,
+        startTime: Uevent.eventStartTime);
 
     return Scaffold(
       appBar: AppBar(),
@@ -709,8 +712,12 @@ class _EventsPageState extends State<EventsPage> {
                   Image.network(event.image!,
                       width: double.infinity, height: 200, fit: BoxFit.cover),
                   SizedBox(height: 50),
-                  Text(event.name!,
-                      style: Theme.of(context).textTheme.headlineLarge),
+                  Text(
+                    event.name!,
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                          color: isDarkMode ? Colors.white : Colors.black,
+                        ),
+                  ),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -720,7 +727,9 @@ class _EventsPageState extends State<EventsPage> {
                       SizedBox(width: 10),
                       Text(
                         event.date!,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: isDarkMode ? Colors.white : Colors.black,
+                            ),
                       ),
                     ],
                   ),
@@ -735,13 +744,38 @@ class _EventsPageState extends State<EventsPage> {
                       SizedBox(width: 10, height: 10),
                       Text(
                         event.venue!,
-                        style: Theme.of(context).textTheme.bodyMedium,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: isDarkMode ? Colors.white : Colors.black,
+                            ),
                       ),
                       SizedBox(width: 10, height: 10),
-                      Text(event.location!)
+                      Text(
+                        event.location!,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              color: isDarkMode ? Colors.white : Colors.black,
+                            ),
+                      )
                     ],
                   ),
-                  SizedBox(height: 20, width: 20),
+                  SizedBox(height: 10, width: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.access_time_sharp,
+                        color: const Color.fromARGB(255, 94, 216, 125),
+                      ),
+                      SizedBox(width: 10, height: 10),
+                      Text(event.startTime!,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                color: isDarkMode ? Colors.white : Colors.black,
+                              )),
+                    ],
+                  ),
+                  SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -760,7 +794,12 @@ class _EventsPageState extends State<EventsPage> {
                         },
                         child: Text(
                           'Buy tickets',
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium
+                              ?.copyWith(
+                                color: isDarkMode ? Colors.white : Colors.black,
+                              ),
                         ),
                       ),
                     ],
@@ -787,6 +826,7 @@ class Festical extends StatelessWidget {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             bottom: const TabBar(
               tabs: [
