@@ -19,9 +19,9 @@ ThemeData lightMode = ThemeData(
   textTheme: const TextTheme(
       headlineLarge: TextStyle(
           color: Colors.black, fontSize: 40, fontWeight: FontWeight.bold),
-      bodyLarge: TextStyle(color: Colors.black, fontSize: 40),
-      bodyMedium: TextStyle(color: Colors.black, fontSize: 20),
-      bodySmall: TextStyle(color: Colors.black, fontSize: 20)
+      bodyLarge: TextStyle(fontSize: 40),
+      bodyMedium: TextStyle(fontSize: 20),
+      bodySmall: TextStyle(fontSize: 20)
       // for large body text
       ),
 );
@@ -29,16 +29,19 @@ ThemeData lightMode = ThemeData(
 ThemeData darkMode = ThemeData(
   brightness: Brightness.dark,
   colorScheme: ColorScheme.dark(
-      surface: Color.fromARGB(255, 36, 36, 36),
-      primary: Colors.green.shade700,
-      secondary: Colors.green.shade900),
+    surface: Color.fromARGB(255, 65, 65, 65),
+    primary: Colors.green.shade700,
+    secondary: Colors.green.shade900,
+    tertiary: const Color.fromARGB(248, 55, 55, 55),
+  ),
   scaffoldBackgroundColor: Colors.black,
   appBarTheme: AppBarTheme(
-      backgroundColor: const Color.fromARGB(249, 142, 139, 142),
+      backgroundColor: const Color.fromARGB(248, 55, 55, 55),
       foregroundColor: const Color.fromARGB(255, 247, 247, 247)),
   textTheme: const TextTheme(
-    bodyLarge: TextStyle(color: Colors.black, fontSize: 40),
-    bodyMedium: TextStyle(color: Colors.black, fontSize: 30),
-    bodySmall: TextStyle(color: Colors.black, fontSize: 20),
+    headlineLarge: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+    bodyLarge: TextStyle(fontSize: 40),
+    bodyMedium: TextStyle(fontSize: 20),
+    bodySmall: TextStyle(fontSize: 20),
   ),
 );

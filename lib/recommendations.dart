@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 // import 'package:url_launcher/url_launcher.dart';
 
+import 'package:provider/provider.dart';
+import './themes/theme_provider.dart';
+import './themes/themes.dart';
+
 class Recommendations extends StatelessWidget {
   const Recommendations({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeData == darkMode;
+
     return Scaffold(
         appBar: AppBar(),
         body: GridView.count(
@@ -22,9 +29,12 @@ class Recommendations extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 padding: EdgeInsets.all(20.0),
                 margin: EdgeInsets.all(10.0),
-                child: const Text(
+                child: Text(
                   'Top 3 Festivals for You...',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isDarkMode
+                          ? const Color.fromARGB(255, 255, 254, 254)
+                          : Colors.black),
                 ),
               ),
             ),
@@ -39,10 +49,12 @@ class Recommendations extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 padding: EdgeInsets.all(20.0),
                 margin: EdgeInsets.all(10.0),
-                child: const Text(
+                child: Text(
                   'Top 3 Festivals Your Favourite Artists Are At...',
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold, height: 1.5),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isDarkMode
+                          ? const Color.fromARGB(255, 255, 255, 255)
+                          : Colors.black),
                 ),
               ),
             ),
@@ -57,10 +69,12 @@ class Recommendations extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 padding: EdgeInsets.all(20.0),
                 margin: EdgeInsets.all(10.0),
-                child: const Text(
+                child: Text(
                   'Top 3 Festivals Including Your Favourite Genre...',
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold, height: 1.5),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isDarkMode
+                          ? const Color.fromARGB(255, 255, 255, 255)
+                          : Colors.black),
                 ),
               ),
             ),
@@ -75,10 +89,12 @@ class Recommendations extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 padding: EdgeInsets.all(20.0),
                 margin: EdgeInsets.all(10.0),
-                child: const Text(
+                child: Text(
                   'Top 3 Festivals that are a bit different...',
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold, height: 1.5),
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: isDarkMode
+                          ? const Color.fromARGB(255, 255, 255, 255)
+                          : Colors.black),
                 ),
               ),
             ),

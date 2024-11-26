@@ -71,7 +71,7 @@ class _NavigationState extends State<Navigation> {
                 color: isDarkMode
                     ? const Color.fromARGB(255, 96, 94, 94)
                     : Colors.black),
-            label: 'Recommendations',
+            label: 'For you',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.festival_rounded,
