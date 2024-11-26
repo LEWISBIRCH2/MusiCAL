@@ -78,6 +78,7 @@ class _MyAppState extends ChangeNotifier {
   UserEvent? selectedEvent;
   List<String> festNames = [];
   List<Festival> userFestivals = [];
+  Iterable<UserEvent> calEvents = [];
 
   Future<void> getToken() async {
     accessToken = await SpotifySdk.getAccessToken(
@@ -486,23 +487,22 @@ class _CalendarState extends State<Calendar> {
         });
       },
       onDayPressed: (date, events) {
-        setState(() => _currentDate2 = date);
-        var eventFilter = appState.events.where((e) {
-          DateTime d;
-          if (e.eventDate != 'not found') {
-            List dateArray = e.eventDate!.split('-');
-            int year = int.parse(dateArray[0]);
-            int month = int.parse(dateArray[1]);
-            int day = int.parse(dateArray[2]);
-            d = DateTime(year, month, day);
-          } else {
-            d = DateTime(0, 0, 0);
-          }
-          return e.eventName == events[0].title && d == events[0].date;
+        setState(() {
+          _currentDate2 = date;
+          appState.calEvents = appState.events.where((e) {
+            DateTime d;
+            if (e.eventDate != 'not found') {
+              List dateArray = e.eventDate!.split('-');
+              int year = int.parse(dateArray[0]);
+              int month = int.parse(dateArray[1]);
+              int day = int.parse(dateArray[2]);
+              d = DateTime(year, month, day);
+            } else {
+              d = DateTime(0, 0, 0);
+            }
+            return d == date;
+          });
         });
-        appState.selectedEvent = eventFilter.elementAt(0);
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => EventsPage()));
       },
       onDayLongPressed: (DateTime date) {},
     );
@@ -564,31 +564,28 @@ class _CalendarState extends State<Calendar> {
                 height: 2,
               ),
               Container(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                height: 10,
-              ),
-              Container(
-                  height: 40,
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 16.0,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < appState.calEvents.length; i++)
+                        Row(
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  appState.selectedEvent =
+                                      appState.calEvents.elementAt(i);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => EventsPage()));
+                                },
+                                child: Text(appState.calEvents
+                                    .elementAt(i)
+                                    .eventName!)),
+                          ],
+                        ),
+                    ],
                   ),
-                  alignment: Alignment.topLeft,
-                  child: Text('Selected Date: $_currentDate2',
-                      style: const TextStyle(fontWeight: FontWeight.bold))),
-              Container(
-                color: const Color.fromARGB(255, 255, 255, 255),
-                height: 1,
-              ),
-              Container(
-                  height: 100,
-                  margin: EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                  ),
-                  alignment: Alignment.topLeft,
-                  child: Text(
-                    'Artist(s) Playing: ',
-                    style: TextStyle(fontSize: 30),
-                  ))
+                ),
+              )
             ],
           ) //
         ],
