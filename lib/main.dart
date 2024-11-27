@@ -994,8 +994,6 @@ class Festical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDarkMode =
-        Provider.of<ThemeProvider>(context).themeData == darkMode;
     var appState = context.watch<_MyAppState>();
 
     Artists? festArtists = appState.topArtists;
@@ -1003,38 +1001,21 @@ class Festical extends StatelessWidget {
     return DefaultTabController(
         length: 3,
         child: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
-            bottom: TabBar(
-              indicatorColor: const Color.fromARGB(255, 255, 253, 251),
+            bottom: const TabBar(
               tabs: [
                 Tab(
-                  icon: Icon(
-                    Icons.filter_1_rounded,
-                    color: isDarkMode
-                        ? const Color.fromARGB(255, 255, 255, 255)
-                        : const Color.fromARGB(255, 0, 0, 0),
-                  ),
+                  icon: Icon(Icons.filter_1_rounded),
                 ),
                 Tab(
-                  icon: Icon(
-                    Icons.filter_2_rounded,
-                    color: isDarkMode
-                        ? const Color.fromARGB(255, 255, 255, 255)
-                        : const Color.fromARGB(255, 0, 0, 0),
-                  ),
+                  icon: Icon(Icons.filter_2_rounded),
                 ),
                 Tab(
-                  icon: Icon(
-                    Icons.filter_3_rounded,
-                    color: isDarkMode
-                        ? const Color.fromARGB(255, 255, 255, 255)
-                        : const Color.fromARGB(255, 0, 0, 0),
-                  ),
+                  icon: Icon(Icons.filter_3_rounded),
                 )
               ],
             ),
-            title: const Text('Your Festical'),
+            title: const Text('Your FestiCAL'),
           ),
           body: TabBarView(children: [
             Center(
@@ -1049,7 +1030,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 10,
+                                    fontSize: 8,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1060,7 +1041,7 @@ class Festical extends StatelessWidget {
                       style: GoogleFonts.lacquer(
                           textStyle: TextStyle(
                               color: Colors.black,
-                              fontSize: 10,
+                              fontSize: 8,
                               fontWeight: FontWeight.w700)),
                     ),
                   )),
@@ -1072,7 +1053,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 10,
+                                    fontSize: 8,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1083,7 +1064,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1094,7 +1075,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1105,7 +1086,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1116,7 +1097,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1127,7 +1108,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1138,7 +1119,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1149,7 +1130,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1160,7 +1141,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1171,7 +1152,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1182,7 +1163,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1193,7 +1174,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1204,7 +1185,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1215,7 +1196,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1226,7 +1207,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1237,7 +1218,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1248,7 +1229,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1259,7 +1240,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1270,7 +1251,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1281,7 +1262,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1292,7 +1273,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1303,7 +1284,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1314,7 +1295,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1325,7 +1306,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1336,7 +1317,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1347,7 +1328,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1358,7 +1339,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
@@ -1369,7 +1350,7 @@ class Festical extends StatelessWidget {
                             style: GoogleFonts.lacquer(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 7,
+                                    fontSize: 5,
                                     fontWeight: FontWeight.w700)),
                           )))
                 ],
@@ -1413,299 +1394,299 @@ class Festical extends StatelessWidget {
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.85, -0.04),
+                      alignment: Alignment(-0.65, -0.04),
                       child: Text(
                         festArtists.items.elementAt(3).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.pinkAccent,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.3, 0.03),
+                      alignment: Alignment(-0.2, 0.03),
                       child: Text(
                         festArtists.items.elementAt(4).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.lightBlue,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.3, -0.04),
+                      alignment: Alignment(0.2, -0.04),
                       child: Text(
                         festArtists.items.elementAt(5).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.pinkAccent,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.03),
+                      alignment: Alignment(0.65, 0.03),
                       child: Text(
                         festArtists.items.elementAt(6).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.orange,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.85, 0.07),
+                      alignment: Alignment(-0.65, 0.07),
                       child: Text(
                         festArtists.items.elementAt(7).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.green,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.3, 0.15),
+                      alignment: Alignment(-0.2, 0.15),
                       child: Text(
                         festArtists.items.elementAt(8).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.red,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.3, 0.07),
+                      alignment: Alignment(0.2, 0.07),
                       child: Text(
                         festArtists.items.elementAt(9).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.green,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.15),
+                      alignment: Alignment(0.65, 0.15),
                       child: Text(
                         festArtists.items.elementAt(10).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.orange,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.85, 0.19),
+                      alignment: Alignment(-0.65, 0.19),
                       child: Text(
                         festArtists.items.elementAt(11).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.pinkAccent,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.3, 0.27),
+                      alignment: Alignment(-0.2, 0.27),
                       child: Text(
                         festArtists.items.elementAt(12).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.lightBlue,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.3, 0.19),
+                      alignment: Alignment(0.2, 0.19),
                       child: Text(
                         festArtists.items.elementAt(13).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.pinkAccent,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.27),
+                      alignment: Alignment(0.65, 0.27),
                       child: Text(
                         festArtists.items.elementAt(14).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.orange,
-                                fontSize: 10,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.86, 0.32),
+                      alignment: Alignment(-0.76, 0.32),
                       child: Text(
                         festArtists.items.elementAt(15).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.green,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.45, 0.37),
+                      alignment: Alignment(-0.35, 0.37),
                       child: Text(
                         festArtists.items.elementAt(16).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.red,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.05, 0.42),
+                      alignment: Alignment(0, 0.42),
                       child: Text(
                         festArtists.items.elementAt(17).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.green,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.4, 0.37),
+                      alignment: Alignment(0.35, 0.37),
                       child: Text(
                         festArtists.items.elementAt(18).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.orange,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.35),
+                      alignment: Alignment(0.76, 0.35),
                       child: Text(
                         festArtists.items.elementAt(19).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.pinkAccent,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.86, 0.45),
+                      alignment: Alignment(-0.76, 0.45),
                       child: Text(
                         festArtists.items.elementAt(20).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.lightBlue,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.45, 0.5),
+                      alignment: Alignment(-0.35, 0.5),
                       child: Text(
                         festArtists.items.elementAt(21).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.pinkAccent,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.05, 0.55),
+                      alignment: Alignment(0, 0.55),
                       child: Text(
                         festArtists.items.elementAt(22).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.orange,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.4, 0.5),
+                      alignment: Alignment(0.35, 0.5),
                       child: Text(
                         festArtists.items.elementAt(23).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.green,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.48),
+                      alignment: Alignment(0.76, 0.48),
                       child: Text(
                         festArtists.items.elementAt(24).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.red,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.86, 0.6),
+                      alignment: Alignment(-0.76, 0.6),
                       child: Text(
                         festArtists.items.elementAt(25).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.green,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.45, 0.65),
+                      alignment: Alignment(-0.35, 0.65),
                       child: Text(
                         festArtists.items.elementAt(26).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.orange,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(-0.05, 0.7),
+                      alignment: Alignment(0, 0.7),
                       child: Text(
                         festArtists.items.elementAt(27).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.pinkAccent,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.4, 0.65),
+                      alignment: Alignment(0.35, 0.65),
                       child: Text(
                         festArtists.items.elementAt(28).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.lightBlue,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
               Positioned.fill(
                   child: Align(
-                      alignment: Alignment(0.85, 0.63),
+                      alignment: Alignment(0.76, 0.63),
                       child: Text(
                         festArtists.items.elementAt(29).name,
                         style: GoogleFonts.leagueGothic(
                             textStyle: TextStyle(
                                 color: Colors.pinkAccent,
-                                fontSize: 9,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w700)),
                       ))),
             ])),
