@@ -32,7 +32,6 @@ dependencies:
   google_fonts: ^6.2.1
   auto_size_text: ^3.0.0
   shared_preferences: ^2.3.3
-  firebase_auth: ^5.3.3
 
 dev_dependencies:
   flutter_test:
