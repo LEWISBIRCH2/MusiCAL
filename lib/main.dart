@@ -23,6 +23,7 @@ import 'bottomnavbar.dart';
 import './themes/themes.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'loading.dart';
 
 // THE FORBIDDEN RUN COMMAND:
@@ -33,6 +34,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await dotenv.load();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -64,8 +66,8 @@ class MyApp extends StatelessWidget {
 }
 
 class _MyAppState extends ChangeNotifier {
-  final String clientId = '809e9a055f604342a727aa3961f343d2';
-  final String clientSecret = '6aa9ae2264094650a6af77b3eef14903';
+  final String clientId = dotenv.env['clientId']!;
+  final String clientSecret = dotenv.env['clientSecret']!;
   String redirectUrl = 'https://dapper-swan-46f09f.netlify.app';
   String? accessToken;
   Artists? topArtists;
@@ -169,7 +171,7 @@ class _MyAppState extends ChangeNotifier {
   }
 
   Future<void> getEvents() async {
-    const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
+    String apiKey = dotenv.env['getEventsApiKey']!;
 
     for (int i = 0; i < topArtists!.items.length; i++) {
       var artist = topArtists!.items[i].name;
@@ -275,7 +277,7 @@ class _MyAppState extends ChangeNotifier {
   }
 
   Future<void> getFestivals() async {
-    const apiKey = 'ET2XSAasDcZoaaBsaIQMLGSV3EuTFpE3';
+    String apiKey = dotenv.env['getFestivalsApiKey']!;
 
     var response = await http.get(Uri.parse(
         'https://app.ticketmaster.com/discovery/v2/events.json?keyword=festival&segmentName=music&countryCode=GB&size=200&apikey=$apiKey'));
