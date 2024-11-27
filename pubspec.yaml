@@ -14,6 +14,7 @@ dependencies:
   provider: ^6.0.0
   http: ^1.2.2
   flutter_dotenv: ^5.2.1
+  flutter_svg: any
 
   webview_flutter_android: ^4.0.2
   webview_flutter_wkwebview: ^3.16.2
@@ -31,7 +32,6 @@ dependencies:
   google_fonts: ^6.2.1
   auto_size_text: ^3.0.0
   shared_preferences: ^2.3.3
-
 
 dev_dependencies:
   flutter_test:

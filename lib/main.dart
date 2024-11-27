@@ -25,7 +25,11 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'loading.dart';
+
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+
+import 'package:flutter_svg/flutter_svg.dart';
 
 // THE FORBIDDEN RUN COMMAND:
 // flutter run --web-port=50511 --host-vmservice-port=50511 -d chrome --web-browser-flag "--disable-web-security"
@@ -666,7 +670,11 @@ class CalendarState extends State<Calendar> {
 
     if (appState.isLoading) {
       return Scaffold(
-          appBar: AppBar(title: Text('MusiCAL')), body: PianoLoading());
+          appBar: AppBar(
+            title: SvgPicture.asset('assets/images/TRANSP_LOGO.svg',
+                height: 650, width: 65),
+          ),
+          body: PianoLoading());
     } else {
       return 530 >= MediaQuery.of(context).size.width
           ? Scaffold(
