@@ -34,9 +34,6 @@ class _NavigationState extends State<Navigation> {
         Provider.of<ThemeProvider>(context).themeData == darkMode;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('MusiCAL'),
-      ),
       body: IndexedStack(children: [
         Center(
           child: _widgetOptions.elementAt(_selectedIndex),
@@ -62,26 +59,26 @@ class _NavigationState extends State<Navigation> {
           BottomNavigationBarItem(
               icon: Icon(Icons.calendar_month_rounded,
                   color: isDarkMode
-                      ? const Color.fromARGB(255, 96, 94, 94)
+                      ? const Color.fromARGB(255, 255, 255, 255)
                       : const Color.fromARGB(255, 124, 124, 124)),
               label: 'Calendar'),
           BottomNavigationBarItem(
             icon: Icon(Icons.thumb_up_alt_rounded,
                 color: isDarkMode
-                    ? const Color.fromARGB(255, 96, 94, 94)
+                    ? const Color.fromARGB(255, 255, 255, 255)
                     : const Color.fromARGB(255, 124, 124, 124)),
-            label: 'For you',
+            label: 'For You',
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.festival,
                   color: isDarkMode
-                      ? const Color.fromARGB(255, 96, 94, 94)
+                      ? const Color.fromARGB(255, 255, 255, 255)
                       : const Color.fromARGB(255, 124, 124, 124)),
-              label: 'Festical'),
+              label: 'FestiCAL'),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings_rounded,
                   color: isDarkMode
-                      ? const Color.fromARGB(255, 96, 94, 94)
+                      ? const Color.fromARGB(255, 255, 255, 255)
                       : const Color.fromARGB(255, 124, 124, 124)),
               label: 'Settings'),
         ],

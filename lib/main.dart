@@ -440,20 +440,15 @@ class Calendar extends StatefulWidget {
 }
 
 class CalendarState extends State<Calendar> {
-  final DateTime _currentDate = DateTime(2024, 11, 3);
-  DateTime _currentDate2 = DateTime(2024, 11, 3);
-  String _currentMonth = DateFormat.yMMM().format(DateTime(2024, 11, 3));
-  DateTime _targetDateTime = DateTime(2024, 11, 3);
+  final DateTime _currentDate = DateTime.now();
+  DateTime _currentDate2 = DateTime.now();
+  String _currentMonth = DateFormat.yMMM().format(DateTime.now());
+  DateTime _targetDateTime = DateTime.now();
 
   static final Widget _eventIcon = Container(
     decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.all(Radius.circular(1000)),
         border: Border.all(color: Colors.black, width: 2.0)),
-    child: Icon(
-      Icons.music_note,
-      color: const Color.fromARGB(255, 114, 181, 85),
-    ),
   );
 
   @override
@@ -486,11 +481,12 @@ class CalendarState extends State<Calendar> {
 
     final calendarCarouselNoHeader = CalendarCarousel<Event>(
       markedDateShowIcon: true,
-      showIconBehindDayText: false,
+      showIconBehindDayText: true,
       markedDateIconMaxShown: 1,
       markedDateIconBuilder: (event) {
         return event.icon;
       },
+      markedDateIconBorderColor: Colors.black,
       markedDateMoreShowTotal: true,
       todayBorderColor: isDarkMode
           ? const Color.fromARGB(255, 114, 181, 85)
@@ -501,9 +497,7 @@ class CalendarState extends State<Calendar> {
           ? TextStyle(color: Colors.white)
           : TextStyle(color: Colors.black),
 
-      weekendTextStyle: isDarkMode
-          ? TextStyle(color: const Color.fromARGB(255, 250, 241, 154))
-          : TextStyle(color: const Color.fromARGB(255, 185, 72, 64)),
+      weekendTextStyle: TextStyle(color: const Color.fromARGB(255, 5, 142, 19)),
 
       thisMonthDayBorderColor:
           isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 0, 0),
@@ -517,7 +511,6 @@ class CalendarState extends State<Calendar> {
       markedDateCustomShapeBorder: CircleBorder(
           side: BorderSide(
               color: const Color.fromARGB(1, 215, 17, 246))), //#d74c3c
-      markedDateCustomTextStyle: TextStyle(fontSize: 18, color: Colors.black),
       showHeader: false,
       todayTextStyle: isDarkMode
           ? TextStyle(color: Colors.white)
@@ -578,8 +571,8 @@ class CalendarState extends State<Calendar> {
       markedDateShowIcon: true,
       height: MediaQuery.of(context).size.height * 0.6,
       width: MediaQuery.of(context).size.width * 0.35,
-      showIconBehindDayText: false,
-      markedDateIconMaxShown: 1,
+      showIconBehindDayText: true,
+      markedDateIconMaxShown: 0,
       markedDateIconBuilder: (event) {
         return event.icon;
       },
@@ -652,178 +645,211 @@ class CalendarState extends State<Calendar> {
     // }
 
     if (appState.isLoading) {
-      return PianoLoading();
+      return Scaffold(
+          appBar: AppBar(title: Text('MusiCAL')), body: PianoLoading());
     } else {
       return 530 >= MediaQuery.of(context).size.width
           ? Scaffold(
-              body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 30.0,
-                      bottom: 16.0,
-                      left: 16.0,
-                      right: 16.0,
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                            child: Text(
-                          _currentMonth,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 34.0,
-                          ),
-                        )),
-                        TextButton(
-                          child: Text('PREV'),
-                          onPressed: () {
-                            setState(() {
-                              _targetDateTime = DateTime(_targetDateTime.year,
-                                  _targetDateTime.month - 1);
-                              _currentMonth =
-                                  DateFormat.yMMM().format(_targetDateTime);
-                            });
-                          },
-                        ),
-                        TextButton(
-                          child: Text('NEXT'),
-                          onPressed: () {
-                            setState(() {
-                              _targetDateTime = DateTime(_targetDateTime.year,
-                                  _targetDateTime.month + 1);
-                              _currentMonth =
-                                  DateFormat.yMMM().format(_targetDateTime);
-                            });
-                          },
-                        )
-                      ],
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 10.0),
-                        child: calendarCarouselNoHeader,
-                      ),
-                      Column(
-                        children: [
-                          for (int i = 0; i < appState.calEvents.length; i++)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        appState.selectedEvent =
-                                            appState.calEvents.elementAt(i);
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EventsPage()));
-                                      },
-                                      child: Text(appState.calEvents
-                                          .elementAt(i)
-                                          .eventName!)),
-                                ),
-                              ],
-                            ),
-                        ],
-                      )
-                    ],
-                  )
-                ],
+              appBar: AppBar(
+                title: Text('MusiCAL'),
               ),
-            ))
-          : Scaffold(
               body: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 30.0,
-                      bottom: 16.0,
-                      left: 16.0,
-                      right: 16.0,
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 30.0,
+                        bottom: 16.0,
+                        left: 16.0,
+                        right: 16.0,
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                              child: Text(
                             _currentMonth,
-                            style: isDarkMode
-                                ? TextStyle(fontSize: 34, color: Colors.white)
-                                : TextStyle(fontSize: 34, color: Colors.black),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 34.0,
+                            ),
+                          )),
+                          TextButton(
+                            child: Text('PREV'),
+                            onPressed: () {
+                              setState(() {
+                                _targetDateTime = DateTime(_targetDateTime.year,
+                                    _targetDateTime.month - 1);
+                                _currentMonth =
+                                    DateFormat.yMMM().format(_targetDateTime);
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: Text('NEXT'),
+                            onPressed: () {
+                              setState(() {
+                                _targetDateTime = DateTime(_targetDateTime.year,
+                                    _targetDateTime.month + 1);
+                                _currentMonth =
+                                    DateFormat.yMMM().format(_targetDateTime);
+                              });
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.40,
+                          margin: EdgeInsets.symmetric(horizontal: 16.0),
+                          child: calendarCarouselNoHeader,
+                        ),
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              for (int i = 0;
+                                  i < appState.calEvents.length;
+                                  i++)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: InkWell(
+                                          onTap: () {
+                                            appState.selectedEvent =
+                                                appState.calEvents.elementAt(i);
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EventsPage()));
+                                          },
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.8,
+                                                height: 75,
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(appState.calEvents
+                                                          .elementAt(i)
+                                                          .eventName!),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                            ],
                           ),
                         ),
-                        TextButton(
-                          child: Text('PREV'),
-                          onPressed: () {
-                            setState(() {
-                              _targetDateTime = DateTime(_targetDateTime.year,
-                                  _targetDateTime.month - 1);
-                              _currentMonth =
-                                  DateFormat.yMMM().format(_targetDateTime);
-                            });
-                          },
+                      ],
+                    )
+                  ],
+                ),
+              ))
+          : Scaffold(
+              appBar: AppBar(
+                title: Text('MusiCAL'),
+              ),
+              body: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 30.0,
+                        bottom: 16.0,
+                        left: 16.0,
+                        right: 16.0,
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              _currentMonth,
+                              style: isDarkMode
+                                  ? TextStyle(fontSize: 34, color: Colors.white)
+                                  : TextStyle(
+                                      fontSize: 34, color: Colors.black),
+                            ),
+                          ),
+                          TextButton(
+                            child: Text('PREV'),
+                            onPressed: () {
+                              setState(() {
+                                _targetDateTime = DateTime(_targetDateTime.year,
+                                    _targetDateTime.month - 1);
+                                _currentMonth =
+                                    DateFormat.yMMM().format(_targetDateTime);
+                              });
+                            },
+                          ),
+                          TextButton(
+                            child: Text('NEXT'),
+                            onPressed: () {
+                              setState(() {
+                                _targetDateTime = DateTime(_targetDateTime.year,
+                                    _targetDateTime.month + 1);
+                                _currentMonth =
+                                    DateFormat.yMMM().format(_targetDateTime);
+                              });
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Center(
+                          child: Container(
+                            child: calendarCarouselNoHeaderWeb,
+                          ),
                         ),
-                        TextButton(
-                          child: Text('NEXT'),
-                          onPressed: () {
-                            setState(() {
-                              _targetDateTime = DateTime(_targetDateTime.year,
-                                  _targetDateTime.month + 1);
-                              _currentMonth =
-                                  DateFormat.yMMM().format(_targetDateTime);
-                            });
-                          },
+                        Column(
+                          children: [
+                            for (int i = 0; i < appState.calEvents.length; i++)
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Center(
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          appState.selectedEvent =
+                                              appState.calEvents.elementAt(i);
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EventsPage()));
+                                        },
+                                        child: Text(appState.calEvents
+                                            .elementAt(i)
+                                            .eventName!)),
+                                  ),
+                                ],
+                              ),
+                          ],
                         )
                       ],
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Center(
-                        child: Container(
-                          child: calendarCarouselNoHeaderWeb,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          for (int i = 0; i < appState.calEvents.length; i++)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Center(
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        appState.selectedEvent =
-                                            appState.calEvents.elementAt(i);
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EventsPage()));
-                                      },
-                                      child: Text(appState.calEvents
-                                          .elementAt(i)
-                                          .eventName!)),
-                                ),
-                              ],
-                            ),
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ));
+                    )
+                  ],
+                ),
+              ));
     }
   }
 }
@@ -924,12 +950,6 @@ class _EventsPageState extends State<EventsPage> {
                             ),
                       ),
                       SizedBox(width: 10, height: 10),
-                      Text(
-                        event.location!,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: isDarkMode ? Colors.white : Colors.black,
-                            ),
-                      )
                     ],
                   ),
                   SizedBox(height: 10, width: 20),
@@ -994,6 +1014,8 @@ class Festical extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeData == darkMode;
     var appState = context.watch<_MyAppState>();
 
     Artists? festArtists = appState.topArtists;
@@ -1002,7 +1024,16 @@ class Festical extends StatelessWidget {
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            bottom: const TabBar(
+            bottom: TabBar(
+              unselectedLabelColor: isDarkMode
+                  ? const Color.fromARGB(255, 255, 255, 255)
+                  : Colors.black,
+              labelColor: !isDarkMode
+                  ? const Color.fromARGB(255, 255, 255, 255)
+                  : Colors.black,
+              indicatorColor: isDarkMode
+                  ? Colors.white
+                  : const Color.fromARGB(255, 141, 236, 145),
               tabs: [
                 Tab(
                   icon: Icon(Icons.filter_1_rounded),
@@ -2039,7 +2070,7 @@ class Recommendations extends StatelessWidget {
         Provider.of<ThemeProvider>(context).themeData == darkMode;
 
     return Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(title: Text('Festivals For You')),
         body: GridView.count(
           crossAxisCount: 1,
           children: [
@@ -2145,5 +2176,3 @@ class Recommendations extends StatelessWidget {
         ));
   }
 }
-
-//adding to main so i can pin to my github will remove afterwards
