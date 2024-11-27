@@ -25,7 +25,12 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'loading.dart';
+
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+
+
 import 'package:flutter_svg/flutter_svg.dart';
+
 // THE FORBIDDEN RUN COMMAND:
 // flutter run --web-port=50511 --host-vmservice-port=50511 -d chrome --web-browser-flag "--disable-web-security"
 
@@ -574,44 +579,61 @@ class CalendarState extends State<Calendar> {
       height: MediaQuery.of(context).size.height * 0.6,
       width: MediaQuery.of(context).size.width * 0.35,
       showIconBehindDayText: true,
-      markedDateIconMaxShown: 0,
+      markedDateIconMaxShown: 1,
       markedDateIconBuilder: (event) {
         return event.icon;
       },
+      markedDateIconBorderColor: Colors.black,
+
       markedDateMoreShowTotal: true,
-      todayBorderColor: Colors.green,
       daysHaveCircularBorder: true,
       showOnlyCurrentMonthDate: false,
-      weekendTextStyle: TextStyle(
-        color: Colors.red,
-      ),
-      thisMonthDayBorderColor: Colors.grey,
+      todayBorderColor: isDarkMode
+          ? const Color.fromARGB(255, 114, 181, 85)
+          : const Color.fromARGB(255, 114, 181, 85),
+      weekdayTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black),
+      weekendTextStyle: TextStyle(color: const Color.fromARGB(255, 5, 142, 19)),
+
+      thisMonthDayBorderColor:
+          isDarkMode ? Colors.white : const Color.fromARGB(255, 0, 0, 0),
       weekFormat: false,
       markedDatesMap: markedDateMap,
       selectedDateTime: _currentDate2,
       targetDateTime: _targetDateTime,
       markedDateCustomShapeBorder: CircleBorder(
           side: BorderSide(
-              color: const Color.fromARGB(1, 215, 76, 60))), //#d74c3c
-      markedDateCustomTextStyle: TextStyle(
-        fontSize: 18,
-        color: Colors.blue,
-      ),
+              color: const Color.fromARGB(1, 215, 17, 246))), //#d74c3c
       showHeader: false,
-      todayTextStyle: TextStyle(
-        color: Colors.blue,
-      ),
-      todayButtonColor: const Color.fromARGB(255, 233, 255, 227),
-      selectedDayTextStyle: TextStyle(
-        color: const Color.fromARGB(255, 55, 255, 0),
-      ),
+      todayTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black), // color of today date
+      nextDaysTextStyle: isDarkMode
+          ? TextStyle(color: const Color.fromARGB(255, 255, 255, 255))
+          : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+      nextMonthDayBorderColor: isDarkMode ? Colors.black : Colors.white,
+      headerTextStyle: TextStyle(color: Colors.pink),
+      todayButtonColor: isDarkMode
+          ? const Color.fromARGB(248, 73, 72, 72)
+          : Colors.white, // background of today date
+      selectedDayTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
+      selectedDayButtonColor: const Color.fromARGB(255, 114, 181, 85),
+      daysTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: const Color.fromARGB(255, 0, 0, 0)),
       minSelectedDate: _currentDate.subtract(Duration(days: 360)),
       maxSelectedDate: _currentDate.add(Duration(days: 360)),
-      prevDaysTextStyle: TextStyle(fontSize: 16, color: Colors.black),
-      inactiveDaysTextStyle: TextStyle(
-        color: Colors.tealAccent,
-        fontSize: 16,
-      ),
+      prevMonthDayBorderColor: isDarkMode ? Colors.black : Colors.white,
+      prevDaysTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black),
+      inactiveDaysTextStyle: isDarkMode
+          ? TextStyle(color: Colors.white)
+          : TextStyle(color: Colors.black),
+
       onCalendarChanged: (DateTime date) {
         setState(() {
           _targetDateTime = date;
@@ -827,30 +849,56 @@ class CalendarState extends State<Calendar> {
                             child: calendarCarouselNoHeaderWeb,
                           ),
                         ),
-                        Column(
-                          children: [
-                            for (int i = 0; i < appState.calEvents.length; i++)
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Center(
-                                    child: ElevatedButton(
-                                        onPressed: () {
-                                          appState.selectedEvent =
-                                              appState.calEvents.elementAt(i);
-                                          Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      EventsPage()));
-                                        },
-                                        child: Text(appState.calEvents
-                                            .elementAt(i)
-                                            .eventName!)),
-                                  ),
-                                ],
-                              ),
-                          ],
-                        )
+                        SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              for (int i = 0;
+                                  i < appState.calEvents.length;
+                                  i++)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: InkWell(
+                                          onTap: () {
+                                            appState.selectedEvent =
+                                                appState.calEvents.elementAt(i);
+                                            Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        EventsPage()));
+                                          },
+                                          child: Card(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.8,
+                                                height: 75,
+                                                child: Center(
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(appState.calEvents
+                                                          .elementAt(i)
+                                                          .eventName!),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                            ],
+                          ),
+                        ),
                       ],
                     )
                   ],
@@ -2101,7 +2149,12 @@ class Recommendations extends StatelessWidget {
                               : Colors.black),
                     ),
                     appState.festLoading
-                        ? Text('loading')
+                        ? Center(
+                            child: LoadingAnimationWidget.staggeredDotsWave(
+                              color: Color.fromARGB(255, 57, 191, 5),
+                              size: 200,
+                            ),
+                          )
                         : Column(
                             children: [
                               for (int i = 0; i < 5; i++)
