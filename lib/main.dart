@@ -1021,336 +1021,336 @@ class Festical extends StatelessWidget {
             Center(
               child: Stack(
                 children: [
-                  Image.asset('assets/images/EmptyLineUp.jpg'),
+                  Image.asset('assets/images/TRNSMT_poster.jpg'),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.6, -0.5),
+                          alignment: Alignment(0, -0.67),
                           child: Text(
                             festArtists!.items.elementAt(0).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 8,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                    alignment: Alignment(0.7, -0.21),
+                    alignment: Alignment(0, -0.35),
                     child: Text(
                       festArtists.items.elementAt(1).name,
-                      style: GoogleFonts.lacquer(
+                      style: GoogleFonts.rubikDirt(
                           textStyle: TextStyle(
                               color: Colors.black,
-                              fontSize: 8,
+                              fontSize: 10,
                               fontWeight: FontWeight.w700)),
                     ),
                   )),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.5, 0.08),
+                          alignment: Alignment(0, 0.1),
                           child: Text(
                             festArtists.items.elementAt(2).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 8,
+                                    fontSize: 10,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.85, -0.4),
+                          alignment: Alignment(-0.7, -0.61),
                           child: Text(
                             festArtists.items.elementAt(3).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.27, -0.4),
+                          alignment: Alignment(-0.2, -0.56),
                           child: Text(
                             festArtists.items.elementAt(4).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.33, -0.4),
+                          alignment: Alignment(0.2, -0.61),
                           child: Text(
                             festArtists.items.elementAt(5).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.92, -0.4),
+                          alignment: Alignment(0.7, -0.56),
                           child: Text(
                             festArtists.items.elementAt(6).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.87, -0.31),
+                          alignment: Alignment(-0.7, -0.51),
                           child: Text(
                             festArtists.items.elementAt(7).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.41, -0.31),
+                          alignment: Alignment(-0.2, -0.46),
                           child: Text(
                             festArtists.items.elementAt(8).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.02, -0.31),
+                          alignment: Alignment(0.2, -0.51),
                           child: Text(
                             festArtists.items.elementAt(9).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.45, -0.31),
+                          alignment: Alignment(0.7, -0.46),
                           child: Text(
                             festArtists.items.elementAt(10).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.89, -0.31),
+                          alignment: Alignment(-0.7, -0.26),
                           child: Text(
                             festArtists.items.elementAt(11).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.85, -0.11),
+                          alignment: Alignment(-0.2, -0.21),
                           child: Text(
                             festArtists.items.elementAt(12).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.27, -0.11),
+                          alignment: Alignment(0.2, -0.26),
                           child: Text(
                             festArtists.items.elementAt(13).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.33, -0.11),
+                          alignment: Alignment(0.7, -0.21),
                           child: Text(
                             festArtists.items.elementAt(14).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.92, -0.11),
+                          alignment: Alignment(-0.7, -0.15),
                           child: Text(
                             festArtists.items.elementAt(15).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.87, -0.02),
+                          alignment: Alignment(-0.2, -0.1),
                           child: Text(
                             festArtists.items.elementAt(16).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.41, -0.02),
+                          alignment: Alignment(0.2, -0.15),
                           child: Text(
                             festArtists.items.elementAt(17).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.02, -0.02),
+                          alignment: Alignment(0.7, -0.1),
                           child: Text(
                             festArtists.items.elementAt(18).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.45, -0.02),
+                          alignment: Alignment(-0.2, -0.02),
                           child: Text(
                             festArtists.items.elementAt(19).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.89, -0.02),
+                          alignment: Alignment(0.2, -0.02),
                           child: Text(
                             festArtists.items.elementAt(20).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.85, 0.18),
+                          alignment: Alignment(-0.7, 0.18),
                           child: Text(
                             festArtists.items.elementAt(21).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.27, 0.18),
+                          alignment: Alignment(-0.2, 0.18),
                           child: Text(
                             festArtists.items.elementAt(22).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.33, 0.18),
+                          alignment: Alignment(0.2, 0.18),
                           child: Text(
                             festArtists.items.elementAt(23).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.92, 0.18),
+                          alignment: Alignment(0.7, 0.18),
                           child: Text(
                             festArtists.items.elementAt(24).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.87, 0.27),
+                          alignment: Alignment(-0.7, 0.27),
                           child: Text(
                             festArtists.items.elementAt(25).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(-0.41, 0.27),
+                          alignment: Alignment(-0.35, 0.32),
                           child: Text(
                             festArtists.items.elementAt(26).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.02, 0.27),
+                          alignment: Alignment(0, 0.27),
                           child: Text(
                             festArtists.items.elementAt(27).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.45, 0.27),
+                          alignment: Alignment(0.35, 0.32),
                           child: Text(
                             festArtists.items.elementAt(28).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           ))),
                   Positioned.fill(
                       child: Align(
-                          alignment: Alignment(0.89, 0.27),
+                          alignment: Alignment(0.7, 0.27),
                           child: Text(
                             festArtists.items.elementAt(29).name,
-                            style: GoogleFonts.lacquer(
+                            style: GoogleFonts.rubikDirt(
                                 textStyle: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 5,
+                                    fontSize: 6,
                                     fontWeight: FontWeight.w700)),
                           )))
                 ],
