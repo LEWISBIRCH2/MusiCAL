@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'settings.dart';
 import 'package:musical/main.dart';
 import './themes/theme_provider.dart';
 import './themes/themes.dart';

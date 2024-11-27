@@ -26,9 +26,9 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'loading.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
 
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -40,6 +40,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseAuth.instance.useAuthEmulator('localhost', 50511);
   await dotenv.load();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -2322,16 +2323,24 @@ class _SettingsState extends State<Settings> {
                     style: TextStyle(height: 5, fontSize: 20)),
               )),
           ListTile(
-              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              dense: true,
-              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-              leading: Icon(
-                Icons.logout,
-                color: isDarkMode
-                    ? const Color.fromARGB(255, 157, 154, 154)
-                    : const Color.fromARGB(255, 0, 0, 0),
-              ),
-              title: Text('logout', style: TextStyle(height: 5, fontSize: 20))),
+            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+            dense: true,
+            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+            leading: Icon(
+              Icons.logout,
+              color: isDarkMode
+                  ? const Color.fromARGB(255, 157, 154, 154)
+                  : const Color.fromARGB(255, 0, 0, 0),
+            ),
+            title: InkWell(
+                onTap: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const MyHomePage()));
+                },
+                child:
+                    Text('Logout', style: TextStyle(height: 5, fontSize: 20))),
+          )
         ],
       ),
     );
