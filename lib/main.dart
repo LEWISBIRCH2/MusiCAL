@@ -10,6 +10,7 @@ import 'package:musical/models/Profile-model.dart';
 import 'package:musical/pages/spotify_auth_page.dart';
 import 'package:provider/provider.dart';
 import 'package:musical/firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'themes/theme_provider.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:http/http.dart' as http;
@@ -376,6 +377,16 @@ class _MyAppState extends ChangeNotifier {
     userFestivals.sort((f1, f2) => f2.festRec.compareTo(f1.festRec));
     festLoading = false;
     notifyListeners();
+  }
+
+  Future<void> deleteUserData() async {
+    isLoading = true;
+    await dbref.child(userID!).remove();
+    events = [];
+    await getTopArtists();
+    await getEvents();
+    await getUsersEvents();
+    isLoading = false;
   }
 }
 
@@ -2176,5 +2187,96 @@ class Recommendations extends StatelessWidget {
             ),
           ],
         ));
+  }
+}
+
+class Settings extends StatefulWidget {
+  const Settings({super.key});
+
+  @override
+  State<Settings> createState() => _SettingsState();
+}
+
+class _SettingsState extends State<Settings> {
+  Future<void> toggleDarkMode(selectedMode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    prefs.setString('mode', selectedMode);
+
+    final colScheme = prefs.getString('mode');
+
+    if (colScheme == 'lightMode') {
+      Provider.of<ThemeProvider>(context, listen: false)
+          .toggleTheme('lightMode');
+    } else if (colScheme == 'darkMode') {
+      Provider.of<ThemeProvider>(context, listen: false)
+          .toggleTheme('darkMode');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final isDarkMode =
+        Provider.of<ThemeProvider>(context).themeData == darkMode;
+
+    final localColourScheme = isDarkMode ? 'lightMode' : 'darkMode';
+
+    var appState = context.watch<_MyAppState>();
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        title: Text('Settings'),
+      ),
+      body: ListView(
+        children: [
+          ListTile(
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              dense: true,
+              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+              leading: Icon(
+                Icons.contrast,
+                color: isDarkMode
+                    ? const Color.fromARGB(255, 157, 154, 154)
+                    : const Color.fromARGB(255, 0, 0, 0),
+              ),
+              title: Text(
+                isDarkMode ? 'light mode' : 'dark mode',
+                style: TextStyle(height: 5, fontSize: 20),
+              ),
+              onTap: () async {
+                await toggleDarkMode(localColourScheme);
+              }),
+          ListTile(
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              dense: true,
+              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+              leading: Icon(
+                Icons.calendar_month_rounded,
+                color: isDarkMode
+                    ? const Color.fromARGB(255, 157, 154, 154)
+                    : const Color.fromARGB(255, 0, 0, 0),
+              ),
+              title: InkWell(
+                onTap: () async {
+                  await appState.deleteUserData();
+                },
+                child: Text('Refresh Calendar',
+                    style: TextStyle(height: 5, fontSize: 20)),
+              )),
+          ListTile(
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              dense: true,
+              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+              leading: Icon(
+                Icons.logout,
+                color: isDarkMode
+                    ? const Color.fromARGB(255, 157, 154, 154)
+                    : const Color.fromARGB(255, 0, 0, 0),
+              ),
+              title: Text('logout', style: TextStyle(height: 5, fontSize: 20))),
+        ],
+      ),
+    );
   }
 }
