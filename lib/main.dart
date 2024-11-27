@@ -26,7 +26,6 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'loading.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
@@ -40,7 +39,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseAuth.instance.useAuthEmulator('localhost', 50511);
   await dotenv.load();
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -389,10 +387,12 @@ class _MyAppState extends ChangeNotifier {
     isLoading = true;
     await dbref.child(userID!).remove();
     events = [];
+    calEvents = [];
     await getTopArtists();
     await getEvents();
     await getUsersEvents();
     isLoading = false;
+    notifyListeners();
   }
 }
 
@@ -2334,9 +2334,10 @@ class _SettingsState extends State<Settings> {
             ),
             title: InkWell(
                 onTap: () async {
+                  Navigator.pop(context);
                   await appState.deleteUserData();
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const MyHomePage()));
+                      builder: (context) => const Navigation()));
                 },
                 child:
                     Text('Logout', style: TextStyle(height: 5, fontSize: 20))),
