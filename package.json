@@ -3,7 +3,8 @@
     "cors": "^2.8.5",
     "flutter": "^0.0.5",
     "http": "^0.0.1-security",
-    "kotlin-compiler": "^2.0.21"
+    "kotlin-compiler": "^2.0.21",
+    "flutter_dotenv": "^3.1.0"
   },
   "scripts": {
     "run": "flutter run --web-port=50511 --host-vmservice-port=50511"
