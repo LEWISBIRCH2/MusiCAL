@@ -684,7 +684,7 @@ class CalendarState extends State<Calendar> {
       return Scaffold(
           appBar: AppBar(
             title: SvgPicture.asset('assets/images/TRANSP_LOGO.svg',
-                height: 650, width: 65),
+                height: 50, width: 50),
           ),
           body: PianoLoading());
     } else {
@@ -2335,9 +2335,9 @@ class _SettingsState extends State<Settings> {
             title: InkWell(
                 onTap: () async {
                   Navigator.pop(context);
+                  await appState.deleteUserData();
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const Navigation()));
-                  await appState.deleteUserData();
                 },
                 child:
                     Text('Logout', style: TextStyle(height: 5, fontSize: 20))),
