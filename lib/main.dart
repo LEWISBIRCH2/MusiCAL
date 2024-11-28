@@ -282,7 +282,7 @@ class _MyAppState extends ChangeNotifier {
   }
 
   Future<void> getFestivals() async {
-    String apiKey = dotenv.env['getFestivalsApiKey']!;
+    String apiKey = dotenv.env['getEventsApiKey']!;
 
     var response = await http.get(Uri.parse(
         'https://app.ticketmaster.com/discovery/v2/events.json?keyword=festival&segmentName=music&countryCode=GB&size=200&apikey=$apiKey'));
