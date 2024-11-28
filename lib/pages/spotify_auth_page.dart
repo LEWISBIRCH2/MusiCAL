@@ -3,6 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:webview_flutter_android/webview_flutter_android.dart';
 import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 import 'package:musical/bottomnavbar.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class SpotifyAuthPage extends StatelessWidget {
   final Function(String code) onCodeReceived;
@@ -11,14 +12,14 @@ class SpotifyAuthPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String clientId = '809e9a055f604342a727aa3961f343d2';
+    String clientId = dotenv.env['clientId']!;
+
     const String redirectUri = 'https://dapper-swan-46f09f.netlify.app';
     const String scopes =
-        'user-read-private user-read-email user-top-read'; //ANDROID APP SEMI-SOLVED. NEEDED USER-TOP-READ IN SCOPE.
-    // ALSO CHANGES TO MANIFEST. NEED SAME FOR IOS? COULD ALSO UPDATE DEV DASHBOARD BUNDLES.
+        'user-read-private user-read-email user-top-read'; 
+    
 
-    const String authUrl =
-        'https://accounts.spotify.com/authorize?response_type=code'
+    String authUrl = 'https://accounts.spotify.com/authorize?response_type=code'
         '&client_id=$clientId'
         '&redirect_uri=$redirectUri'
         '&scope=$scopes';
