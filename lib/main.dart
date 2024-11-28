@@ -1088,6 +1088,7 @@ class Festical extends StatelessWidget {
 
     return DefaultTabController(
         length: 3,
+        initialIndex: 1,
         child: Scaffold(
           appBar: AppBar(
             bottom: TabBar(
@@ -2254,7 +2255,7 @@ class _SettingsState extends State<Settings> {
                     : const Color.fromARGB(255, 0, 0, 0),
               ),
               title: Text(
-                isDarkMode ? 'light mode' : 'dark mode',
+                isDarkMode ? 'Light Mode' : 'Dark Mode',
                 style: TextStyle(height: 5, fontSize: 20),
               ),
               onTap: () async {
