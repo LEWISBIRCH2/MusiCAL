@@ -2322,26 +2322,26 @@ class _SettingsState extends State<Settings> {
                 child: Text('Refresh Calendar',
                     style: TextStyle(height: 5, fontSize: 20)),
               )),
-          ListTile(
-            contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-            dense: true,
-            visualDensity: VisualDensity(horizontal: 0, vertical: -4),
-            leading: Icon(
-              Icons.logout,
-              color: isDarkMode
-                  ? const Color.fromARGB(255, 157, 154, 154)
-                  : const Color.fromARGB(255, 0, 0, 0),
-            ),
-            title: InkWell(
-                onTap: () async {
-                  Navigator.pop(context);
-                  await appState.deleteUserData();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const Navigation()));
-                },
-                child:
-                    Text('Logout', style: TextStyle(height: 5, fontSize: 20))),
-          )
+          // ListTile(
+          //   contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+          //   dense: true,
+          //   visualDensity: VisualDensity(horizontal: 0, vertical: -4),
+          //   leading: Icon(
+          //     Icons.logout,
+          //     color: isDarkMode
+          //         ? const Color.fromARGB(255, 157, 154, 154)
+          //         : const Color.fromARGB(255, 0, 0, 0),
+          //   ),
+          //   title: InkWell(
+          //       onTap: () async {
+          //         Navigator.pop(context);
+          //         await appState.deleteUserData();
+          //         Navigator.of(context).push(MaterialPageRoute(
+          //             builder: (context) => const Navigation()));
+          //       },
+          //       child:
+          //           Text('Logout', style: TextStyle(height: 5, fontSize: 20))),
+          // )
         ],
       ),
     );
