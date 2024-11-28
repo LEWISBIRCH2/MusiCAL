@@ -2137,15 +2137,15 @@ class Recommendations extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBar(title: Text('Festivals For You')),
-        body: GridView.count(
-          crossAxisCount: 1,
+        body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
               child: Container(
+                height: 588,
                 decoration: BoxDecoration(
                     // change colour to reference light/dark themes built by layla
-                    color: Theme.of(context).colorScheme.tertiary,
+                    color: Theme.of(context).colorScheme.secondary,
                     border: Border.all(width: 8),
                     borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.topCenter,
@@ -2153,13 +2153,6 @@ class Recommendations extends StatelessWidget {
                 margin: EdgeInsets.all(10.0),
                 child: Column(
                   children: [
-                    Text(
-                      'Top 5 Festivals for You...',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: isDarkMode
-                              ? const Color.fromARGB(255, 255, 254, 254)
-                              : Colors.black),
-                    ),
                     appState.festLoading
                         ? Center(
                             child: LoadingAnimationWidget.staggeredDotsWave(
@@ -2172,74 +2165,36 @@ class Recommendations extends StatelessWidget {
                               for (int i = 0; i < 5; i++)
                                 Row(
                                   children: [
-                                    Text(appState.userFestivals[i].name!),
-                                    // Text(appState.userFestivals[i].date!),
-                                    // Text(appState.userFestivals[i].location!),
+                                    SizedBox(
+                                      width: 300,
+                                      height: 105,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          final Uri url = Uri.parse(
+                                              appState.userFestivals[i].url!);
+                                          if (await canLaunchUrl(url)) {
+                                            await launchUrl(url,
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          }
+                                        },
+                                        child: Card(
+                                          child: Center(
+                                              child: Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Text(
+                                              appState.userFestivals[i].name!,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          )),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 )
                             ],
                           )
                   ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    // change colour to reference light/dark themes built by layla
-                    color: Theme.of(context).colorScheme.tertiary,
-                    border: Border.all(width: 8),
-                    borderRadius: BorderRadius.circular(20)),
-                alignment: Alignment.topCenter,
-                padding: EdgeInsets.all(20.0),
-                margin: EdgeInsets.all(10.0),
-                child: Text(
-                  'Top 3 Festivals Your Favourite Artists Are At...',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isDarkMode
-                          ? const Color.fromARGB(255, 255, 255, 255)
-                          : Colors.black),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    // change colour to reference light/dark themes built by layla
-                    color: Theme.of(context).colorScheme.tertiary,
-                    border: Border.all(width: 8),
-                    borderRadius: BorderRadius.circular(20)),
-                alignment: Alignment.topCenter,
-                padding: EdgeInsets.all(20.0),
-                margin: EdgeInsets.all(10.0),
-                child: Text(
-                  'Top 3 Festivals Including Your Favourite Genre...',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isDarkMode
-                          ? const Color.fromARGB(255, 255, 255, 255)
-                          : Colors.black),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                decoration: BoxDecoration(
-                    // change colour to reference light/dark themes built by layla
-                    color: Theme.of(context).colorScheme.tertiary,
-                    border: Border.all(width: 8),
-                    borderRadius: BorderRadius.circular(20)),
-                alignment: Alignment.topCenter,
-                padding: EdgeInsets.all(20.0),
-                margin: EdgeInsets.all(10.0),
-                child: Text(
-                  'Top 3 Festivals that are a bit different...',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isDarkMode
-                          ? const Color.fromARGB(255, 255, 255, 255)
-                          : Colors.black),
                 ),
               ),
             ),
