@@ -1,17 +1,15 @@
-## MusiCAL
+# MusiCAL
+
+MusiCAL is an event recommendation app which allows users to see upcoming events being played by their favourite artists. When creating an account, they can connect their Spotify account which MusiCAL will take information about their favourite artists from. Then, by searching for events being played by those artists on Ticketmaster, the in-app calendar will populate automatically with recommendations. Information about the events including location, date, timings, price and purchase links are provided.
+
+As well as this, MusiCAL includes a feature which recommends festivals with line-ups that include their favourite artists and genres. Finally introducing FestiCAL, the feature that provides users with their dream festival line-up poster. Using popular poster templates, users can choose their favourite design which will be populated with their favourite artists. Check out the app for yourself to see what artists come up!
 
 MusiCAL is a collaborative final project, completed during our time at Northcoders. 
 
-# Features
+## Tech Stack
 
-Musical is a gig-finding calendar app, which,  when paired with the user’s Spotify account, ensures that they’ll never miss their favourite artists’ events again. Our app is unique for every user, and is built entirely around their listening preferences. 
- 
-To complement with the calendar, users can enjoy a range of additional features whilst they explore the app, such as personalised recommendations for their next big festival, and  customised poster designs, styled by their top bands 
+This app was created in Dart using Flutter and Firebase, in under two weeks. 
 
-# Tech Stack
+## Installation
 
-This app was created using Flutter and Dart, in under two weeks. 
-
-# Installation
-
-This app will not function without the appropriate .env files installed on a local machine. 
+This app will not function without the appropriate .env files installed on a local machine.
