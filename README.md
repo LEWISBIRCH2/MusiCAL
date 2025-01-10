@@ -12,4 +12,8 @@ This app was created in Dart using Flutter and Firebase, in under two weeks.
 
 ## Installation
 
+For this project, you will need to download Flutter. 
+
+[Flutter Installation Instructions](https://docs.flutter.dev/get-started/install)
+
 This app will not function without the appropriate .env files installed on a local machine.
