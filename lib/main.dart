@@ -1,3 +1,6 @@
+// THE FORBIDDEN RUN COMMAND:
+// flutter run --web-port=50511 --host-vmservice-port=50511 -d chrome --web-browser-flag "--disable-web-security"
+
 import 'dart:convert';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,13 +29,12 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'loading.dart';
-
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-
 import 'package:flutter_svg/flutter_svg.dart';
 
-// THE FORBIDDEN RUN COMMAND:
-// flutter run --web-port=50511 --host-vmservice-port=50511 -d chrome --web-browser-flag "--disable-web-security"
+
+
+//                                                                     -- META DATA --
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +71,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
+//                                                                     -- META DATA --
+//                                                              -- SPOTIFY CALLS / DB STRUCTURE --
 class _MyAppState extends ChangeNotifier {
   final String clientId = dotenv.env['clientId']!;
   final String clientSecret = dotenv.env['clientSecret']!;
@@ -122,7 +125,8 @@ class _MyAppState extends ChangeNotifier {
       return null;
     }
   }
-
+//                                                        -- SPOTIFY CALLS / DB STRUCTURE--
+//                                                           -- API CALLS LOGIC --
   Future<void> getTopArtists() async {
     var response = await http.get(
       Uri.parse(
@@ -382,6 +386,9 @@ class _MyAppState extends ChangeNotifier {
     festLoading = false;
     notifyListeners();
   }
+//                                                           -- API CALLS LOGIC --
+//                                                           -- REFRESH CALENDER --
+
 
   Future<void> deleteUserData() async {
     isLoading = true;
@@ -395,6 +402,8 @@ class _MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 }
+//                                                            -- REFRESH CALENDER --
+//                                                               -- API CALLS --
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -423,15 +432,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => Navigation()));
                             await appState.getTopArtists();
-                            print('1');
+                            print('Top Artists GOT');
                             await appState.getEvents();
-                            print('2');
+                            print('Events GOT');
                             await appState.getUsersEvents();
-                            print('3');
+                            print('UserEvents GOT');
                             await appState.getFestivals();
-                            print('4');
+                            print('Festivals GOT');
                             await appState.getUserFestivals();
-                            print('5');
+                            print('UserFestivals GOT');
                           },
                           child: Text('LOGIN')),
                     ],
@@ -443,14 +452,21 @@ class _MyHomePageState extends State<MyHomePage> {
         : SpotifyAuthPage(onCodeReceived: (code) async {
             appState.accessToken = await appState.exchangeToken(code);
             await appState.getTopArtists();
+            print('Top Artists GOT');
             await appState.getEvents();
+            print('Events GOT');
             await appState.getUsersEvents();
+            print('UserEvents GOT');
             await appState.getFestivals();
+            print('Festivals GOT');
             await appState.getUserFestivals();
+            print('UserFestivals GOT');
           });
   }
 }
 
+//                                                                   -- API CALLS --
+//                                                               -- CALENDAR SCAFFOLD --
 class Calendar extends StatefulWidget {
   const Calendar({super.key});
 
@@ -920,6 +936,11 @@ class CalendarState extends State<Calendar> {
   }
 }
 
+
+//                                                               -- CALENDAR SCAFFOLD --
+//                                                              -- EVENTS PAGE SCAFFOLD --
+
+
 class EventPageEvent {
   final String? name;
   final String? date;
@@ -1074,6 +1095,8 @@ class _EventsPageState extends State<EventsPage> {
     );
   }
 }
+//                                                              -- EVENTS PAGE SCAFFOLD --
+//                                                                -- FESTICAL SCAFFOLD --
 
 class Festical extends StatelessWidget {
   const Festical({super.key});
@@ -2125,6 +2148,9 @@ class Festical extends StatelessWidget {
         ));
   }
 }
+//                                                                -- FESTICAL SCAFFOLD --
+//                                                          -- RECOMMENDED FESTIVALS SCAFFOLD --
+
 
 class Recommendations extends StatelessWidget {
   const Recommendations({super.key});
@@ -2202,6 +2228,9 @@ class Recommendations extends StatelessWidget {
         ));
   }
 }
+//                                                          -- RECOMMENDED FESTIVALS SCAFFOLD --
+//                                                                     -- SETTINGS --
+
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -2302,3 +2331,4 @@ class _SettingsState extends State<Settings> {
     );
   }
 }
+//                                                                     -- SETTINGS --
